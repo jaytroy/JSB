@@ -1,3 +1,7 @@
+//
+// Created by jay on 6/26/26.
+//
+
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -6,89 +10,47 @@
 #include <JSBSim/initialization/FGInitialCondition.h>
 #include <ncurses.h>
 #include <bits/this_thread_sleep.h>
+#include "simulation.h"
 
-void DumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename) {
-    std::ofstream out(filename);
 
-    if (!out.is_open()) {
-        throw std::runtime_error("Failed to open output file");
-    }
+Simulation::Simulation()
+    : fdm(), nCursesManager()
+{}
 
-    std::streambuf *oldBuf = std::cout.rdbuf();
-    std::cout.rdbuf(out.rdbuf());
-
-    fdm.PrintPropertyCatalog();
-
-    std::cout.rdbuf(oldBuf);
-}
-
-int main() {
-    //Ncurses setup
-    initscr();
-    noecho();
-    cbreak();
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
-
-    //JSB setup
+void Simulation::setup() {
     JSBSim::FGFDMExec fdm;
 
-    SGPath root(".");
+    SGPath root("/home/jay/Proj/jsbsim");
     fdm.SetRootDir(root);
 
-    fdm.SetAircraftPath(SGPath("/home/jay/Proj/jsbsim/aircraft"));
-    fdm.SetEnginePath(SGPath("/home/jay/Proj/jsbsim/engine"));
-    fdm.SetSystemsPath(SGPath("/home/jay/Proj/jsbsim/systems"));
+    fdm.SetAircraftPath(SGPath("/aircraft"));
+    fdm.SetEnginePath(SGPath("/engine"));
+    fdm.SetSystemsPath(SGPath("/systems"));
 
     if (!fdm.LoadModel("c172p")) {
-        std::cerr << "Failed to load aircraft model\n";
-        return 1;
+        throw std::runtime_error("Failed to load aircraft model");
     }
 
     auto IC = fdm.GetIC();
     if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset00.xml"))) {
-        std::cerr << "Failed to load IC file\n";
-        return 1;
+        throw std::runtime_error("Failed to load reset file");
     }
 
-    fdm.RunIC();
-    fdm.Setdt(0.01);
+    dumpPropertyCatalogToFile(fdm, "catalog.txt");
+}
 
-    //Setup ends here
-
-    DumpPropertyCatalogToFile(fdm, "catalog.txt");
-
-    //This is the sim loop
-    double throttle = 0.0;
-    double rudder = 0.0;
-    double elevator = 0.0;
-    double aileron = 0.0;
-
-    fdm.SetPropertyValue("fcs/elevator-trim-cmd-norm", 0.2);
-
-    int engineOn = 0;
+void Simulation::run() {
 
     double dt = fdm.GetDeltaT();
 
+    fdm.RunIC();
+    fdm.Setdt(0.01);
     while (true) {
-        int c = getch();
+        int c = nCursesManager.input();
 
+        //Need to move this out
         if (c == 27)
             break;
-
-        if (c == 'p' && !engineOn) {
-            fdm.SetPropertyValue("propulsion/engine/set-running", 1);
-            fdm.SetPropertyValue("propulsion/starter_cmd", 1);
-            fdm.SetPropertyValue("fcs/mixture-cmd-norm", 1.0);
-            fdm.SetPropertyValue("propulsion/magneto_cmd", 3);
-            engineOn = 1;
-        } else if (c == 'p' && engineOn) {
-            fdm.SetPropertyValue("propulsion/engine/set-running", 0);
-            fdm.SetPropertyValue("propulsion/starter_cmd", 0);
-            fdm.SetPropertyValue("fcs/mixture-cmd-norm", 0.0);
-            fdm.SetPropertyValue("propulsion/magneto_cmd", 0);
-            engineOn = 0;
-        }
 
         if (c == KEY_UP)
             throttle += 0.01;
@@ -97,6 +59,8 @@ int main() {
         //Clamp throttle
         if (throttle > 1.0) throttle = 1.0;
         if (throttle < 0.0) throttle = 0.0;
+
+        
 
         if (c == KEY_BACKSPACE) {
             if (fdm.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
@@ -123,14 +87,11 @@ int main() {
         }
         if (c == 'q') {
             rudder = -1.0;
-        } else if(c == 'e') {
+        } else if (c == 'e') {
             rudder = 1.0;
         }
 
-        fdm.SetPropertyValue("fcs/throttle-cmd-norm", throttle);
-        fdm.SetPropertyValue("fcs/rudder-cmd-norm", rudder);
-        fdm.SetPropertyValue("fcs/aileron-cmd-norm", aileron);
-        fdm.SetPropertyValue("fcs/elevetor-cmd-norm", elevator);
+        //up to here
 
         fdm.Run();
 
@@ -145,6 +106,8 @@ int main() {
         double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
         double brake = fdm.GetPropertyValue("fcs/center-brake-cmd-norm");
         double roll = fdm.GetPropertyValue("attitude/roll-rad");
+        double throttle = fdm.GetPropertyValue("propulsion/throttle-pos-norm");
+        double rudder = fdm.GetPropertyValue("fcs/rudder-prop-norm");
         printw(
             "t=%f\n"
             "v=%f\n"
@@ -157,20 +120,32 @@ int main() {
             "rudder=%lf\n"
             "brake=%lf\n"
             "roll=%lf\n",
-            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder,brake,roll);
+            time, airspeed, throttle, rpm, posN, posE, posU, heading, rudder, brake, roll);
 
         refresh();
 
-        //Reset fcs
-        rudder = 0.0;
-        elevator = 0.0;
-        aileron = 0.0;
-
+        //Sleep for sim duration (~8.3ms) to match real life time.
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
+
     endwin();
 
     std::cout << "Exited" << std::endl;
-
-    return 0;
 }
+
+
+void Simulation::dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename) {
+    std::ofstream out(filename);
+
+    if (!out.is_open()) {
+        throw std::runtime_error("Failed to open output file");
+    }
+
+    std::streambuf *oldBuf = std::cout.rdbuf();
+    std::cout.rdbuf(out.rdbuf());
+
+    fdm.PrintPropertyCatalog();
+
+    std::cout.rdbuf(oldBuf);
+}
+
