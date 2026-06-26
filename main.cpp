@@ -2,7 +2,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <JSBSim/FGFDMExec.h>
+#include <JSBSim/models/FGAircraft.h>
+#include <JSBSim/initialization/FGInitialCondition.h>
 #include <ncurses.h>
+#include <bits/this_thread_sleep.h>
 
 void DumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename) {
     std::ofstream out(filename);
@@ -37,7 +40,16 @@ int main() {
     fdm.SetEnginePath(SGPath("/home/jay/Proj/jsbsim/engine"));
     fdm.SetSystemsPath(SGPath("/home/jay/Proj/jsbsim/systems"));
 
-    fdm.LoadModel("c172p");
+    if (!fdm.LoadModel("c172p")) {
+        std::cerr << "Failed to load aircraft model\n";
+        return 1;
+    }
+
+    auto IC = fdm.GetIC();
+    if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset01.xml"))) {
+        std::cerr << "Failed to load IC file\n";
+        return 1;
+    }
 
     fdm.RunIC();
     fdm.Setdt(0.01);
@@ -48,25 +60,30 @@ int main() {
 
     //This is the sim loop
     double throttle = 0.0;
-
-
+    double rudder = 0.0;
 
     fdm.SetPropertyValue("fcs/elevator-trim-cmd-norm", 0.2);
 
-    while (true) {
+    int engineOn = 0;
+
+    double dt = fdm.GetDeltaT();
+
+    while (fdm.Run()) {
         int c = getch();
 
         if (c == 27)
             break;
 
-        double time = fdm.GetSimTime();
-        double airspeed = fdm.GetPropertyValue("velocities/vc-kts");
-
-        if (c == 's') {
+        if (c == 's' && !engineOn) {
             fdm.SetPropertyValue("propulsion/engine/set-running", 1);
             fdm.SetPropertyValue("propulsion/starter_cmd", 1);
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 1.0);
+        } else if (c == 's' && engineOn) {
+            fdm.SetPropertyValue("propulsion/engine/set-running", 0);
+            fdm.SetPropertyValue("propulsion/starter_cmd", 0);
+            fdm.SetPropertyValue("fcs/mixture-cmd-norm", 0.0);
         }
+
         if (c == KEY_UP)
             throttle += 0.01;
         if (c == KEY_DOWN)
@@ -76,20 +93,38 @@ int main() {
             fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 1.0);
             fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 1.0);
         }
-
+        if (c == KEY_LEFT) {
+            rudder -= 0.1;
+        }
+        if (c == KEY_RIGHT) {
+            rudder += 0.1;
+        }
 
         fdm.SetPropertyValue("fcs/throttle-cmd-norm", throttle);
+        fdm.SetPropertyValue("fcs/rudder-cmd-norm", rudder);
 
         fdm.Run();
 
         erase();
-        printw("t=%f\nv=%f\nthrottle=%f\nrpm=%f\nposit_x=%lf\nposit_y=%lf\n",
-        time, airspeed, throttle, fdm.GetPropertyValue("propulsion/engine/engine-rpm")), fdm.GetPropertyValue("position/distance-from-start-lon-mt"), fdm.GetPropertyValue("position/distance-from-start-lat-mt");
-        refresh();
-    }
 
+        double time = fdm.GetSimTime();
+        double airspeed = fdm.GetPropertyValue("velocities/vc-kts");
+        double posN = fdm.GetPropertyValue("position/from-start-neu-n-ft");
+        double posE = fdm.GetPropertyValue("position/from-start-neu-e-ft");
+        double posU = fdm.GetPropertyValue("position/from-start-neu-u-ft");
+        double rpm = fdm.GetPropertyValue("propulsion/engine/engine-rpm");
+        double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.8 / 3.141592653589793238463);
+        printw(
+            "t=%f\nv=%f\nthrottle=%f\nrpm=%lf\nposit_n=%lf\nposit_e=%lf\nposit_u=%lf\nheading=%lf\nrudder=%lf\n",
+            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder);
+
+        refresh();
+
+        std::this_thread::sleep_for(std::chrono::duration<double>(dt));
+    }
     endwin();
 
     std::cout << "Exited" << std::endl;
+
     return 0;
 }
