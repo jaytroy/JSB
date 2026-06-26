@@ -46,7 +46,7 @@ int main() {
     }
 
     auto IC = fdm.GetIC();
-    if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset01.xml"))) {
+    if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset00.xml"))) {
         std::cerr << "Failed to load IC file\n";
         return 1;
     }
@@ -68,7 +68,7 @@ int main() {
 
     double dt = fdm.GetDeltaT();
 
-    while (fdm.Run()) {
+    while (true) {
         int c = getch();
 
         if (c == 27)
@@ -78,32 +78,46 @@ int main() {
             fdm.SetPropertyValue("propulsion/engine/set-running", 1);
             fdm.SetPropertyValue("propulsion/starter_cmd", 1);
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 1.0);
+            fdm.SetPropertyValue("propulsion/magneto_cmd", 3);
+            engineOn = 1;
         } else if (c == 's' && engineOn) {
             fdm.SetPropertyValue("propulsion/engine/set-running", 0);
             fdm.SetPropertyValue("propulsion/starter_cmd", 0);
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 0.0);
+            fdm.SetPropertyValue("propulsion/magneto_cmd", 0);
+            engineOn = 0;
         }
 
         if (c == KEY_UP)
             throttle += 0.01;
         if (c == KEY_DOWN)
             throttle -= 0.01;
+        if (throttle > 1.0) throttle = 1.0;
+        if (throttle < 0.0) throttle = 0.0;
         if (c == KEY_BACKSPACE) {
-            fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);
-            fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 1.0);
-            fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 1.0);
+            if (fdm.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
+                fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);
+                fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 1.0);
+                fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 1.0);
+            } else {
+                fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 0.0);
+                fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 0.0);
+                fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 0.0);
+            }
         }
         if (c == KEY_LEFT) {
-            rudder -= 0.1;
-        }
-        if (c == KEY_RIGHT) {
-            rudder += 0.1;
+            rudder = -1;
+        } else if(c == KEY_RIGHT) {
+            rudder = 1;
         }
 
         fdm.SetPropertyValue("fcs/throttle-cmd-norm", throttle);
         fdm.SetPropertyValue("fcs/rudder-cmd-norm", rudder);
 
         fdm.Run();
+
+        //Reset fcs
+        rudder = 0;
 
         erase();
 
@@ -113,10 +127,11 @@ int main() {
         double posE = fdm.GetPropertyValue("position/from-start-neu-e-ft");
         double posU = fdm.GetPropertyValue("position/from-start-neu-u-ft");
         double rpm = fdm.GetPropertyValue("propulsion/engine/engine-rpm");
-        double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.8 / 3.141592653589793238463);
+        double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
+        double brake = fdm.GetPropertyValue("fcs/center-brake-cmd-norm");
         printw(
-            "t=%f\nv=%f\nthrottle=%f\nrpm=%lf\nposit_n=%lf\nposit_e=%lf\nposit_u=%lf\nheading=%lf\nrudder=%lf\n",
-            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder);
+            "t=%f\nv=%f\nthrottle=%f\nrpm=%lf\nposit_n=%lf\nposit_e=%lf\nposit_u=%lf\nheading=%lf\nrudder=%lf\nbrake=%lf\n",
+            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder,brake);
 
         refresh();
 
