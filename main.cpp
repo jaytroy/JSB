@@ -61,6 +61,8 @@ int main() {
     //This is the sim loop
     double throttle = 0.0;
     double rudder = 0.0;
+    double elevator = 0.0;
+    double aileron = 0.0;
 
     fdm.SetPropertyValue("fcs/elevator-trim-cmd-norm", 0.2);
 
@@ -74,13 +76,13 @@ int main() {
         if (c == 27)
             break;
 
-        if (c == 's' && !engineOn) {
+        if (c == 'p' && !engineOn) {
             fdm.SetPropertyValue("propulsion/engine/set-running", 1);
             fdm.SetPropertyValue("propulsion/starter_cmd", 1);
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 1.0);
             fdm.SetPropertyValue("propulsion/magneto_cmd", 3);
             engineOn = 1;
-        } else if (c == 's' && engineOn) {
+        } else if (c == 'p' && engineOn) {
             fdm.SetPropertyValue("propulsion/engine/set-running", 0);
             fdm.SetPropertyValue("propulsion/starter_cmd", 0);
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 0.0);
@@ -92,8 +94,10 @@ int main() {
             throttle += 0.01;
         if (c == KEY_DOWN)
             throttle -= 0.01;
+        //Clamp throttle
         if (throttle > 1.0) throttle = 1.0;
         if (throttle < 0.0) throttle = 0.0;
+
         if (c == KEY_BACKSPACE) {
             if (fdm.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
                 fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);
@@ -105,19 +109,30 @@ int main() {
                 fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 0.0);
             }
         }
-        if (c == KEY_LEFT) {
-            rudder = -1;
-        } else if(c == KEY_RIGHT) {
-            rudder = 1;
+
+        //Control surfaces
+        if (c == 's') {
+            elevator = 1.0;
+        } else if (c == 'w') {
+            elevator = -1.0;
+        }
+        if (c == 'd') {
+            aileron = 1.0;
+        } else if (c == 'a') {
+            aileron = -1.0;
+        }
+        if (c == 'q') {
+            rudder = -1.0;
+        } else if(c == 'e') {
+            rudder = 1.0;
         }
 
         fdm.SetPropertyValue("fcs/throttle-cmd-norm", throttle);
         fdm.SetPropertyValue("fcs/rudder-cmd-norm", rudder);
+        fdm.SetPropertyValue("fcs/aileron-cmd-norm", aileron);
+        fdm.SetPropertyValue("fcs/elevetor-cmd-norm", elevator);
 
         fdm.Run();
-
-        //Reset fcs
-        rudder = 0;
 
         erase();
 
@@ -129,11 +144,27 @@ int main() {
         double rpm = fdm.GetPropertyValue("propulsion/engine/engine-rpm");
         double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
         double brake = fdm.GetPropertyValue("fcs/center-brake-cmd-norm");
+        double roll = fdm.GetPropertyValue("attitude/roll-rad");
         printw(
-            "t=%f\nv=%f\nthrottle=%f\nrpm=%lf\nposit_n=%lf\nposit_e=%lf\nposit_u=%lf\nheading=%lf\nrudder=%lf\nbrake=%lf\n",
-            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder,brake);
+            "t=%f\n"
+            "v=%f\n"
+            "throttle=%f\n"
+            "rpm=%lf\n"
+            "posit_n=%lf\n"
+            "posit_e=%lf\n"
+            "posit_u=%lf\n"
+            "heading=%lf\n"
+            "rudder=%lf\n"
+            "brake=%lf\n"
+            "roll=%lf\n",
+            time,airspeed,throttle,rpm,posN,posE,posU,heading,rudder,brake,roll);
 
         refresh();
+
+        //Reset fcs
+        rudder = 0.0;
+        elevator = 0.0;
+        aileron = 0.0;
 
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
