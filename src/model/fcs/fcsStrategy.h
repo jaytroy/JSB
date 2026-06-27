@@ -5,11 +5,13 @@
 #ifndef JSB_STRATEGY_H
 #define JSB_STRATEGY_H
 #include <string>
+#include <JSBSim/FGFDMExec.h>
 
 
 class FcsStrategy {
+public:
     virtual ~FcsStrategy() = default;
-    virtual void adjustValue(std::string target, double value);
+    virtual void adjustValue(JSBSim::FGFDMExec fdm, double value);
 };
 
 enum class ControlChannel {

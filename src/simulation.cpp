@@ -6,18 +6,23 @@
 #include <iostream>
 #include <unistd.h>
 #include <JSBSim/FGFDMExec.h>
-#include <JSBSim/models/FGAircraft.h>
 #include <JSBSim/initialization/FGInitialCondition.h>
 #include <ncurses.h>
 #include <bits/this_thread_sleep.h>
 #include "simulation.h"
 
+#include "model/fcs/actions/pitch.h"
+#include "model/fcs/actions/roll.h"
+#include "model/fcs/actions/throttle.h"
+#include "model/fcs/actions/yaw.h"
+
 
 Simulation::Simulation()
-    : fdm(), nCursesManager()
+    : fdm_(), nCursesManager_()
 {}
 
 void Simulation::setup() {
+    //Set up JSB
     JSBSim::FGFDMExec fdm;
 
     SGPath root("/home/jay/Proj/jsbsim");
@@ -37,23 +42,31 @@ void Simulation::setup() {
     }
 
     dumpPropertyCatalogToFile(fdm, "catalog.txt");
+
+    //Set up FCS strategies
+    strategies_["throttle"] = std::make_unique<Throttle>();
+    strategies_["pitch"] = std::make_unique<Pitch>();
+    strategies_["yaw"] = std::make_unique<Yaw>();
+    strategies_["roll"] = std::make_unique<Roll>();
 }
 
 void Simulation::run() {
 
-    double dt = fdm.GetDeltaT();
+    double dt = fdm_.GetDeltaT();
 
-    fdm.RunIC();
-    fdm.Setdt(0.01);
+    fdm_.RunIC();
+    fdm_.Setdt(0.01);
     while (true) {
-        int c = nCursesManager.input();
+        int c = nCursesManager_.getInput();
+
+
 
         //Need to move this out
         if (c == 27)
             break;
 
         if (c == KEY_UP)
-            throttle += 0.01;
+            strategies_.adjustFCS(Pitch, 0.1);
         if (c == KEY_DOWN)
             throttle -= 0.01;
         //Clamp throttle
@@ -63,14 +76,12 @@ void Simulation::run() {
         
 
         if (c == KEY_BACKSPACE) {
-            if (fdm.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
-                fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);
-                fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 1.0);
-                fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 1.0);
+            if (fdm_.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
+
             } else {
-                fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 0.0);
-                fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 0.0);
-                fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 0.0);
+                fdm_.SetPropertyValue("fcs/left-brake-cmd-norm", 0.0);
+                fdm_.SetPropertyValue("fcs/right-brake-cmd-norm", 0.0);
+                fdm_.SetPropertyValue("fcs/center-brake-cmd-norm", 0.0);
             }
         }
 
@@ -93,21 +104,21 @@ void Simulation::run() {
 
         //up to here
 
-        fdm.Run();
+        fdm_.Run();
 
         erase();
 
-        double time = fdm.GetSimTime();
-        double airspeed = fdm.GetPropertyValue("velocities/vc-kts");
-        double posN = fdm.GetPropertyValue("position/from-start-neu-n-ft");
-        double posE = fdm.GetPropertyValue("position/from-start-neu-e-ft");
-        double posU = fdm.GetPropertyValue("position/from-start-neu-u-ft");
-        double rpm = fdm.GetPropertyValue("propulsion/engine/engine-rpm");
-        double heading = fdm.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
-        double brake = fdm.GetPropertyValue("fcs/center-brake-cmd-norm");
-        double roll = fdm.GetPropertyValue("attitude/roll-rad");
-        double throttle = fdm.GetPropertyValue("propulsion/throttle-pos-norm");
-        double rudder = fdm.GetPropertyValue("fcs/rudder-prop-norm");
+        double time = fdm_.GetSimTime();
+        double airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
+        double posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
+        double posE = fdm_.GetPropertyValue("position/from-start-neu-e-ft");
+        double posU = fdm_.GetPropertyValue("position/from-start-neu-u-ft");
+        double rpm = fdm_.GetPropertyValue("propulsion/engine/engine-rpm");
+        double heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
+        double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
+        double roll = fdm_.GetPropertyValue("attitude/roll-rad");
+        double throttle = fdm_.GetPropertyValue("propulsion/throttle-pos-norm");
+        double rudder = fdm_.GetPropertyValue("fcs/rudder-prop-norm");
         printw(
             "t=%f\n"
             "v=%f\n"

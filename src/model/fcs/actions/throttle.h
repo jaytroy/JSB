@@ -4,15 +4,14 @@
 
 #ifndef JSB_THROTTLE_H
 #define JSB_THROTTLE_H
-#include "fcsStrategy.h"
+#include "../fcsStrategy.h"
 
 
 class Throttle : public FcsStrategy {
+public:
     ~Throttle() override;
 
-    void adjustValue(std::string target, double value) override;
-
-    Throttle();
+    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
 };
 
 

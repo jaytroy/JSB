@@ -5,7 +5,10 @@
 #include "aircraft.h"
 
 #include <FGFDMExec.h>
+#include <stdexcept>
 #include <models/FGPropagate.h>
+
+#include "fcs/fcsStrategy.h"
 
 /**
  * @brief Aircraft::Aircraft constructs a new aircraft to be used in the sim.
@@ -31,20 +34,14 @@ void Aircraft::stopAircraft() {
     engineOn = 0;
 }
 
-void Aircraft::setThrottle(double value) {
-        fdm.SetPropertyValue("fcs/throttle-cmd-norm", value);
-}
+void Aircraft::adjustFCS(std::unique_ptr<FcsStrategy> &&strategy, double value) {
+   fcsStrategy_ = std::move(strategy);
 
-void Aircraft::setPitch(double value) {
-        fdm.SetPropertyValue("fcs/elevator-cmd-norm", value);
-}
-
-void Aircraft::setYaw(double value) {
-        fdm.SetPropertyValue("fcs/rudder-cmd-norm", value);
-}
-
-void Aircraft::setRoll(double value) {
-        fdm.SetPropertyValue("fcs/aileron-cmd-norm", value);
+    if (fcsStrategy_) {
+        fcsStrategy_->adjustValue(fdm, value);
+    } else {
+        throw std::runtime_error("Bad strategy was set");
+    }
 }
 
 void Aircraft::resetFCS() {

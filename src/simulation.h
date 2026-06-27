@@ -4,7 +4,11 @@
 
 #ifndef JSB_SIMULATION_H
 #define JSB_SIMULATION_H
-#include "util/ncursesmanager.h"
+#include <unordered_map>
+#include <JSBSim/FGFDMExec.h>
+
+#include "model/aircraft.h"
+#include "util/nCursesManager.h"
 
 
 class Simulation {
@@ -15,8 +19,10 @@ public:
     void run();
 
 private:
-    NCursesManager nCursesManager;
-    JSBSim::FGFDMExec fdm;
+    NCursesManager nCursesManager_;
+    JSBSim::FGFDMExec fdm_;
+    Aircraft aircraft_;
+    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
 
     static void dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename);
 };
