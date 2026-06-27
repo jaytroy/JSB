@@ -9,17 +9,16 @@
 #include <JSBSim/initialization/FGInitialCondition.h>
 #include <ncurses.h>
 #include <bits/this_thread_sleep.h>
-#include "simulation.h"
+#include "Simulation.h"
 
-#include "model/fcs/actions/pitch.h"
-#include "model/fcs/actions/roll.h"
-#include "model/fcs/actions/throttle.h"
-#include "model/fcs/actions/yaw.h"
+#include "model/fcs/actions/Pitch.h"
+#include "model/fcs/actions/Roll.h"
+#include "model/fcs/actions/Throttle.h"
+#include "model/fcs/actions/Yaw.h"
 
 
-Simulation::Simulation()
-    : fdm_(), nCursesManager_()
-{}
+Simulation::Simulation() {
+}
 
 void Simulation::setup() {
     //Set up JSB
@@ -44,10 +43,20 @@ void Simulation::setup() {
     dumpPropertyCatalogToFile(fdm, "catalog.txt");
 
     //Set up FCS strategies
+    //This can be made better with a factory
     strategies_["throttle"] = std::make_unique<Throttle>();
     strategies_["pitch"] = std::make_unique<Pitch>();
     strategies_["yaw"] = std::make_unique<Yaw>();
     strategies_["roll"] = std::make_unique<Roll>();
+
+    commandHandler_ = {
+        {FcsCommand::PitchUp,   [this]() { strategies_["pitch"]->adjustValue(fdm_, 0.1); }},
+        {FcsCommand::PitchDown, [this]() { strategies_["pitch"]->adjustValue(fdm_, -0.1); }},
+        {FcsCommand::RollLeft,  [this]() { strategies_["roll"]->adjustValue(fdm_, -0.1); }},
+        {FcsCommand::RollRight, [this]() { strategies_["roll"]->adjustValue(fdm_, 0.1); }},
+        {FcsCommand::YawLeft, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
+        {FcsCommand::YawRight, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
+    };
 }
 
 void Simulation::run() {
@@ -57,10 +66,16 @@ void Simulation::run() {
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
-        int c = nCursesManager_.getInput();
+        int c = CursesManager_.getInput();
 
 
-
+        InputEvent event;
+        while (inputDevice_->pollEvent(event)) {
+            auto res = keyBindings_.find(event.code);
+            if (res !=keyBindings_.end()) {
+                res->second();
+            }
+        }
         //Need to move this out
         if (c == 27)
             break;
@@ -106,6 +121,7 @@ void Simulation::run() {
 
         fdm_.Run();
 
+        //Erase previous buffer
         erase();
 
         double time = fdm_.GetSimTime();
@@ -136,6 +152,7 @@ void Simulation::run() {
         refresh();
 
         //Sleep for sim duration (~8.3ms) to match real life time.
+        //This will likely lag the sim if dense enough
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 

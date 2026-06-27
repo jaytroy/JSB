@@ -4,17 +4,18 @@
 
 #ifndef JSB_CURSESMANAGER_H
 #define JSB_CURSESMANAGER_H
+#include "InputDevice.h"
 
 /**
  * @brief The NCursesManager enables CLI input for the simulator.
  * This is very simple and basic, only enabling one key press to be read per tick.
  * In the future, it will be replaced with something more robust.
  */
-class NCursesManager {
+class NCursesManager : InputDevice {
 public:
     NCursesManager();
 
-    int getInput();
+    bool pollEvent(InputEvent &outEvent);
 private:
     int c = -1;
 };

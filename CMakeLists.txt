@@ -7,27 +7,29 @@ find_package(PkgConfig REQUIRED)
 find_package(Curses REQUIRED)
 pkg_check_modules(JSBSIM REQUIRED JSBSim)
 
-add_executable(JSB src/main.cpp
-        src/model/aircraft.cpp
-        src/model/aircraft.h
-        src/util/nCursesManager.cpp
-        src/util/nCursesManager.h
-        src/simulation.cpp
-        src/simulation.h
-        src/model/fcs/fcsStrategy.cpp
-        src/model/fcs/fcsStrategy.h
-        src/model/fcs/actions/throttle.cpp
-        src/model/fcs/actions/throttle.h
-        src/model/fcs/actions/pitch.cpp
-        src/model/fcs/actions/pitch.h
-        src/model/fcs/actions/roll.cpp
-        src/model/fcs/actions/roll.h
-        src/model/fcs/actions/yaw.cpp
-        src/model/fcs/actions/yaw.h
-        src/model/fcs/actions/brake.cpp
-        src/model/fcs/actions/brake.h
-        src/model/fcs/input.cpp
-        src/model/fcs/input.h
+add_executable(JSB src/Main.cpp
+        src/model/Aircraft.cpp
+        src/model/Aircraft.h
+        src/util/NCursesManager.cpp
+        src/util/NCursesManager.h
+        src/Simulation.cpp
+        src/Simulation.h
+        src/model/fcs/FcsStrategy.cpp
+        src/model/fcs/FcsStrategy.h
+        src/model/fcs/actions/Throttle.cpp
+        src/model/fcs/actions/Throttle.h
+        src/model/fcs/actions/Pitch.cpp
+        src/model/fcs/actions/Pitch.h
+        src/model/fcs/actions/Roll.cpp
+        src/model/fcs/actions/Roll.h
+        src/model/fcs/actions/Yaw.cpp
+        src/model/fcs/actions/Yaw.h
+        src/model/fcs/actions/Brake.cpp
+        src/model/fcs/actions/Brake.h
+        src/model/fcs/Input.cpp
+        src/model/fcs/Input.h
+        src/util/InputDevice.h
+        src/model/fcs/FcsCommand.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

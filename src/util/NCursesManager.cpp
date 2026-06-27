@@ -2,7 +2,7 @@
 // Created by jay on 6/26/26.
 //
 
-#include "nCursesManager.h"
+#include "NCursesManager.h"
 
 #include <ncurses.h>
 
@@ -14,7 +14,10 @@ NCursesManager::NCursesManager() {
     nodelay(stdscr, TRUE);
 }
 
-int NCursesManager::getInput() {
+bool NCursesManager::pollEvent(InputEvent &outEvent) {
     c = getch();
-    return c;
+    if (c == ERR) return false;
+    outEvent.code = ch;
+    outEvent.pressed = true;
+    return true;
 }

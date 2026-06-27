@@ -4,7 +4,7 @@
 
 #ifndef JSB_YAW_H
 #define JSB_YAW_H
-#include "../fcsStrategy.h"
+#include "../FcsStrategy.h"
 
 
 class Yaw : public FcsStrategy {

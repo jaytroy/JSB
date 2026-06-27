@@ -2,7 +2,7 @@
 // Created by jay on 6/27/26.
 //
 
-#include "brake.h"
+#include "Brake.h"
 
 void Brake::adjustValue(JSBSim::FGFDMExec fdm, double value) {
     fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);

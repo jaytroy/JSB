@@ -4,7 +4,7 @@
 
 #ifndef JSB_BRAKE_H
 #define JSB_BRAKE_H
-#include "../fcsStrategy.h"
+#include "../FcsStrategy.h"
 
 
 class Brake : FcsStrategy {

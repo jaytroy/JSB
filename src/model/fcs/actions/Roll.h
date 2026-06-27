@@ -4,7 +4,7 @@
 
 #ifndef JSB_ROLL_H
 #define JSB_ROLL_H
-#include "../fcsStrategy.h"
+#include "../FcsStrategy.h"
 
 
 class Roll : public FcsStrategy {

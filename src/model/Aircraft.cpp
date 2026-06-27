@@ -2,13 +2,13 @@
 // Created by jay on 6/26/26.
 //
 
-#include "aircraft.h"
+#include "Aircraft.h"
 
 #include <FGFDMExec.h>
 #include <stdexcept>
 #include <models/FGPropagate.h>
 
-#include "fcs/fcsStrategy.h"
+#include "fcs/FcsStrategy.h"
 
 /**
  * @brief Aircraft::Aircraft constructs a new aircraft to be used in the sim.

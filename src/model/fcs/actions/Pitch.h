@@ -4,7 +4,7 @@
 
 #ifndef JSB_PITCH_H
 #define JSB_PITCH_H
-#include "../fcsStrategy.h"
+#include "../FcsStrategy.h"
 
 
 class Pitch : public FcsStrategy {

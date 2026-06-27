@@ -4,7 +4,7 @@
 
 #ifndef JSB_THROTTLE_H
 #define JSB_THROTTLE_H
-#include "../fcsStrategy.h"
+#include "../FcsStrategy.h"
 
 
 class Throttle : public FcsStrategy {
