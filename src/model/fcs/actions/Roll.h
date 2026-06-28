@@ -9,8 +9,8 @@
 
 class Roll : public FcsStrategy {
 public:
-    ~Roll() override;
-    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
+    ~Roll() override = default;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

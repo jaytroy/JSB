@@ -13,7 +13,7 @@
  */
 class Aircraft {
 public:
-    explicit Aircraft(const JSBSim::FGFDMExec &fdm);
+    explicit Aircraft(JSBSim::FGFDMExec &fdm);
 
     void startAircraft();
     void stopAircraft();
@@ -27,7 +27,7 @@ public:
     void resetFCS();
 
 private:
-    JSBSim::FGFDMExec fdm;
+    JSBSim::FGFDMExec &fdm_;
     int engineOn = 0;
     double throttle = 0.0;
     double rudder = 0.0;

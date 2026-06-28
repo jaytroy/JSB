@@ -7,10 +7,10 @@
 #include "../FcsStrategy.h"
 
 
-class Brake : FcsStrategy {
+class Brake : public FcsStrategy {
 public:
-    ~Brake() override;
-    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
+    ~Brake() override = default;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

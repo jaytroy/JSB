@@ -4,7 +4,20 @@
 
 #include "Brake.h"
 
-void Brake::adjustValue(JSBSim::FGFDMExec fdm, double value) {
-    fdm.SetPropertyValue("fcs/left-brake-cmd-norm", 1.0);
-    fdm.SetPropertyValue("fcs/right-brake-cmd-norm", 1.0);
-    fdm.SetPropertyValue("fcs/center-brake-cmd-norm", 1.0);}
+void Brake::adjustValue(JSBSim::FGFDMExec &fdm, double value) {
+    double current = fdm.GetPropertyValue(FCS::brake_center.data());
+
+    printf("Brake is %lf", current);
+
+    if (current == 0.0) {
+        fdm.SetPropertyValue(FCS::brake_left.data(), 1.0);
+        fdm.SetPropertyValue(FCS::brake_right.data(), 1.0);
+        fdm.SetPropertyValue(FCS::brake_center.data(), 1.0);
+    } else {
+        fdm.SetPropertyValue(FCS::brake_left.data(), 0.0);
+        fdm.SetPropertyValue(FCS::brake_right.data(), 0.0);
+        fdm.SetPropertyValue(FCS::brake_center.data(), 0.0);
+    }
+
+
+}

@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 project(JSB)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(PkgConfig REQUIRED)
 find_package(Curses REQUIRED)
 pkg_check_modules(JSBSIM REQUIRED JSBSim)
 
-add_executable(JSB src/Main.cpp
+add_executable(JSB
+        src/Main.cpp
         src/model/Aircraft.cpp
         src/model/Aircraft.h
         src/util/NCursesManager.cpp
@@ -26,13 +29,14 @@ add_executable(JSB src/Main.cpp
         src/model/fcs/actions/Yaw.h
         src/model/fcs/actions/Brake.cpp
         src/model/fcs/actions/Brake.h
-        src/model/fcs/Input.cpp
-        src/model/fcs/Input.h
         src/util/InputDevice.h
         src/model/fcs/FcsCommand.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})
-target_link_libraries(JSB PRIVATE ${JSBSIM_LIBRARIES})
 target_link_directories(JSB PRIVATE ${JSBSIM_LIBRARY_DIRS})
-target_link_libraries(JSB PRIVATE ${CURSES_LIBRARIES})
+target_link_libraries(JSB PRIVATE
+        /usr/lib/libJSBSim.a
+        ${CURSES_LIBRARIES}
+        m
+)

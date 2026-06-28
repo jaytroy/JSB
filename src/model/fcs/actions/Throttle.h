@@ -9,9 +9,9 @@
 
 class Throttle : public FcsStrategy {
 public:
-    ~Throttle() override;
+    ~Throttle() override = default;
 
-    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

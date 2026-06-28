@@ -17,7 +17,7 @@ NCursesManager::NCursesManager() {
 bool NCursesManager::pollEvent(InputEvent &outEvent) {
     c = getch();
     if (c == ERR) return false;
-    outEvent.code = ch;
+    outEvent.code = c;
     outEvent.pressed = true;
     return true;
 }

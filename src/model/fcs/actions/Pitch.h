@@ -9,8 +9,8 @@
 
 class Pitch : public FcsStrategy {
 public:
-    ~Pitch() override;
-    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
+    ~Pitch() override = default;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

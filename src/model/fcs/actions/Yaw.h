@@ -9,9 +9,9 @@
 
 class Yaw : public FcsStrategy {
 public:
-    ~Yaw() override;
+    ~Yaw() override = default;
 
-    void adjustValue(JSBSim::FGFDMExec fdm, double value) override;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

@@ -11,11 +11,11 @@
  * This is very simple and basic, only enabling one key press to be read per tick.
  * In the future, it will be replaced with something more robust.
  */
-class NCursesManager : InputDevice {
+class NCursesManager : public InputDevice {
 public:
     NCursesManager();
 
-    bool pollEvent(InputEvent &outEvent);
+    bool pollEvent(InputEvent &outEvent) override;
 private:
     int c = -1;
 };

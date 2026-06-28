@@ -2,6 +2,5 @@
 
 int main() {
     Simulation sim;
-    sim.setup();
     sim.run();
 }

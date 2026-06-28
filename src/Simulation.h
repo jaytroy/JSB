@@ -15,7 +15,7 @@
 
 class Simulation {
 public:
-    explicit Simulation();
+    Simulation();
 
     void setup();
 
@@ -25,7 +25,7 @@ private:
     NCursesManager nCursesManager_;
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
-    std::unordered_map<std::string, std::unique_ptr<FcsStrategy> > strategies_;
+    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> uuustrategies_;
     std::unique_ptr<InputDevice> inputDevice_;
     std::unordered_map<FcsCommand, std::function<void()>> commandHandler_;
 
@@ -36,6 +36,9 @@ private:
         {'d', FcsCommand::RollRight},
         {'q', FcsCommand::YawLeft},
         {'e', FcsCommand::YawRight},
+        {'u', FcsCommand::ThrottleUp},
+        {'n', FcsCommand::ThrottleDown},
+        {'b', FcsCommand::ToggleBrake},
     };
 
     static void dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename);

@@ -11,113 +11,92 @@
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
+#include "model/fcs/actions/Brake.h"
 #include "model/fcs/actions/Pitch.h"
 #include "model/fcs/actions/Roll.h"
 #include "model/fcs/actions/Throttle.h"
 #include "model/fcs/actions/Yaw.h"
 
 
-Simulation::Simulation() {
-}
+Simulation::Simulation() : aircraft_(fdm_) {
+    //Redirect JSB output
+    //std::ofstream logFile("jsbsim.log");
+    //std::cout.rdbuf(logFile.rdbuf());
+    //std::cerr.rdbuf(logFile.rdbuf());
 
-void Simulation::setup() {
-    //Set up JSB
-    JSBSim::FGFDMExec fdm;
+    //SGPath root("/home/jay/Proj/jsbsim");
+    SGPath root(".");
+    fdm_.SetRootDir(root);
 
-    SGPath root("/home/jay/Proj/jsbsim");
-    fdm.SetRootDir(root);
+    fdm_.SetAircraftPath(SGPath("/home/jay/Proj/jsbsim/aircraft"));
+    fdm_.SetEnginePath(SGPath("/home/jay/Proj/jsbsim/engine"));
+    fdm_.SetSystemsPath(SGPath("/home/jay/Proj/jsbsim/systems"));
 
-    fdm.SetAircraftPath(SGPath("/aircraft"));
-    fdm.SetEnginePath(SGPath("/engine"));
-    fdm.SetSystemsPath(SGPath("/systems"));
-
-    if (!fdm.LoadModel("c172p")) {
+    if (!fdm_.LoadModel("c172p")) {
         throw std::runtime_error("Failed to load aircraft model");
     }
 
-    auto IC = fdm.GetIC();
+    auto IC = fdm_.GetIC();
     if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset00.xml"))) {
         throw std::runtime_error("Failed to load reset file");
     }
 
-    dumpPropertyCatalogToFile(fdm, "catalog.txt");
+    //Dump catalog
+    dumpPropertyCatalogToFile(fdm_, "catalog.txt");
+
+    //Set up input
+    inputDevice_ = std::make_unique<NCursesManager>();
 
     //Set up FCS strategies
+    //This can likely be moved out
     //This can be made better with a factory
     strategies_["throttle"] = std::make_unique<Throttle>();
     strategies_["pitch"] = std::make_unique<Pitch>();
     strategies_["yaw"] = std::make_unique<Yaw>();
     strategies_["roll"] = std::make_unique<Roll>();
+    strategies_["brake"] = std::make_unique<Brake>();
 
     commandHandler_ = {
-        {FcsCommand::PitchUp,   [this]() { strategies_["pitch"]->adjustValue(fdm_, 0.1); }},
+        {FcsCommand::PitchUp, [this]() { strategies_["pitch"]->adjustValue(fdm_, 0.1); }},
         {FcsCommand::PitchDown, [this]() { strategies_["pitch"]->adjustValue(fdm_, -0.1); }},
-        {FcsCommand::RollLeft,  [this]() { strategies_["roll"]->adjustValue(fdm_, -0.1); }},
+        {FcsCommand::RollLeft, [this]() { strategies_["roll"]->adjustValue(fdm_, -0.1); }},
         {FcsCommand::RollRight, [this]() { strategies_["roll"]->adjustValue(fdm_, 0.1); }},
         {FcsCommand::YawLeft, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
         {FcsCommand::YawRight, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
+        {FcsCommand::ThrottleUp, [this]() { strategies_["throttle"]->adjustValue(fdm_, 0.01); }},
+        {FcsCommand::ThrottleDown, [this]() { strategies_["throttle"]->adjustValue(fdm_, 0.01); }},
+        {FcsCommand::ToggleBrake, [this]() {strategies_["brake"]->adjustValue(fdm_, 0.0); }}
     };
 }
 
-void Simulation::run() {
 
+void Simulation::run() {
     double dt = fdm_.GetDeltaT();
+
+    aircraft_.startAircraft();
 
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
-        int c = CursesManager_.getInput();
-
+        //Currently missing shutdown logic (SIGINT termination only)
 
         InputEvent event;
         while (inputDevice_->pollEvent(event)) {
-            auto res = keyBindings_.find(event.code);
-            if (res !=keyBindings_.end()) {
-                res->second();
+            printf("Pressed %c\n", event.code);
+            if (event.code == 27) {
+                //Escape key pressed
+                goto simEnd;
+            }
+
+            auto res = keyToCommand_.find(event.code);
+            if (res != keyToCommand_.end()) {
+                auto command = commandHandler_.find(res->second);
+                if (command != commandHandler_.end()) {
+                    command->second();
+                    printf("here\n");
+                }
             }
         }
-        //Need to move this out
-        if (c == 27)
-            break;
-
-        if (c == KEY_UP)
-            strategies_.adjustFCS(Pitch, 0.1);
-        if (c == KEY_DOWN)
-            throttle -= 0.01;
-        //Clamp throttle
-        if (throttle > 1.0) throttle = 1.0;
-        if (throttle < 0.0) throttle = 0.0;
-
-        
-
-        if (c == KEY_BACKSPACE) {
-            if (fdm_.GetPropertyValue("fcs/left-brake-cmd-norm") == 0.0) {
-
-            } else {
-                fdm_.SetPropertyValue("fcs/left-brake-cmd-norm", 0.0);
-                fdm_.SetPropertyValue("fcs/right-brake-cmd-norm", 0.0);
-                fdm_.SetPropertyValue("fcs/center-brake-cmd-norm", 0.0);
-            }
-        }
-
-        //Control surfaces
-        if (c == 's') {
-            elevator = 1.0;
-        } else if (c == 'w') {
-            elevator = -1.0;
-        }
-        if (c == 'd') {
-            aileron = 1.0;
-        } else if (c == 'a') {
-            aileron = -1.0;
-        }
-        if (c == 'q') {
-            rudder = -1.0;
-        } else if (c == 'e') {
-            rudder = 1.0;
-        }
-
-        //up to here
 
         fdm_.Run();
 
@@ -151,17 +130,25 @@ void Simulation::run() {
 
         refresh();
 
-        //Sleep for sim duration (~8.3ms) to match real life time.
-        //This will likely lag the sim if dense enough
+        //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
+        //This will inevitably lag the sim a bit
+        //Needs to be replaced with some exterior time tracking given that real-time simulation is desired
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 
+    simEnd:
+
     endwin();
 
-    std::cout << "Exited" << std::endl;
+    std::cout << "Exited successfully" << std::endl;
 }
 
 
+/**
+ * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.q
+ * @param fdm The FGFDMExec instance
+ * @param filename The output file name.
+ */
 void Simulation::dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename) {
     std::ofstream out(filename);
 
