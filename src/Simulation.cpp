@@ -13,23 +13,18 @@
 
 #include "model/fcs/FcsStrategyFactory.h"
 
-
 /**
  * Constructs the simulator.
  */
 Simulation::Simulation() : aircraft_(fdm_) {
-    //Redirect JSB output
-    //std::ofstream logFile("jsbsim.log");
-    //std::cout.rdbuf(logFile.rdbuf());
-    //std::cerr.rdbuf(logFile.rdbuf());
-
-    //SGPath root("/home/jay/Proj/jsbsim");
-    const SGPath root(".");
+    //Set up JSB directories and load models
+    const std::string jsbSimDir = std::getenv("jsbSimDir");
+    const SGPath root(jsbSimDir);
     fdm_.SetRootDir(root);
 
-    fdm_.SetAircraftPath(SGPath("/home/jay/Proj/jsbsim/aircraft"));
-    fdm_.SetEnginePath(SGPath("/home/jay/Proj/jsbsim/engine"));
-    fdm_.SetSystemsPath(SGPath("/home/jay/Proj/jsbsim/systems"));
+    fdm_.SetAircraftPath(SGPath("aircraft"));
+    fdm_.SetEnginePath(SGPath("engine"));
+    fdm_.SetSystemsPath(SGPath("systems"));
 
     if (!fdm_.LoadModel("c172p")) {
         throw std::runtime_error("Failed to load aircraft model");
@@ -53,10 +48,10 @@ Simulation::Simulation() : aircraft_(fdm_) {
     commandHandler_ = {
         {FcsCommand::PitchUp, {"pitch", 0.1}},
         {FcsCommand::PitchDown, {"pitch", -0.1}},
-        {FcsCommand::RollLeft,  {"roll", -0.1}},
+        {FcsCommand::RollLeft, {"roll", -0.1}},
         {FcsCommand::RollRight, {"roll", 0.1}},
-        {FcsCommand::YawLeft,  {"yaw", -0.1}},
-        {FcsCommand::YawRight,  {"yaw", 0.1}},
+        {FcsCommand::YawLeft, {"yaw", -0.1}},
+        {FcsCommand::YawRight, {"yaw", 0.1}},
         {FcsCommand::ThrottleUp, {"throttle", 0.1}},
         {FcsCommand::ThrottleDown, {"throttle", -0.1}},
         {FcsCommand::ToggleBrake, {"brake", 0.0}},
@@ -77,7 +72,7 @@ void Simulation::run() {
     while (true) {
         //Currently missing shutdown logic (SIGINT termination only)
 
-        InputEvent event;
+        InputEvent event{};
         while (inputDevice_->pollEvent(event)) {
             printf("Pressed %c\n", event.code);
             if (event.code == 27) {
@@ -89,8 +84,8 @@ void Simulation::run() {
             if (res != keyToCommand_.end()) {
                 auto command = commandHandler_.find(res->second);
                 if (command != commandHandler_.end()) {
-                    auto& binding = command->second;
-                    strategies_[binding.strategyKey]->adjustValue(fdm_,binding.delta);
+                    auto &binding = command->second;
+                    strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
                 }
             }
         }
@@ -133,7 +128,7 @@ void Simulation::run() {
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 
-    simEnd:
+simEnd:
 
     endwin();
 
@@ -160,4 +155,3 @@ void Simulation::dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::st
 
     std::cout.rdbuf(oldBuf);
 }
-

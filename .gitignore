@@ -1,6 +1,14 @@
+# Build files
 /build
 /cmake-build-debug
+
+# Linter
 .clang-tidy
+
+# IDE files
 .idea
+
+# Other files
 jsbsim.log
 main
+var.env

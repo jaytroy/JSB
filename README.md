@@ -3,6 +3,11 @@ This is a barebones implementation of a flight simulator using JSBSim and C++. I
 
 This program currently requires [JSBSim and JSBSim Dev](https://github.com/JSBSim-Team/jsbsim/releases), NCurses, and C++ libraries to be installed. 
 
+Make sure you have your environment variables set
+```dotenv
+jsbSimDir="/home/usr/yourjsbdir"
+```
+
 Build and (re)run with
 >rm -rf build && cmake -B build && cmake --build build && ./build/JSB
 
@@ -11,7 +16,7 @@ Build and (re)run with
 |---------------------------|-------------|----------------------------------------------------------------------------|
 | Graphics (OpenGL)         | TBD         | Or UEngine/FlightGear instead? Ideally modular.                            |
 | Environment Variables     | In progress | So that users don't have to modify code directly                           |
-| Better FCS strat creation | In progress | Implement factory pattern to declutter FCS strat creation                  |
+| Better FCS strat creation | Almost      | Implement factory pattern to declutter FCS strat creation                  |
 | Expand FCS functionality  | TBD         | Implement more than barebones flight controls                              |
 | Dockerize                 | TBD         | Make it run anywhere! (that can run docker)                                |
 | Aircraft selection        | TBD         | Fly something other than a measly 172P                                     |
