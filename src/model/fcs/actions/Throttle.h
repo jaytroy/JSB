@@ -6,7 +6,9 @@
 #define JSB_THROTTLE_H
 #include "../FcsStrategy.h"
 
-
+/**
+ * FCS Throttle controls.
+ */
 class Throttle : public FcsStrategy {
 public:
     ~Throttle() override = default;

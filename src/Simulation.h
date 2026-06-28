@@ -12,6 +12,10 @@
 #include "model/fcs/FcsCommand.h"
 #include "input/NCursesManager.h"
 
+/**
+ * The simulation class is responsible for running all parts of the simulator and putting them together.
+ * This is where we have the main game loop.
+ */
 class Simulation {
 public:
     Simulation();
@@ -37,6 +41,13 @@ private:
         {'b', FcsCommand::ToggleBrake},
     };
 
+    /**
+     * Dumps the entirety property catalog of the current aircraft into a file.
+     * This is primarily for ease of development.
+     * @brief Lets you look up things like "fcs/throttle..."
+     * @param fdm The fdm instance.
+     * @param filename The output filename.
+     */
     static void dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename);
 };
 

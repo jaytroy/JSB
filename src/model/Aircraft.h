@@ -9,7 +9,7 @@
 #include "fcs/FcsStrategy.h"
 
 /**
- * @brief The aircraft class. Holds and refers to all info about the specific aircraft.
+ * @brief The aircraft class. Holds all info about the specific aircraft and enables interaction with it.
  */
 class Aircraft {
 public:
@@ -17,13 +17,6 @@ public:
 
     void startAircraft();
     void stopAircraft();
-
-    void adjustFCS(std::unique_ptr<FcsStrategy> &&strategy, double value);
-
-    void setThrottle(double value);
-    void setPitch(double value);
-    void setRoll(double value);
-    void setYaw(double value);
     void resetFCS();
 
 private:

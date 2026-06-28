@@ -6,7 +6,9 @@
 #define JSB_YAW_H
 #include "../FcsStrategy.h"
 
-
+/**
+ * FCS Yaw controls.
+ */
 class Yaw : public FcsStrategy {
 public:
     ~Yaw() override = default;

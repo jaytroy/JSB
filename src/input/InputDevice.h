@@ -10,6 +10,10 @@ struct InputEvent {
     bool pressed;
 };
 
+/**
+ * Abstract class defining input functionality.
+ * Currently works with keyboard.
+ */
 class InputDevice {
 public:
     virtual ~InputDevice() = default;

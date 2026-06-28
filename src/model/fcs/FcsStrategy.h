@@ -10,7 +10,7 @@
 
 
 /**
- * @brief Defines functionality for FCS commands using the strategy design pattern.
+ * @brief Abstract class defining functionality for FCS commands using the strategy design pattern.
  */
 class FcsStrategy {
 public:

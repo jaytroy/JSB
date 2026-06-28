@@ -14,7 +14,9 @@
 #include "actions/Throttle.h"
 #include "actions/Yaw.h"
 
-
+/**
+ * Enables easy and decoupled creation of FCS commands.
+ */
 class FcsStrategyFactory {
 public:
     using Creator = std::function<std::unique_ptr<FcsStrategy>()>;

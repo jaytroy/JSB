@@ -11,7 +11,7 @@ struct FcsBinding {
 };
 
 /**
- * @brief An enum class for all possible FCS commands.
+ * An enum class for all possible FCS commands.
  * Will expand as sim expands.
  */
 enum class FcsCommand {

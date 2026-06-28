@@ -14,6 +14,9 @@
 #include "model/fcs/FcsStrategyFactory.h"
 
 
+/**
+ * Constructs the simulator.
+ */
 Simulation::Simulation() : aircraft_(fdm_) {
     //Redirect JSB output
     //std::ofstream logFile("jsbsim.log");
@@ -21,7 +24,7 @@ Simulation::Simulation() : aircraft_(fdm_) {
     //std::cerr.rdbuf(logFile.rdbuf());
 
     //SGPath root("/home/jay/Proj/jsbsim");
-    SGPath root(".");
+    const SGPath root(".");
     fdm_.SetRootDir(root);
 
     fdm_.SetAircraftPath(SGPath("/home/jay/Proj/jsbsim/aircraft"));
@@ -60,10 +63,13 @@ Simulation::Simulation() : aircraft_(fdm_) {
     };
 }
 
-
+/**
+ * Runs the simulation.
+ */
 void Simulation::run() {
     double dt = fdm_.GetDeltaT();
 
+    //This should be a command
     aircraft_.startAircraft();
 
     fdm_.RunIC();

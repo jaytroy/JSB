@@ -6,6 +6,9 @@
 
 #include <ncurses.h>
 
+/**
+ * Sets up the basic stuff required for NCurses to work.
+ */
 NCursesManager::NCursesManager() {
     initscr();
     noecho();
@@ -14,6 +17,11 @@ NCursesManager::NCursesManager() {
     nodelay(stdscr, TRUE);
 }
 
+/**
+ * Polls an event (keystroke) from keyboard.
+ * @param outEvent The caller's InputEvent object.
+ * @return True if poll is successful, otherwise false.
+ */
 bool NCursesManager::pollEvent(InputEvent &outEvent) {
     c = getch();
     if (c == ERR) return false;

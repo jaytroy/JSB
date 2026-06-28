@@ -11,12 +11,16 @@
 #include "fcs/FcsStrategy.h"
 
 /**
- * @brief Aircraft::Aircraft constructs a new aircraft to be used in the sim.
- * @return The aircraft.
+ * The aircraft constructor.
+ * @param fdm The FDM instance.
  */
 Aircraft::Aircraft(JSBSim::FGFDMExec &fdm)
     : fdm_(fdm) {}
 
+/**
+ * Starts the aircraft.
+ * *** WILL BE REMOVED ***
+ */
 void Aircraft::startAircraft() {
     fdm_.SetPropertyValue("propulsion/engine/set-running", 1);
     fdm_.SetPropertyValue("propulsion/starter_cmd", 1);
@@ -26,6 +30,10 @@ void Aircraft::startAircraft() {
     engineOn = 1;
 }
 
+/**
+ * Stops the aircraft.
+ * *** WILL BE REMOVED ***
+ */
 void Aircraft::stopAircraft() {
     fdm_.SetPropertyValue("propulsion/engine/set-running", 0);
     fdm_.SetPropertyValue("propulsion/starter_cmd", 0);
@@ -34,16 +42,10 @@ void Aircraft::stopAircraft() {
     engineOn = 0;
 }
 
-void Aircraft::adjustFCS(std::unique_ptr<FcsStrategy> &&strategy, double value) {
-   fcsStrategy_ = std::move(strategy);
-
-    if (fcsStrategy_) {
-        fcsStrategy_->adjustValue(fdm_, value);
-    } else {
-        throw std::runtime_error("Bad strategy was set");
-    }
-}
-
+/**
+ * Resets FCS to prevent to prevent it "sticking" in one direction.
+ * This makes controls game-like.
+ */
 void Aircraft::resetFCS() {
         fdm_.SetPropertyValue("fcs/throttle-cmd-norm", 0.0);
         fdm_.SetPropertyValue("fcs/elevator-cmd-norm", 0.0);
