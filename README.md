@@ -1,7 +1,7 @@
 # JSBSim flight simulator
 This is a barebones implementation of a flight simulator using JSBSim and C++. It is tested on Ubuntu 24.04 and is unlikely to run on dissimilar OS's.
 
-This program currently requires [JSBSim and JSBSim Dev](https://github.com/JSBSim-Team/jsbsim/releases) libraries to be installed. 
+This program currently requires [JSBSim and JSBSim Dev](https://github.com/JSBSim-Team/jsbsim/releases), NCurses, and C++ libraries to be installed. 
 
 Build and (re)run with
 >rm -rf build && cmake -B build && cmake --build build && ./build/JSB
