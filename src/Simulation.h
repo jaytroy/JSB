@@ -10,24 +10,20 @@
 
 #include "model/Aircraft.h"
 #include "model/fcs/FcsCommand.h"
-#include "util/NCursesManager.h"
-
+#include "input/NCursesManager.h"
 
 class Simulation {
 public:
     Simulation();
-
-    void setup();
-
     void run();
 
 private:
     NCursesManager nCursesManager_;
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
-    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> uuustrategies_;
+    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::unique_ptr<InputDevice> inputDevice_;
-    std::unordered_map<FcsCommand, std::function<void()>> commandHandler_;
+    std::unordered_map<FcsCommand, FcsBinding> commandHandler_;
 
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
         {'w', FcsCommand::PitchDown},

@@ -11,11 +11,7 @@
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
-#include "model/fcs/actions/Brake.h"
-#include "model/fcs/actions/Pitch.h"
-#include "model/fcs/actions/Roll.h"
-#include "model/fcs/actions/Throttle.h"
-#include "model/fcs/actions/Yaw.h"
+#include "model/fcs/FcsStrategyFactory.h"
 
 
 Simulation::Simulation() : aircraft_(fdm_) {
@@ -48,24 +44,19 @@ Simulation::Simulation() : aircraft_(fdm_) {
     inputDevice_ = std::make_unique<NCursesManager>();
 
     //Set up FCS strategies
-    //This can likely be moved out
-    //This can be made better with a factory
-    strategies_["throttle"] = std::make_unique<Throttle>();
-    strategies_["pitch"] = std::make_unique<Pitch>();
-    strategies_["yaw"] = std::make_unique<Yaw>();
-    strategies_["roll"] = std::make_unique<Roll>();
-    strategies_["brake"] = std::make_unique<Brake>();
+    strategies_ = FcsStrategyFactory::createAll();
 
+    //I still don't like this
     commandHandler_ = {
-        {FcsCommand::PitchUp, [this]() { strategies_["pitch"]->adjustValue(fdm_, 0.1); }},
-        {FcsCommand::PitchDown, [this]() { strategies_["pitch"]->adjustValue(fdm_, -0.1); }},
-        {FcsCommand::RollLeft, [this]() { strategies_["roll"]->adjustValue(fdm_, -0.1); }},
-        {FcsCommand::RollRight, [this]() { strategies_["roll"]->adjustValue(fdm_, 0.1); }},
-        {FcsCommand::YawLeft, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
-        {FcsCommand::YawRight, [this]() { strategies_["yaw"]->adjustValue(fdm_, 0.1); }},
-        {FcsCommand::ThrottleUp, [this]() { strategies_["throttle"]->adjustValue(fdm_, 0.01); }},
-        {FcsCommand::ThrottleDown, [this]() { strategies_["throttle"]->adjustValue(fdm_, 0.01); }},
-        {FcsCommand::ToggleBrake, [this]() {strategies_["brake"]->adjustValue(fdm_, 0.0); }}
+        {FcsCommand::PitchUp, {"pitch", 0.1}},
+        {FcsCommand::PitchDown, {"pitch", -0.1}},
+        {FcsCommand::RollLeft,  {"roll", -0.1}},
+        {FcsCommand::RollRight, {"roll", 0.1}},
+        {FcsCommand::YawLeft,  {"yaw", -0.1}},
+        {FcsCommand::YawRight,  {"yaw", 0.1}},
+        {FcsCommand::ThrottleUp, {"throttle", 0.1}},
+        {FcsCommand::ThrottleDown, {"throttle", -0.1}},
+        {FcsCommand::ToggleBrake, {"brake", 0.0}},
     };
 }
 
@@ -92,8 +83,8 @@ void Simulation::run() {
             if (res != keyToCommand_.end()) {
                 auto command = commandHandler_.find(res->second);
                 if (command != commandHandler_.end()) {
-                    command->second();
-                    printf("here\n");
+                    auto& binding = command->second;
+                    strategies_[binding.strategyKey]->adjustValue(fdm_,binding.delta);
                 }
             }
         }
@@ -131,7 +122,7 @@ void Simulation::run() {
         refresh();
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
-        //This will inevitably lag the sim a bit
+        //This will inevitably lag the sim
         //Needs to be replaced with some exterior time tracking given that real-time simulation is desired
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
