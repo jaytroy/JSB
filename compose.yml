@@ -1,6 +1,0 @@
-services:
-  jsb:
-    image: jsb
-    build:
-      context: ./src
-      dockerfile: Dockerfile

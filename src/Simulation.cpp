@@ -18,8 +18,8 @@
  */
 Simulation::Simulation() : aircraft_(fdm_) {
     //Set up JSB directories and load models
-    const std::string jsbSimDir = std::getenv("jsbSimDir");
-    const SGPath root(jsbSimDir);
+    const std::string JSBGITDIR = std::getenv("JSBGITDIR");
+    const SGPath root(JSBGITDIR);
     fdm_.SetRootDir(root);
 
     fdm_.SetAircraftPath(SGPath("aircraft"));
@@ -31,7 +31,7 @@ Simulation::Simulation() : aircraft_(fdm_) {
     }
 
     auto IC = fdm_.GetIC();
-    if (!IC->Load(SGPath("/home/jay/Proj/jsbsim/aircraft/c172p/reset00.xml"))) {
+    if (!IC->Load(SGPath("reset00.xml"))) {
         throw std::runtime_error("Failed to load reset file");
     }
 
