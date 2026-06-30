@@ -17,8 +17,9 @@
  * Constructs the simulator.
  */
 Simulation::Simulation() : aircraft_(fdm_) {
+    static const char* JSBGITDIR = std::getenv("JSBGITDIR");
+
     //Set up JSB directories and load models
-    const std::string JSBGITDIR = std::getenv("JSBGITDIR");
     const SGPath root(JSBGITDIR);
     fdm_.SetRootDir(root);
 
@@ -35,7 +36,7 @@ Simulation::Simulation() : aircraft_(fdm_) {
         throw std::runtime_error("Failed to load reset file");
     }
 
-    //Dump catalog
+    //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
     //Set up input
@@ -43,19 +44,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
 
     //Set up FCS strategies
     strategies_ = FcsStrategyFactory::createAll();
-
-    //I still don't like this
-    commandHandler_ = {
-        {FcsCommand::PitchUp, {"pitch", 0.1}},
-        {FcsCommand::PitchDown, {"pitch", -0.1}},
-        {FcsCommand::RollLeft, {"roll", -0.1}},
-        {FcsCommand::RollRight, {"roll", 0.1}},
-        {FcsCommand::YawLeft, {"yaw", -0.1}},
-        {FcsCommand::YawRight, {"yaw", 0.1}},
-        {FcsCommand::ThrottleUp, {"throttle", 0.1}},
-        {FcsCommand::ThrottleDown, {"throttle", -0.1}},
-        {FcsCommand::ToggleBrake, {"brake", 0.0}},
-    };
 }
 
 /**
@@ -70,7 +58,6 @@ void Simulation::run() {
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
-        //Currently missing shutdown logic (SIGINT termination only)
 
         InputEvent event{};
         while (inputDevice_->pollEvent(event)) {
@@ -92,6 +79,8 @@ void Simulation::run() {
 
         fdm_.Run();
 
+        aircraft_.resetFCS();
+
         //Erase previous buffer
         erase();
 
@@ -105,7 +94,7 @@ void Simulation::run() {
         double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
         double roll = fdm_.GetPropertyValue("attitude/roll-rad");
         double throttle = fdm_.GetPropertyValue("propulsion/throttle-pos-norm");
-        double rudder = fdm_.GetPropertyValue("fcs/rudder-prop-norm");
+        double rudder = fdm_.GetPropertyValue("fcs/rudder-cmd-norm");
         printw(
             "t=%f\n"
             "v=%f\n"

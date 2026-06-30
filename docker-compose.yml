@@ -1,7 +1,9 @@
-name: jsb_simulation
+name: jsb
 
 services:
   simulation:
+    container_name: jsb-simulation
+    image: ghcr.io/jaytroy/jsb-simulation:latest
     build:
       context: .
       dockerfile: Dockerfile

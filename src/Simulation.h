@@ -25,9 +25,8 @@ private:
     NCursesManager nCursesManager_;
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
-    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::unique_ptr<InputDevice> inputDevice_;
-    std::unordered_map<FcsCommand, FcsBinding> commandHandler_;
+    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
 
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
         {'w', FcsCommand::PitchDown},
@@ -39,6 +38,20 @@ private:
         {'u', FcsCommand::ThrottleUp},
         {'n', FcsCommand::ThrottleDown},
         {'b', FcsCommand::ToggleBrake},
+    };
+
+    //I still don't like this
+    //I can go directly key to command, but is that better?
+    std::unordered_map<FcsCommand, FcsBinding> commandHandler_ = {
+        {FcsCommand::PitchUp, {"pitch", 0.1}},
+        {FcsCommand::PitchDown, {"pitch", -0.1}},
+        {FcsCommand::RollLeft, {"roll", -0.1}},
+        {FcsCommand::RollRight, {"roll", 0.1}},
+        {FcsCommand::YawLeft, {"yaw", -0.1}},
+        {FcsCommand::YawRight, {"yaw", 0.1}},
+        {FcsCommand::ThrottleUp, {"throttle", 0.1}},
+        {FcsCommand::ThrottleDown, {"throttle", -0.1}},
+        {FcsCommand::ToggleBrake, {"brake", 0.0}},
     };
 
     /**

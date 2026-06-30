@@ -8,7 +8,11 @@
 # IDE files
 .idea
 
+# Log files
+*.log
+
+# Env files
+*.env
+
 # Other files
-jsbsim.log
-main
-var.env
+docker-compose.yml
