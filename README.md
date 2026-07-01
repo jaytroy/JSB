@@ -6,7 +6,6 @@ Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim
 ### Run the container via Docker compose:
 Copy this file. Make sure to point it towards the repository you cloned above.
 ```yaml
-volumes: 
 name: jsb
 
 services:
@@ -27,7 +26,7 @@ services:
 
 Then run with:
 ```shell
-docker compose run --rm -it simulation
+docker compose run --build --rm -it simulation
 ```
 
 ### Compile from source
@@ -54,19 +53,19 @@ You can generally omit the first two commands.
 
 
 ### Todo:
-| Feature                   | Status | Notes                                                                       |
-|---------------------------|--------|-----------------------------------------------------------------------------|
-| Graphics (OpenGL)         | TBD    | Or UEngine/FlightGear instead? Ideally modular.                             |
-| User interface | TBD | Graphics prerequisite. Display data better                                  |
-| Environment Variables     | Done   | So that users don't have to modify code directly                            |
-| Better FCS strat creation | Almost | Implement factory pattern to declutter FCS strat creation                   |
-| Expand FCS functionality  | TBD    | Implement more than barebones flight controls                               |
-| Dockerize                 | Done   | Make it run anywhere! (that runs Docker)                                    |
-| Aircraft selection        | TBD    | Fly something other than a measly 172P                                      |
-| Multiple aircraft at once | TBD    | Allow the user to perform mid-air collisions                                |
-| Custom environments       | TBD    | Set up your own worlds and environments be creating bespoke XML Reset files |
+| Feature                             | Status | Notes                                                                       |
+|-------------------------------------|--------|-----------------------------------------------------------------------------|
+| Graphics (OpenGL)                   | TBD    | Or UEngine/FlightGear instead? Ideally modular.                             |
+| User interface                      | TBD    | Graphics prerequisite. Display data better                                  |
+| Environment Variables               | Done   | So that users don't have to modify code directly                            |
+| Better FCS strat creation           | Almost | Implement factory pattern to declutter FCS strat creation                   |
+| Expand FCS functionality            | TBD    | Implement more than barebones flight controls                               |
+| Dockerize                           | Done   | Make it run anywhere! (that runs Docker)                                    |
+| Aircraft selection                  | TBD    | Fly something other than a measly 172P                                      |
+| Multiple aircraft at once           | TBD    | Allow the user to perform mid-air collisions                                |
+| Custom environments                 | TBD    | Set up your own worlds and environments be creating bespoke XML Reset files |
 | Switch NCurses for something better | TBD    | Curses only allows for keyboard input at a time. Replace with sdl2?         |
-| Unit tests | TBD | Oh no                                                                       |
+| Unit tests                          | TBD    | Oh no                                                                       |
 
 
 #### Generative AI use declaration

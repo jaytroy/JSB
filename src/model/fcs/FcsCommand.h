@@ -21,6 +21,7 @@ enum class FcsCommand {
     YawLeft, YawRight,
     Start, Stop,
     ToggleBrake,
+    ToggleEngine
 };
 
 

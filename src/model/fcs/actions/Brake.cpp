@@ -5,11 +5,9 @@
 #include "Brake.h"
 
 void Brake::adjustValue(JSBSim::FGFDMExec &fdm, double value) {
-    double current = fdm.GetPropertyValue(FCS::brake_center.data());
+    double isOn = fdm.GetPropertyValue(FCS::brake_center.data());
 
-    printf("Brake is %lf", current);
-
-    if (current == 0.0) {
+    if (!isOn) {
         fdm.SetPropertyValue(FCS::brake_left.data(), 1.0);
         fdm.SetPropertyValue(FCS::brake_right.data(), 1.0);
         fdm.SetPropertyValue(FCS::brake_center.data(), 1.0);
@@ -18,6 +16,4 @@ void Brake::adjustValue(JSBSim::FGFDMExec &fdm, double value) {
         fdm.SetPropertyValue(FCS::brake_right.data(), 0.0);
         fdm.SetPropertyValue(FCS::brake_center.data(), 0.0);
     }
-
-
 }

@@ -9,6 +9,7 @@
 
 #include "FcsStrategy.h"
 #include "actions/Brake.h"
+#include "actions/Engine.h"
 #include "actions/Pitch.h"
 #include "actions/Roll.h"
 #include "actions/Throttle.h"
@@ -28,6 +29,7 @@ public:
             {"roll", [] {return std::make_unique<Roll>(); }},
             {"brake", [] {return std::make_unique<Brake>(); }},
             {"yaw", [] {return std::make_unique<Yaw>();}},
+            {"engine", [] {return std::make_unique<Engine>();}}
         };
 
         std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> result;
@@ -38,6 +40,5 @@ public:
         return result;
     }
 };
-
 
 #endif //JSB_FCSSTRATEGYFACTORY_H

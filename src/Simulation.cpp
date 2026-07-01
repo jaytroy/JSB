@@ -52,9 +52,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
 void Simulation::run() {
     double dt = fdm_.GetDeltaT();
 
-    //This should be a command
-    aircraft_.startAircraft();
-
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
@@ -79,8 +76,6 @@ void Simulation::run() {
 
         fdm_.Run();
 
-        aircraft_.resetFCS();
-
         //Erase previous buffer
         erase();
 
@@ -93,8 +88,8 @@ void Simulation::run() {
         double heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
         double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
         double roll = fdm_.GetPropertyValue("attitude/roll-rad");
-        double throttle = fdm_.GetPropertyValue("propulsion/throttle-pos-norm");
-        double rudder = fdm_.GetPropertyValue("fcs/rudder-cmd-norm");
+        double throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
+        double pitch = fdm_.GetPropertyValue("attitude/pitch-rad");
         printw(
             "t=%f\n"
             "v=%f\n"
@@ -104,12 +99,14 @@ void Simulation::run() {
             "posit_e=%lf\n"
             "posit_u=%lf\n"
             "heading=%lf\n"
-            "rudder=%lf\n"
-            "brake=%lf\n"
-            "roll=%lf\n",
-            time, airspeed, throttle, rpm, posN, posE, posU, heading, rudder, brake, roll);
+            "pitch=%lf\n"
+            "roll=%lf\n"
+            "brake=%lf\n",
+            time, airspeed, throttle, rpm, posN, posE, posU, heading, pitch, roll, brake);
 
         refresh();
+
+        aircraft_.resetFCS();
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
         //This will inevitably lag the sim
@@ -126,7 +123,7 @@ simEnd:
 
 
 /**
- * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.q
+ * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.
  * @param fdm The FGFDMExec instance
  * @param filename The output file name.
  */

@@ -38,6 +38,7 @@ private:
         {'u', FcsCommand::ThrottleUp},
         {'n', FcsCommand::ThrottleDown},
         {'b', FcsCommand::ToggleBrake},
+        {'p', FcsCommand::ToggleEngine}
     };
 
     //I still don't like this
@@ -52,6 +53,7 @@ private:
         {FcsCommand::ThrottleUp, {"throttle", 0.1}},
         {FcsCommand::ThrottleDown, {"throttle", -0.1}},
         {FcsCommand::ToggleBrake, {"brake", 0.0}},
+        {FcsCommand::ToggleEngine, {"engine", 0.0}}
     };
 
     /**

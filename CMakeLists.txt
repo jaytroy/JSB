@@ -31,6 +31,8 @@ add_executable(JSB
         src/input/InputDevice.h
         src/model/fcs/FcsCommand.h
         src/model/fcs/FcsStrategyFactory.h
+        src/model/fcs/actions/Engine.cpp
+        src/model/fcs/actions/Engine.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

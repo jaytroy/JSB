@@ -12,7 +12,7 @@
 /**
  * @brief Abstract class defining functionality for FCS commands using the strategy design pattern.
  */
-class FcsStrategy {
+class FcsStrategy { //Rename this to smt more fitting or make another class
 public:
     virtual ~FcsStrategy() = default;
     virtual void adjustValue(JSBSim::FGFDMExec &fdm, double value) = 0;
@@ -34,6 +34,7 @@ namespace FCS { //Should this be here?
     static constexpr std::string_view brake_left = "fcs/left-brake-cmd-norm";
     static constexpr std::string_view brake_right = "fcs/right-brake-cmd-norm";
     static constexpr std::string_view brake_center = "fcs/center-brake-cmd-norm";
+    static constexpr std::string_view engine = "propulsion/engine/set-running";
 }
 
 //necessary?
