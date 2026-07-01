@@ -12,9 +12,6 @@ services:
   simulation:
     container_name: jsb-simulation
     image: ghcr.io/jaytroy/jsb-simulation:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
     volumes:
       - /your/jsb/dir:/app/jsbsim # Update this
     environment:
