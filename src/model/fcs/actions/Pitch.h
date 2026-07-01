@@ -6,7 +6,9 @@
 #define JSB_PITCH_H
 #include "../FcsStrategy.h"
 
-
+/**
+ * FCS Pitch controls.
+ */
 class Pitch : public FcsStrategy {
 public:
     ~Pitch() override = default;

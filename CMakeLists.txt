@@ -13,11 +13,10 @@ add_executable(JSB
         src/Main.cpp
         src/model/Aircraft.cpp
         src/model/Aircraft.h
-        src/util/NCursesManager.cpp
-        src/util/NCursesManager.h
+        src/input/NCursesManager.cpp
+        src/input/NCursesManager.h
         src/Simulation.cpp
         src/Simulation.h
-        src/model/fcs/FcsStrategy.cpp
         src/model/fcs/FcsStrategy.h
         src/model/fcs/actions/Throttle.cpp
         src/model/fcs/actions/Throttle.h
@@ -29,8 +28,11 @@ add_executable(JSB
         src/model/fcs/actions/Yaw.h
         src/model/fcs/actions/Brake.cpp
         src/model/fcs/actions/Brake.h
-        src/util/InputDevice.h
+        src/input/InputDevice.h
         src/model/fcs/FcsCommand.h
+        src/model/fcs/FcsStrategyFactory.h
+        src/model/fcs/actions/Engine.cpp
+        src/model/fcs/actions/Engine.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

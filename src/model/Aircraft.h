@@ -9,25 +9,17 @@
 #include "fcs/FcsStrategy.h"
 
 /**
- * @brief The aircraft class. Holds and refers to all info about the specific aircraft.
+ * @brief The aircraft class. Holds all info about the specific aircraft and enables interaction with it.
  */
 class Aircraft {
 public:
     explicit Aircraft(JSBSim::FGFDMExec &fdm);
 
-    void startAircraft();
-    void stopAircraft();
-
-    void adjustFCS(std::unique_ptr<FcsStrategy> &&strategy, double value);
-
-    void setThrottle(double value);
-    void setPitch(double value);
-    void setRoll(double value);
-    void setYaw(double value);
     void resetFCS();
 
 private:
     JSBSim::FGFDMExec &fdm_;
+    // Need better logging for these
     int engineOn = 0;
     double throttle = 0.0;
     double rudder = 0.0;

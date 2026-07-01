@@ -6,7 +6,9 @@
 #define JSB_ROLL_H
 #include "../FcsStrategy.h"
 
-
+/**
+ * FCS Roll controls.
+ */
 class Roll : public FcsStrategy {
 public:
     ~Roll() override = default;
