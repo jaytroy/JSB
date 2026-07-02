@@ -6,7 +6,9 @@
 #define JSB_BRAKE_H
 #include "../FcsStrategy.h"
 
-
+/**
+ * FCS Brake controls.
+ */
 class Brake : public FcsStrategy {
 public:
     ~Brake() override = default;

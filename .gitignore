@@ -1,4 +1,18 @@
+# Build files
 /build
 /cmake-build-debug
+
+# Linter
 .clang-tidy
+
+# IDE files
 .idea
+
+# Log files
+*.log
+
+# Env files
+*.env
+
+# Other files
+docker-compose.yml

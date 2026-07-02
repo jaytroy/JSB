@@ -5,8 +5,13 @@
 #ifndef JSB_FCSCOMMAND_H
 #define JSB_FCSCOMMAND_H
 
+struct FcsBinding {
+    std::string strategyKey;
+    double delta;
+};
+
 /**
- * @brief An enum class for all possible FCS commands.
+ * An enum class for all possible FCS commands.
  * Will expand as sim expands.
  */
 enum class FcsCommand {
@@ -16,6 +21,7 @@ enum class FcsCommand {
     YawLeft, YawRight,
     Start, Stop,
     ToggleBrake,
+    ToggleEngine
 };
 
 

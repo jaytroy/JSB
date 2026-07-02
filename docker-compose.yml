@@ -1,0 +1,15 @@
+name: jsb
+
+services:
+  simulation:
+    container_name: jsb-simulation
+    image: ghcr.io/jaytroy/jsb-simulation:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /home/jay/Proj/jsbsim:/app/jsbsim
+    environment:
+      - TERM=xterm
+    stdin_open: true
+    tty: true
