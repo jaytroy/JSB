@@ -37,6 +37,8 @@ add_executable(JSB
         src/gfx/GraphicsObserver.h
         src/gfx/GL.cpp
         src/gfx/GL.h
+        src/gfx/Window.cpp
+        src/gfx/Window.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})
