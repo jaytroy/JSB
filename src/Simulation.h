@@ -22,7 +22,6 @@ public:
     void run();
 
 private:
-    NCursesManager nCursesManager_;
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> uuustrategies_;

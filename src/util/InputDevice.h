@@ -7,13 +7,12 @@
 
 struct InputEvent {
     int code;
-    bool pressed;
 };
 
 class InputDevice {
 public:
     virtual ~InputDevice() = default;
-    virtual bool pollEvent(InputEvent &outEvent) = 0;
+    virtual bool pollEvents(std::vector<InputEvent> &outEvent) = 0;
 };
 
 

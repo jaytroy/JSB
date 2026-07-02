@@ -7,17 +7,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(PkgConfig REQUIRED)
 find_package(Curses REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
 pkg_check_modules(JSBSIM REQUIRED JSBSim)
 
 add_executable(JSB
         src/Main.cpp
         src/model/Aircraft.cpp
         src/model/Aircraft.h
-        src/util/NCursesManager.cpp
-        src/util/NCursesManager.h
         src/Simulation.cpp
         src/Simulation.h
-        src/model/fcs/FcsStrategy.cpp
         src/model/fcs/FcsStrategy.h
         src/model/fcs/actions/Throttle.cpp
         src/model/fcs/actions/Throttle.h
@@ -29,14 +27,23 @@ add_executable(JSB
         src/model/fcs/actions/Yaw.h
         src/model/fcs/actions/Brake.cpp
         src/model/fcs/actions/Brake.h
-        src/util/InputDevice.h
+        src/input/InputDevice.h
         src/model/fcs/FcsCommand.h
+        src/model/fcs/FcsStrategyFactory.h
+        src/model/fcs/actions/Engine.cpp
+        src/model/fcs/actions/Engine.h
+        src/input/SdlManager.cpp
+        src/input/SdlManager.h
+        src/gfx/GraphicsObserver.h
+        src/gfx/GL.cpp
+        src/gfx/GL.h
 )
 
-target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})
+target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})
 target_link_directories(JSB PRIVATE ${JSBSIM_LIBRARY_DIRS})
 target_link_libraries(JSB PRIVATE
         /usr/lib/libJSBSim.a
         ${CURSES_LIBRARIES}
         m
 )
+target_link_libraries(JSB PRIVATE SDL2::SDL2 SDL2::SDL2main)
