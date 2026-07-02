@@ -46,13 +46,10 @@ rm -rf build && cmake -B build && cmake --build build && ./build/JSB
 ```
 You can generally omit the first two commands.
 
-
-
-
 ### Todo:
 | Feature                             | Status | Notes                                                                       |
 |-------------------------------------|--------|-----------------------------------------------------------------------------|
-| Graphics (OpenGL)                   | TBD    | Or UEngine/FlightGear instead? Ideally modular.                             |
+| Graphics (OpenGL)                   | TBD    | Or UEngine/Unity instead? Ideally modular.                                  |
 | User interface                      | TBD    | Graphics prerequisite. Display data better                                  |
 | Environment Variables               | Done   | So that users don't have to modify code directly                            |
 | Better FCS strat creation           | Almost | Implement factory pattern to declutter FCS strat creation                   |

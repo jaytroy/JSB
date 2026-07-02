@@ -11,6 +11,7 @@
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
+#include "input/SdlManager.h"
 #include "model/fcs/FcsStrategyFactory.h"
 
 /**
@@ -40,7 +41,7 @@ Simulation::Simulation() : aircraft_(fdm_) {
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
     //Set up input
-    inputDevice_ = std::make_unique<NCursesManager>();
+    inputDevice_ = std::make_unique<SdlManager>();
 
     //Set up FCS strategies
     strategies_ = FcsStrategyFactory::createAll();
@@ -56,20 +57,22 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     while (true) {
 
-        InputEvent event{};
-        while (inputDevice_->pollEvent(event)) {
-            printf("Pressed %c\n", event.code);
-            if (event.code == 27) {
-                //Escape key pressed
-                goto simEnd;
-            }
+        //Should this be here?
+        std::vector<InputEvent> events;
+        while (inputDevice_->pollEvents(events)) {
+            for (InputEvent event : events) {
+                if (event.code == 27) {
+                    //Escape key pressed
+                    goto simEnd;
+                }
 
-            auto res = keyToCommand_.find(event.code);
-            if (res != keyToCommand_.end()) {
-                auto command = commandHandler_.find(res->second);
-                if (command != commandHandler_.end()) {
-                    auto &binding = command->second;
-                    strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
+                auto res = keyToCommand_.find(event.code);
+                if (res != keyToCommand_.end()) {
+                    auto command = commandHandler_.find(res->second);
+                    if (command != commandHandler_.end()) {
+                        auto &binding = command->second;
+                        strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
+                    }
                 }
             }
         }
