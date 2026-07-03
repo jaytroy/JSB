@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 project(JSB)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -34,11 +34,8 @@ add_executable(JSB
         src/model/fcs/actions/Engine.h
         src/input/SdlManager.cpp
         src/input/SdlManager.h
-        src/gfx/GraphicsObserver.h
-        src/gfx/GL.cpp
-        src/gfx/GL.h
-        src/gfx/Window.cpp
-        src/gfx/Window.h
+        src/input/Joystick.cpp
+        src/input/Joystick.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})

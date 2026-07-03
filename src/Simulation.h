@@ -8,9 +8,9 @@
 #include <unordered_map>
 #include <JSBSim/FGFDMExec.h>
 
+#include "input/InputDevice.h"
 #include "model/Aircraft.h"
 #include "model/fcs/FcsCommand.h"
-#include "input/NCursesManager.h"
 
 /**
  * The simulation class is responsible for running all parts of the simulator and putting them together.
@@ -24,7 +24,7 @@ public:
 private:
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
-    std::unique_ptr<InputDevice> inputDevice_;
+    std::vector<std::unique_ptr<InputDevice>> inputDevices_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
 
     std::unordered_map<int, FcsCommand> keyToCommand_ = {

@@ -6,7 +6,10 @@
 #define JSB_INPUTDEVICE_H
 
 struct InputEvent {
-    int code;
+    int keyCode;
+    int pitch;
+    int roll;
+    int yaw;
 };
 
 /**
@@ -16,7 +19,7 @@ struct InputEvent {
 class InputDevice {
 public:
     virtual ~InputDevice() = default;
-    virtual bool pollEvents(std::vector<InputEvent> &outEvent) = 0;
+    virtual bool pollEvents(std::vector<InputEvent> &outEvent) = 0; //Does this need to be an array? Liekly need just the latest.
 };
 
 
