@@ -44,7 +44,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
     //Set up input
-    inputDevices_.push_back(std::make_unique<SdlManager>());
     inputDevices_.push_back(std::make_unique<Joystick>());
 
     //Set up FCS strategies
@@ -65,48 +64,60 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     double dt = fdm_.GetDeltaT();
 
+    //Needs refactor
     while (true) {
-        //Should this be here?
+        //Keyboard
+        int ch;
+        while ((ch = getch()) != ERR) {
+            if (ch == 27) {
+                goto simEnd;
+            }
+            auto res = keyToCommand_.find(ch);
+            if (res != keyToCommand_.end()) {
+                auto command = commandHandler_.find(res->second);
+                if (command != commandHandler_.end()) {
+                    auto &binding = command->second;
+                    strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
+                }
+            }
+        }
+
+        //erase();
+        printw("test\n");
+        refresh();
+
+        //Joystick
         for (std::unique_ptr<InputDevice> &device: inputDevices_) {
             std::vector<InputEvent> events;
             device->pollEvents(events);
-            for (InputEvent event: events) {
-                if (event.keyCode == 27) {
-                    //Escape key pressed
-                    goto simEnd;
-                }
-
-                //This needs better handling. Testing like this for now.
+            printw("test1\n");
+            refresh();
+            for (const InputEvent& event: events) {
+                printw("test2\n");
+                refresh();
                 if (event.keyCode == -10) {
-                    FcsBinding pitch;
-                    pitch.strategyKey = "pitch";
-                    pitch.delta = event.pitch;
-                    FcsBinding yaw;
-                    yaw.strategyKey = "yaw";
-                    yaw.delta = event.yaw;
-                    FcsBinding roll;
-                    roll.strategyKey = "roll";
-                    roll.delta = event.roll;
-
-                    strategies_[pitch.strategyKey]->adjustValue(fdm_, pitch.delta);
-                    strategies_[yaw.strategyKey]->adjustValue(fdm_, yaw.delta);
-                    strategies_[roll.strategyKey]->adjustValue(fdm_, roll.delta);
-                } else if (event.keyCode >= 0) {
-                    auto res = keyToCommand_.find(event.keyCode);
-                    if (res != keyToCommand_.end()) {
-                        auto command = commandHandler_.find(res->second);
-                        if (command != commandHandler_.end()) {
-                            auto &binding = command->second;
-                            strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
-                        }
+                    FcsBinding fcs;
+                    switch (event.type) {
+                        case 0:
+                            fcs.strategyKey = "roll";
+                            break;
+                        case 1:
+                            fcs.strategyKey = "pitch";
+                            break;
+                        case 2:
+                            fcs.strategyKey = "yaw";
+                            break;
                     }
+                    fcs.delta = event.delta;
+                    strategies_[fcs.strategyKey]->adjustValue(fdm_, fcs.delta);
                 }
             }
         }
 
         fdm_.Run();
+        aircraft_.resetFCS();
 
-        //Erase previous buffer
+       //Erase previous buffer
         erase();
 
         double time = fdm_.GetSimTime();
@@ -117,7 +128,7 @@ void Simulation::run() {
         double rpm = fdm_.GetPropertyValue("propulsion/engine/engine-rpm");
         double heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
         double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
-        double roll = fdm_.GetPropertyValue("fcs/aileron-cmd-norm");
+        double roll = fdm_.GetPropertyValue("attitude/roll-rad");
         double throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
         double pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
         printw(
@@ -136,12 +147,13 @@ void Simulation::run() {
 
         refresh();
 
-        aircraft_.resetFCS();
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
         //This will inevitably lag the sim
         //Needs to be replaced with some exterior time tracking given that real-time simulation is desired
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
+
+
     }
 
 simEnd:

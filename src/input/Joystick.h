@@ -4,6 +4,7 @@
 
 #ifndef JSB_JOYSTICK_H
 #define JSB_JOYSTICK_H
+#include <SDL_joystick.h>
 #include <vector>
 
 #include "InputDevice.h"
@@ -11,7 +12,11 @@
 
 class Joystick : public InputDevice {
 public:
+    Joystick();
     bool pollEvents(std::vector<InputEvent> &outEvent) override;
+
+private:
+    SDL_Joystick *joystick_;
 };
 
 

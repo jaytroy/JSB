@@ -1,5 +1,5 @@
 # JSBSim flight simulator
-This is a barebones implementation of a flight simulator using JSBSim and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
+This is a barebones implementation of a flight simulator using the JSBSim framework and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
 
 Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim.git) somewhere.
 
@@ -58,7 +58,7 @@ You can generally omit the first two commands.
 | Aircraft selection                  | TBD    | Fly something other than a measly 172P                                      |
 | Multiple aircraft at once           | TBD    | Allow the user to perform mid-air collisions                                |
 | Custom environments                 | TBD    | Set up your own worlds and environments be creating bespoke XML Reset files |
-| Switch NCurses for something better | TBD    | Curses only allows for keyboard input at a time. Replace with sdl2?         |
+| Switch NCurses for something better | TBD    | Curses only allows for one keyboard input at a time. Replace with sdl2?     |
 | Unit tests                          | TBD    | Oh no                                                                       |
 
 

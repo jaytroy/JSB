@@ -5,53 +5,60 @@
 #include "Joystick.h"
 
 #include <iostream>
+#include <ncurses.h>
 #include <SDL.h>
 #include <SDL_events.h>
 #include <string>
 
-bool Joystick::pollEvents(std::vector<InputEvent> &outEvent) {
+Joystick::Joystick() {
     SDL_Init(SDL_INIT_JOYSTICK);
 
-    SDL_Joystick *joystick = SDL_JoystickOpen(0);
-    std::string name = SDL_JoystickName(joystick);
-   // std::cout << name;
+    joystick_ = SDL_JoystickOpen(0);
+    std::string name = SDL_JoystickName(joystick_);
+    if (!joystick_) {
+        throw std::runtime_error("Failed to get joystick");
+    }
+    SDL_JoystickEventState(SDL_ENABLE);
 
+    //std::cout << name;
+}
+
+bool Joystick::pollEvents(std::vector<InputEvent> &outEvent) {
     bool activated = false;
 
     SDL_Event sdlEvent;
-    int axis, value, pitch, roll, yaw, slider;
+    int axis = 0;
+    double value = 0;
+    InputEvent event;
     while (SDL_PollEvent(&sdlEvent)) {
         if (sdlEvent.type == SDL_JOYAXISMOTION) {
             axis = sdlEvent.jaxis.axis;
             value = sdlEvent.jaxis.value; //max val is 32768 for T16000.M
             switch (axis) {
                 case 0:
-                    roll = value;
+                    //Roll
+                    event.type = 0;
                     break;
                 case 1:
-                    pitch = value;
+                    //Pitch
+                    event.type = 1;
                     break;
                 case 2:
-                    yaw = value;
+                    //Yaw
+                    event.type = 2;
                     break;
                 case 3:
-                    slider = value;
+                    event.type = 3;
                 default:
                     throw std::runtime_error("Bad axis");
             }
 
             //Clamp axes -1.0 to 1.0
-            pitch = (double) pitch / 32768;
-            roll = (double) roll / 32768;
-            yaw = (double) yaw / 32768;
-            slider = (double) slider / 32768;
+            value /= 32768;
 
             //std::cout << "Pitch" << pitch << "   roll" << roll << "\n";
 
-            InputEvent event;
-            event.pitch = pitch;
-            event.roll = roll;
-            event.yaw = yaw;
+            event.delta = value;
             event.keyCode = -10;
 
             outEvent.push_back(event);

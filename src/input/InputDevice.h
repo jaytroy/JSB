@@ -7,9 +7,8 @@
 
 struct InputEvent {
     int keyCode;
-    int pitch;
-    int roll;
-    int yaw;
+    int type;
+    double delta;
 };
 
 /**
