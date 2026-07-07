@@ -4,7 +4,7 @@
 // https://www.libsdl.org/release/SDL-1.2.15/docs/html/guidevideoopengl.html
 //
 
-#include "GL.h"
+//#include "GL.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>

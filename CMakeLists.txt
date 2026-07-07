@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 project(JSB)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui)
@@ -28,16 +28,14 @@ add_executable(JSB
         src/model/fcs/actions/Yaw.h
         src/model/fcs/actions/Brake.cpp
         src/model/fcs/actions/Brake.h
-        src/input/InputDevice.h
+        src/model/input/InputDevice.h
         src/model/fcs/FcsCommand.h
         src/model/fcs/FcsStrategyFactory.h
         src/model/fcs/actions/Engine.cpp
         src/model/fcs/actions/Engine.h
         src/input/SdlManager.cpp
         src/input/SdlManager.h
-        src/gfx/GraphicsObserver.h
         src/gfx/GL.cpp
-        src/gfx/GL.h
         src/gfx/Window.cpp
         src/gfx/Window.h
         ${IMGUI_DIR}/imgui.cpp
@@ -47,6 +45,11 @@ add_executable(JSB
         ${IMGUI_DIR}/imgui_demo.cpp
         ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp
         ${IMGUI_DIR}/backends/imgui_impl_sdlrenderer2.cpp
+        src/input/Joystick.cpp
+        src/input/Joystick.h
+        src/model/input/InputHandler.cpp
+        src/model/input/InputHandler.h
+        src/model/input/EventSink.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})

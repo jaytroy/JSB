@@ -7,12 +7,10 @@
 #include <unistd.h>
 #include <JSBSim/FGFDMExec.h>
 #include <JSBSim/initialization/FGInitialCondition.h>
-#include <ncurses.h>
+#include <ncurses.h> //Currently used to print but ideally shouldn't be here
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
-#include "input/SdlManager.h"
-#include "model/fcs/FcsStrategyFactory.h"
 
 /**
  * Constructs the simulator.
@@ -41,20 +39,21 @@ Simulation::Simulation() : aircraft_(fdm_) {
 
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
-
-    //Set up FCS strategies
-    strategies_ = FcsStrategyFactory::createAll();
 }
 
 /**
  * Runs the simulation.
  */
 void Simulation::run() {
-    double dt = fdm_.GetDeltaT();
-
     fdm_.RunIC();
     fdm_.Setdt(0.01);
+    double dt = fdm_.GetDeltaT();
+
     while (true) {
+
+        if (!inputHandler_.handleInput(fdm_)) {
+            break;
+        }
 
         fdm_.Run();
 
@@ -66,7 +65,7 @@ void Simulation::run() {
         aircraft_.appendData(rendererPayload);
         window_.renderFrame(rendererPayload);
 
-        aircraft_.resetFCS();
+        //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
         //This will inevitably lag the sim
@@ -74,13 +73,10 @@ void Simulation::run() {
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 
-simEnd:
-
     endwin();
     window_.cleanup();
     std::cout << "Exited successfully" << std::endl;
 }
-
 
 /**
  * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.

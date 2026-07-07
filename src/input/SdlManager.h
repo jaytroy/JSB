@@ -5,16 +5,19 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-#include "InputDevice.h"
+#include "../model/input/InputDevice.h"
 
 #ifndef JSB_SDLMANAGER_H
 #define JSB_SDLMANAGER_H
 
 
+/**
+ * Depracted? This is meant to handle keyboard input. Can likely turn it all into a single eventqueue.
+ *//*
 class SdlManager : public InputDevice {
 public:
-    bool pollEvents(std::vector<InputEvent> &outEvent) override;
+    void sampleState(InputEvent &outEvent) override;
 };
 
-
+*/
 #endif //JSB_SDLMANAGER_H
