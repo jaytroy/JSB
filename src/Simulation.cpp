@@ -20,6 +20,8 @@
 Simulation::Simulation() : aircraft_(fdm_) {
     static const char* JSBGITDIR = std::getenv("JSBGITDIR");
 
+    fdm_.SetDebugLevel(0);
+
     //Set up JSB directories and load models
     const SGPath root(JSBGITDIR);
     fdm_.SetRootDir(root);
@@ -40,9 +42,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
-    //Set up input
-    inputDevice_ = std::make_unique<SdlManager>();
-
     //Set up FCS strategies
     strategies_ = FcsStrategyFactory::createAll();
 }
@@ -56,34 +55,6 @@ void Simulation::run() {
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
-
-        //Should this be here?
-        std::vector<InputEvent> events;
-        while (inputDevice_->pollEvents(events)) {
-            for (InputEvent event : events) {
-                if (event.code == 27) {
-                    //Escape key pressed
-                    goto simEnd;
-                }
-
-                auto res = keyToCommand_.find(event.code);
-                if (res != keyToCommand_.end()) {
-                    auto command = commandHandler_.find(res->second);
-                    if (command != commandHandler_.end()) {
-                        auto &binding = command->second;
-                        strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
-                    }
-                }
-            }
-        }
-
-        window_.renderFrame();
-
-        fdm_.Run();
-
-        //Erase previous buffer
-        erase();
-
         double time = fdm_.GetSimTime();
         double airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
         double posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
@@ -94,22 +65,12 @@ void Simulation::run() {
         double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
         double roll = fdm_.GetPropertyValue("attitude/roll-rad");
         double throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
-        double pitch = fdm_.GetPropertyValue("attitude/pitch-rad");
-        printw(
-            "t=%f\n"
-            "v=%f\n"
-            "throttle=%f\n"
-            "rpm=%lf\n"
-            "posit_n=%lf\n"
-            "posit_e=%lf\n"
-            "posit_u=%lf\n"
-            "heading=%lf\n"
-            "pitch=%lf\n"
-            "roll=%lf\n"
-            "brake=%lf\n",
-            time, airspeed, throttle, rpm, posN, posE, posU, heading, pitch, roll, brake);
+        double pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
 
-        refresh();
+        window_.renderFrame(time, airspeed, posN, posE, posU, rpm, heading, brake, roll, throttle, pitch);
+        //window_.renderGraphics
+
+        fdm_.Run();
 
         aircraft_.resetFCS();
 
@@ -122,7 +83,7 @@ void Simulation::run() {
 simEnd:
 
     endwin();
-
+    window_.cleanup();
     std::cout << "Exited successfully" << std::endl;
 }
 

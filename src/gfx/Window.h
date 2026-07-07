@@ -12,7 +12,11 @@ class Window {
 public:
     Window();
     void cleanup();
-    void renderFrame();
+    void renderFrame(double time, double airspeed, double posN, double posE, double posU, double rpm, double heading, double brake, double
+                     roll, double throttle, double
+                     pitch);
+    void loop();
+
 private:
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;

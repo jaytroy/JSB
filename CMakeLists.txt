@@ -4,6 +4,7 @@ project(JSB)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui)
 
 find_package(PkgConfig REQUIRED)
 find_package(Curses REQUIRED)
@@ -39,9 +40,17 @@ add_executable(JSB
         src/gfx/GL.h
         src/gfx/Window.cpp
         src/gfx/Window.h
+        ${IMGUI_DIR}/imgui.cpp
+        ${IMGUI_DIR}/imgui_draw.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        ${IMGUI_DIR}/imgui_demo.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_sdlrenderer2.cpp
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})
+target_include_directories(JSB PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 target_link_directories(JSB PRIVATE ${JSBSIM_LIBRARY_DIRS})
 target_link_libraries(JSB PRIVATE
         /usr/lib/libJSBSim.a
