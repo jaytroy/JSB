@@ -15,7 +15,11 @@ InputHandler::InputHandler() {
     strategies_ = FcsStrategyFactory::createAll();
 
     //Set up input
-    //inputDevices_.push_back(std::make_unique<Joystick>()); //This WILL segfault if no joystick is connected
+    try {
+        inputDevices_.push_back(std::make_unique<Joystick>());
+    } catch (const std::runtime_error& e) {
+        std::cout << "Did not find a joystick\n";
+    }
 }
 
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
@@ -36,24 +40,10 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
         }
     }
 
-    handleJoystick(fdm);
-
-    return 1;
-}
-
-void
-
-/**
- * Handles joystick input.
- * Built to be input framework agnostic.
- * These currently only handle FCS. Need to expand to work with other bindings.
- * @param fdm The FDM instance.
- */
-InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
     for (std::unique_ptr<InputDevice> &device: inputDevices_) {
-        //Currently only one device
+        //Currently, solely SDL manages input
         InputEvent event;
-        device->pollEvents(event);
+        device->sampleState(event);
 
         FcsBinding fcs;
 
@@ -76,9 +66,21 @@ InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
             fcs.delta = event.delta;
             strategies_[fcs.strategyKey]->adjustValue(fdm, fcs.delta);
         } else if (event.type == JOYBTN) {
-            //Develop button handling logic
+            //TODO: Develop button handling logic
             //Bindings for control systems can be included here
             std::cout << "Button pressed\n";
         }
     }
+
+    return 1;
+}
+
+/**
+ * Handles joystick input.
+ * Built to be input framework-agnostic.
+ * These currently only handle FCS. Need to expand to work with other bindings.
+ * @param fdm The FDM instance.
+ */
+void InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
+
 }

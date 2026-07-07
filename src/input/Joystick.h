@@ -8,11 +8,15 @@
 #include <string>
 
 #include "../model/input/InputDevice.h"
+#include "../model/input/EventSink.h"
 
-class Joystick : public InputDevice {
+class Joystick : public InputDevice, public EventSink {
 public:
     Joystick();
-    bool pollEvents(InputEvent &outEvent) override;
+    void sampleState(InputEvent& out) override;
+
+    void onEvent(InputEvent& out) override;
+
     enum class Motion { PITCH, ROLL, YAW, SLIDER };
 
 private:

@@ -6,7 +6,7 @@
 
 #include <vector>
 
-bool SdlManager::pollEvents(InputEvent &outEvent) {
+bool SdlManager::sampleState(InputEvent &outEvent) {
 
     SDL_Event sdlEvent;
     std::vector<InputEvent> inputEvents;

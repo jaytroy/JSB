@@ -21,12 +21,13 @@ struct InputEvent {
 };
 
 /**
- * Abstract class (interface) defining input device functionality.
+ * This handles continuous events, like joystick.
+ * Events here are taken directly from the device, bypassing an event pump.
  */
 class InputDevice {
 public:
     virtual ~InputDevice() = default;
-    virtual bool pollEvents(InputEvent &outEvent) = 0; //Currently holds 1 outevent. Turn into vector to make more?
+    virtual void sampleState(InputEvent& out) = 0;
 };
 
 #endif //JSB_INPUTDEVICE_H

@@ -38,6 +38,7 @@ add_executable(JSB
         src/input/Joystick.h
         src/model/input/InputHandler.cpp
         src/model/input/InputHandler.h
+        src/model/input/EventSink.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})

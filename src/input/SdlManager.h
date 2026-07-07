@@ -16,7 +16,7 @@
  */
 class SdlManager : public InputDevice {
 public:
-    bool pollEvents(InputEvent &outEvent) override;
+    bool sampleState(InputEvent &outEvent) override;
 };
 
 
