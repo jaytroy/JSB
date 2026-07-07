@@ -61,11 +61,10 @@ void Simulation::run() {
         }
 
         fdm_.Run();
-        aircraft_.resetFCS(); //gamified controls reset each tick. This is usefull for keyboard input
+        //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
 
         //Erase previous buffer
         erase();
-
         double time = fdm_.GetSimTime();
         double airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
         double posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
@@ -104,9 +103,6 @@ void Simulation::run() {
 
     std::cout << "Exited successfully" << std::endl;
 }
-
-
-
 
 /**
  * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.

@@ -13,15 +13,15 @@
 #include "InputDevice.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
-#include "../fcs/FcsStrategyFactory.h"
 
 
 class InputHandler {
 public:
     InputHandler();
-    int handleInput(JSBSim::FGFDMExec &fdm);
+    int handleInput(JSBSim::FGFDMExec &fdm); //I don't rly want the fdm instance here but I think it's necesary
 private:
     void handleJoystick(JSBSim::FGFDMExec &fdm);
+    void handleKeyboard(JSBSim::FGFDMExec &fdm);
 
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::vector<std::unique_ptr<InputDevice>> inputDevices_;

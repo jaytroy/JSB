@@ -9,16 +9,17 @@
 
 #include "InputDevice.h"
 #include "../../input/Joystick.h"
+#include "../fcs/FcsStrategyFactory.h"
 
 InputHandler::InputHandler() {
     strategies_ = FcsStrategyFactory::createAll();
 
     //Set up input
-    inputDevices_.push_back(std::make_unique<Joystick>());
+    //inputDevices_.push_back(std::make_unique<Joystick>()); //This WILL segfault if no joystick is connected
 }
 
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
-    //Keyboard
+    //Keyboard via ncurses. Should be changed.
     int ch;
     while ((ch = getch()) != ERR) {
         if (ch == 27) {
@@ -40,11 +41,15 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
     return 1;
 }
 
+void
+
 /**
+ * Handles joystick input.
+ * Built to be input framework agnostic.
  * These currently only handle FCS. Need to expand to work with other bindings.
  * @param fdm The FDM instance.
  */
-void InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
+InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
     for (std::unique_ptr<InputDevice> &device: inputDevices_) {
         //Currently only one device
         InputEvent event;
@@ -75,6 +80,5 @@ void InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
             //Bindings for control systems can be included here
             std::cout << "Button pressed\n";
         }
-
     }
 }
