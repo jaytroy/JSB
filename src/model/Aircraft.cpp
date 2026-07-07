@@ -26,7 +26,7 @@ void Aircraft::resetFCS() {
         fdm_.SetPropertyValue("fcs/aileron-cmd-norm", 0.0);
 }
 
-void Aircraft::updateValue() {
+void Aircraft::updateValues() {
     airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
     posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
     posE = fdm_.GetPropertyValue("position/from-start-neu-e-ft");
@@ -37,4 +37,18 @@ void Aircraft::updateValue() {
     roll = fdm_.GetPropertyValue("attitude/roll-rad");
     throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
     pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
+}
+
+
+void Aircraft::appendData(std::vector<double>& rendererPayload) {
+    rendererPayload.push_back(posN);
+    rendererPayload.push_back(posE);
+    rendererPayload.push_back(posU);
+    rendererPayload.push_back(heading);
+    rendererPayload.push_back(airspeed);
+    rendererPayload.push_back(throttle);
+    rendererPayload.push_back(rpm);
+    rendererPayload.push_back(pitch);
+    rendererPayload.push_back(roll);
+    rendererPayload.push_back(brake);
 }

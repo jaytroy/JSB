@@ -1,6 +1,8 @@
 # JSBSim flight simulator
 This is a barebones implementation of a flight simulator using JSBSim and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
 
+`model` is the simulator base. `input` and `gfx` act as standlone modules supplying information to `model`.
+
 Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim.git) somewhere.
 
 ### Run the container via Docker compose:

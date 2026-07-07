@@ -55,15 +55,17 @@ void Simulation::run() {
     fdm_.RunIC();
     fdm_.Setdt(0.01);
     while (true) {
-        double time = fdm_.GetSimTime();
-
-
-        window_.renderFrame(time, aircraft_);
-        //window_.renderGraphics
 
         fdm_.Run();
 
-        aircraft_.updateValue();
+        aircraft_.updateValues();
+
+        std::vector<double> rendererPayload;
+        double time = fdm_.GetSimTime();
+        rendererPayload.push_back(time);
+        aircraft_.appendData(rendererPayload);
+        window_.renderFrame(rendererPayload);
+
         aircraft_.resetFCS();
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.

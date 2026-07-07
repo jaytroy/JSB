@@ -57,14 +57,14 @@ void Window::cleanup() {
     SDL_Quit();
 }
 
-void Window::renderFrame(double time, Aircraft& aircraft) {
+void Window::renderFrame(std::vector<double>& payload) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event); //This needs to be somewhere where it makes sense
     }
 
-    renderGUI(time, aircraft);
-
+    renderGraphics();
+    renderGUI(payload);
 
     SDL_SetRenderDrawColor(renderer_, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
     SDL_RenderClear(renderer_);
@@ -73,25 +73,30 @@ void Window::renderFrame(double time, Aircraft& aircraft) {
     SDL_RenderPresent(renderer_);
 }
 
-void Window::renderGUI(double time, Aircraft& aircraft) {
+void Window::renderGUI(std::vector<double> payload) {
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
+    //All relevant info
     ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
     ImGui::Begin("Flight controls");
-    ImGui::Text("Sim time: %lf", time);
-    ImGui::Text("North-South position: %lf", aircraft.posN);
-    ImGui::Text("East-West position: %lf", aircraft.posE);
-    ImGui::Text("Up-Down position: %lf", aircraft.posU);
-    ImGui::Text("Heading: %lf", aircraft.heading);
-    ImGui::Text("Airspeed: %lf", aircraft.airspeed);
-    ImGui::Text("Throttle: %lf", aircraft.throttle);
-    ImGui::Text("Rpm: %lf", aircraft.rpm);
-    ImGui::Text("Pitch: %lf", aircraft.pitch);
-    ImGui::Text("Roll: %lf", aircraft.roll);
-    ImGui::Text("Brake: %lf", aircraft.brake);
+    ImGui::Text("Sim time: %lf", payload[0]);
+    ImGui::Text("North-South position: %lf", payload[1]);
+    ImGui::Text("East-West position: %lf", payload[2]);
+    ImGui::Text("Up-Down position: %lf", payload[3]);
+    ImGui::Text("Heading: %lf", payload[4]);
+    ImGui::Text("Airspeed: %lf", payload[5]);
+    ImGui::Text("Throttle: %lf", payload[6]);
+    ImGui::Text("Rpm: %lf", payload[7]);
+    ImGui::Text("Pitch: %lf", payload[8]);
+    ImGui::Text("Roll: %lf", payload[9]);
+    ImGui::Text("Brake: %lf", payload[10]);
 
     ImGui::End();
     ImGui::Render();
+}
+
+void Window::renderGraphics() {
+    // TODO: OpenGL rendering
 }

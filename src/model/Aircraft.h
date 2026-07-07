@@ -16,8 +16,11 @@ public:
     explicit Aircraft(JSBSim::FGFDMExec &fdm);
 
     void resetFCS();
+    void updateValues();
+    void appendData(std::vector<double>& rendererPayload);
 
-    void updateValue();
+private:
+    JSBSim::FGFDMExec &fdm_;
 
     int engineOn = 0;
     double throttle = 0.0;
@@ -33,8 +36,6 @@ public:
     double brake = 0.0;
     double roll = 0.0;
     double pitch = 0.0;
-private:
-    JSBSim::FGFDMExec &fdm_;
 };
 
 

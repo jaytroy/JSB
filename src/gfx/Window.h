@@ -13,11 +13,11 @@ class Window {
 public:
     Window();
     void cleanup();
-    void renderFrame(double time, Aircraft &aircraft);
+    void renderFrame(std::vector<double> &payload);
     void loop();
 
 private:
-    void renderGUI(double time, Aircraft &aircraft);
+    void renderGUI(std::vector<double> payload);
     void renderGraphics();
 
     const int WINDOW_WIDTH = 800;
