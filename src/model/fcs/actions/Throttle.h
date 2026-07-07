@@ -13,7 +13,8 @@ class Throttle : public FcsStrategy {
 public:
     ~Throttle() override = default;
 
-    void adjustValue(JSBSim::FGFDMExec &fdm, double value) override;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double delta) override;
+    void setValue(JSBSim::FGFDMExec &fdm, double value) override;
 };
 
 

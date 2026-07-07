@@ -7,7 +7,7 @@
 #include "../FcsStrategy.h"
 
 /**
- * The engine class currently controls the statrtup sequence.
+ * The engine class currently controls the startup sequence.
  */
 class Engine : public FcsStrategy {
 public:

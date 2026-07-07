@@ -6,18 +6,17 @@
 #define JSB_INPUTDEVICE_H
 
 enum InputType { // Move this into the class?
-    MOUSE,
-    KEYBOARD,
     JOYAXIS,
-    JOYBTN,
     THROTTLE,
     CONTROLLER, //Future proofing
 };
 
-struct InputEvent {
+struct ControlEvent { //this currently holds logic for joystick (T16000). This needs to be able to handle other input devices as well
     InputType type;
-    double delta;
-    int info; //Info allows for any additional information. For example: which axis was activated
+    double roll;
+    double pitch;
+    double yaw;
+    double slider;
 };
 
 /**
@@ -27,7 +26,7 @@ struct InputEvent {
 class InputDevice {
 public:
     virtual ~InputDevice() = default;
-    virtual void sampleState(InputEvent& out) = 0;
+    virtual void sampleState(ControlEvent& out) = 0;
 };
 
 #endif //JSB_INPUTDEVICE_H

@@ -24,7 +24,7 @@ Joystick::Joystick() {
     std::cout << "Registered joystick " << name;
 }
 
-void Joystick::sampleState(InputEvent &outEvent) {
+void Joystick::sampleState(ControlEvent &outEvent) {
 
     double pitch, roll, yaw, slider;
     roll = SDL_JoystickGetAxis(joystick_, 0);
@@ -35,12 +35,17 @@ void Joystick::sampleState(InputEvent &outEvent) {
 
     // 2^16 / 2 denotes max movement (32768)
     //Clamp axes from -1.0 to 1.0
-    roll /= 32768;
-    pitch /= 32768;
-    yaw /= 32768;
+    roll /= 32768.0f;
+    pitch /= 32768.0f;
+    yaw /= 32768.0f;
+
+    outEvent.roll = roll;
+    outEvent.pitch = pitch;
+    outEvent.yaw = yaw;
+    outEvent.slider = slider;
 }
 
-void Joystick::onEvent(InputEvent &out) {
+void Joystick::onEvent(ControlEvent &out) {
 
 }
 

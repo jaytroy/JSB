@@ -4,16 +4,15 @@
 
 #ifndef JSB_EVENTSINK_H
 #define JSB_EVENTSINK_H
-#include <SDL2/SDL_events.h>
 
 /**
- * This handles discrete events, like mouse, keyboard.
+ * Defines functionality for discrete events like mouse, keyboard.
  * Events here are taken directly from an event pump.
  */
 class EventSink {
 public:
     virtual ~EventSink() = default;
-    virtual void onEvent(InputEvent& out) = 0;
+    virtual void onEvent(ControlEvent& out) = 0; //This can't use ControlEvent
 };
 
 #endif //JSB_EVENTSINK_H

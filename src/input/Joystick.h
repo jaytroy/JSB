@@ -4,19 +4,17 @@
 
 #ifndef JSB_JOYSTICK_H
 #define JSB_JOYSTICK_H
+#include <SDL_joystick.h>
 #include <string>
 
 #include "../model/input/InputDevice.h"
-#include "../model/input/EventSink.h"
+#include "../SDL/EventSink.h"
 
 class Joystick : public InputDevice, public EventSink {
 public:
     Joystick();
-    void sampleState(InputEvent& out) override;
-
-    void onEvent(InputEvent& out) override;
-
-    enum class Motion { PITCH, ROLL, YAW, SLIDER };
+    void sampleState(ControlEvent& out) override;
+    void onEvent(ControlEvent& out) override;
 
 private:
     SDL_Joystick *joystick_;
