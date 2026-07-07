@@ -4,6 +4,7 @@
 
 #include "Joystick.h"
 
+#include <format>
 #include <iostream>
 #include <ncurses.h>
 #include <SDL.h>
@@ -14,61 +15,64 @@ Joystick::Joystick() {
     SDL_Init(SDL_INIT_JOYSTICK);
 
     joystick_ = SDL_JoystickOpen(0);
-    std::string name = SDL_JoystickName(joystick_);
     if (!joystick_) {
-        throw std::runtime_error("Failed to get joystick");
+        name = SDL_JoystickName(joystick_);
     }
     SDL_JoystickEventState(SDL_ENABLE);
 
-    //std::cout << name;
+    std::cout << "Registered joystick " << name;
 }
 
-bool Joystick::pollEvents(std::vector<InputEvent> &outEvent) {
+bool Joystick::pollEvents(InputEvent &outEvent) {
+    //This should be unnecessary.
+    //An event simply existing should indicate an activation.
     bool activated = false;
 
     SDL_Event sdlEvent;
-    int axis = 0;
-    double value = 0;
-    InputEvent event;
+
     while (SDL_PollEvent(&sdlEvent)) {
         if (sdlEvent.type == SDL_JOYAXISMOTION) {
-            axis = sdlEvent.jaxis.axis;
-            value = sdlEvent.jaxis.value; //max val is 32768 for T16000.M
+            outEvent.type = JOYAXIS;
+
+            Uint8 axis = sdlEvent.jaxis.axis;
+            Sint16 value = sdlEvent.jaxis.value; // 2^16 / 2 denotes max movement (32768)
+
             switch (axis) {
                 case 0:
                     //Roll
-                    event.type = 0;
+                    outEvent.info = 0;
                     break;
                 case 1:
                     //Pitch
-                    event.type = 1;
+                    outEvent.info = 1;
                     break;
                 case 2:
                     //Yaw
-                    event.type = 2;
+                    outEvent.info = 2;
                     break;
                 case 3:
-                    event.type = 3;
+                    //Slider
+                    outEvent.info = 3;
                 default:
                     throw std::runtime_error("Bad axis");
+
+                    //Clamp axes from -1.0 to 1.0
+                    value /= 32768;
+                    outEvent.delta = value;
+
+                    activated = true;
             }
-
-            //Clamp axes -1.0 to 1.0
-            value /= 32768;
-
-            //std::cout << "Pitch" << pitch << "   roll" << roll << "\n";
-
-            event.delta = value;
-            event.keyCode = -10;
-
-            outEvent.push_back(event);
-
+        } else if (sdlEvent.type == SDL_JOYBUTTONDOWN) {
             activated = true;
-            //std::cout << "Axis" << axis << "   value" << value << "\n";
+            outEvent.type = JOYBTN;
+
+            Uint8 btn = sdlEvent.jbutton.button;
+            outEvent.delta = btn;
+        } else {
+            throw std::runtime_error(std::format("Unrecognized joystick input from {}", name));
         }
+
     }
-
-
 
     return activated;
 }

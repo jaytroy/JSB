@@ -7,13 +7,10 @@
 #include <unistd.h>
 #include <JSBSim/FGFDMExec.h>
 #include <JSBSim/initialization/FGInitialCondition.h>
-#include <ncurses.h>
+#include <ncurses.h> //Currently used to print but ideally shouldn't be here
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
-#include "input/Joystick.h"
-#include "input/SdlManager.h"
-#include "model/fcs/FcsStrategyFactory.h"
 
 /**
  * Constructs the simulator.
@@ -43,12 +40,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
-    //Set up input
-    inputDevices_.push_back(std::make_unique<Joystick>());
-
-    //Set up FCS strategies
-    strategies_ = FcsStrategyFactory::createAll();
-
     initscr();
     noecho();
     cbreak();
@@ -64,60 +55,15 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     double dt = fdm_.GetDeltaT();
 
-    //Needs refactor
     while (true) {
-        //Keyboard
-        int ch;
-        while ((ch = getch()) != ERR) {
-            if (ch == 27) {
-                goto simEnd;
-            }
-            auto res = keyToCommand_.find(ch);
-            if (res != keyToCommand_.end()) {
-                auto command = commandHandler_.find(res->second);
-                if (command != commandHandler_.end()) {
-                    auto &binding = command->second;
-                    strategies_[binding.strategyKey]->adjustValue(fdm_, binding.delta);
-                }
-            }
-        }
-
-        //erase();
-        printw("test\n");
-        refresh();
-
-        //Joystick
-        for (std::unique_ptr<InputDevice> &device: inputDevices_) {
-            std::vector<InputEvent> events;
-            device->pollEvents(events);
-            printw("test1\n");
-            refresh();
-            for (const InputEvent& event: events) {
-                printw("test2\n");
-                refresh();
-                if (event.keyCode == -10) {
-                    FcsBinding fcs;
-                    switch (event.type) {
-                        case 0:
-                            fcs.strategyKey = "roll";
-                            break;
-                        case 1:
-                            fcs.strategyKey = "pitch";
-                            break;
-                        case 2:
-                            fcs.strategyKey = "yaw";
-                            break;
-                    }
-                    fcs.delta = event.delta;
-                    strategies_[fcs.strategyKey]->adjustValue(fdm_, fcs.delta);
-                }
-            }
+        if (!inputHandler_.handleInput(fdm_)) {
+            break;
         }
 
         fdm_.Run();
-        aircraft_.resetFCS();
+        aircraft_.resetFCS(); //gamified controls reset each tick. This is usefull for keyboard input
 
-       //Erase previous buffer
+        //Erase previous buffer
         erase();
 
         double time = fdm_.GetSimTime();
@@ -152,16 +98,14 @@ void Simulation::run() {
         //This will inevitably lag the sim
         //Needs to be replaced with some exterior time tracking given that real-time simulation is desired
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
-
-
     }
-
-simEnd:
 
     endwin();
 
     std::cout << "Exited successfully" << std::endl;
 }
+
+
 
 
 /**

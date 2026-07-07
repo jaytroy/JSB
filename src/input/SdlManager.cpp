@@ -6,7 +6,7 @@
 
 #include <vector>
 
-bool SdlManager::pollEvents(std::vector<InputEvent> &outEvent) {
+bool SdlManager::pollEvents(InputEvent &outEvent) {
 
     SDL_Event sdlEvent;
     std::vector<InputEvent> inputEvents;
@@ -17,8 +17,7 @@ bool SdlManager::pollEvents(std::vector<InputEvent> &outEvent) {
         if (sdlEvent.type == SDL_KEYDOWN || sdlEvent.type == SDL_KEYUP) {
             SDL_KeyboardEvent keyEvent = sdlEvent.key;
             InputEvent event;
-            event.keyCode = keyEvent.keysym.sym;
-            outEvent.push_back(event);
+            outEvent.info = keyEvent.keysym.sym;
             activated = true;
         }
     }

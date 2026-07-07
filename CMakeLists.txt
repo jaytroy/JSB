@@ -27,7 +27,7 @@ add_executable(JSB
         src/model/fcs/actions/Yaw.h
         src/model/fcs/actions/Brake.cpp
         src/model/fcs/actions/Brake.h
-        src/input/InputDevice.h
+        src/model/input/InputDevice.h
         src/model/fcs/FcsCommand.h
         src/model/fcs/FcsStrategyFactory.h
         src/model/fcs/actions/Engine.cpp
@@ -36,6 +36,8 @@ add_executable(JSB
         src/input/SdlManager.h
         src/input/Joystick.cpp
         src/input/Joystick.h
+        src/model/input/InputHandler.cpp
+        src/model/input/InputHandler.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})
