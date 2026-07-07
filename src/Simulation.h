@@ -8,9 +8,10 @@
 #include <unordered_map>
 #include <JSBSim/FGFDMExec.h>
 
+#include "gfx/Window.h"
+#include "input/InputDevice.h"
 #include "model/Aircraft.h"
 #include "model/fcs/FcsCommand.h"
-#include "input/NCursesManager.h"
 
 /**
  * The simulation class is responsible for running all parts of the simulator and putting them together.
@@ -26,6 +27,7 @@ private:
     Aircraft aircraft_;
     std::unique_ptr<InputDevice> inputDevice_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
+    Window window_;
 
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
         {'w', FcsCommand::PitchDown},

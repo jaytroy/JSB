@@ -8,7 +8,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-
+/*
 void GL::setup_opengl(int w, int h) {
     float ratio = (float) w / (float) h;
 
@@ -32,3 +32,4 @@ void GL::render() {
 
 void GL::draw() {
 }
+*/

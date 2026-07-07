@@ -7,20 +7,36 @@
 #include <SDL.h>
 #include <stdexcept>
 
-Window::Window() {
-    int w, h, bpp, flags;
 
+
+Window::Window() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw std::runtime_error("Video init failed");
+        throw std::runtime_error("SDL video init failed");
     }
 
-    SDL_Window* window = SDL_CreateWindow("SDL3 OpenGl test");
+    window_ = SDL_CreateWindow("SDL3 OpenGl test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    if (!window_) {
+        SDL_Quit();
+        throw std::runtime_error("SDL window init failed");
+    }
 
-    SDL_DisplayMode info;
-    SDL_GetDesktopDisplayMode(0, &info);
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer_) {
+        SDL_DestroyWindow(window_);
+        SDL_Quit();
+        throw std::runtime_error("SDL renderer init failed");
+    }
+}
 
-    w = 640;
-    h = 480;
-    bpp = info->vmft
+void Window::cleanup() {
+    SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(window_);
+    SDL_Quit();
+}
 
+void Window::renderFrame() {
+    SDL_SetRenderDrawColor(renderer_, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
+    SDL_RenderClear(renderer_);
+    SDL_RenderPresent(renderer_);
 }

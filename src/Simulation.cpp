@@ -77,6 +77,8 @@ void Simulation::run() {
             }
         }
 
+        window_.renderFrame();
+
         fdm_.Run();
 
         //Erase previous buffer
