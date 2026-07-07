@@ -13,6 +13,8 @@
 #include <SDL.h>
 #include <stdexcept>
 
+#include "../model/Aircraft.h"
+
 Window::Window() { //Give it an abstract implementation
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw std::runtime_error("SDL video init failed");
@@ -55,37 +57,41 @@ void Window::cleanup() {
     SDL_Quit();
 }
 
-void Window::renderFrame(double time, double airspeed, double posN, double posE, double posU, double rpm, double heading, double brake, double roll, double throttle, double pitch) {
+void Window::renderFrame(double time, Aircraft& aircraft) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event); //This needs to be somewhere where it makes sense
     }
 
-    //Frame start
-    ImGui_ImplSDLRenderer2_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
+    renderGUI(time, aircraft);
 
-    ImGui::SetNextWindowSize(ImVec2(500, 5  00), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Flight controls");
-    ImGui::Text("Sim time: %lf", time);
-    ImGui::Text("North-South position: %lf", posN);
-    ImGui::Text("East-West position: %lf", posE);
-    ImGui::Text("Up-Down position: %lf", posU);
-    ImGui::Text("Heading: %lf", heading);
-    ImGui::Text("Airspeed: %lf", airspeed);
-    ImGui::Text("Throttle: %lf", throttle);
-    ImGui::Text("Rpm: %lf", rpm);
-    ImGui::Text("Pitch: %lf", pitch);
-    ImGui::Text("Roll: %lf", roll);
-    ImGui::Text("Brake: %lf", brake);
-
-    ImGui::End();
-    ImGui::Render();
 
     SDL_SetRenderDrawColor(renderer_, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
     SDL_RenderClear(renderer_);
 
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer_);
     SDL_RenderPresent(renderer_);
+}
+
+void Window::renderGUI(double time, Aircraft& aircraft) {
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Flight controls");
+    ImGui::Text("Sim time: %lf", time);
+    ImGui::Text("North-South position: %lf", aircraft.posN);
+    ImGui::Text("East-West position: %lf", aircraft.posE);
+    ImGui::Text("Up-Down position: %lf", aircraft.posU);
+    ImGui::Text("Heading: %lf", aircraft.heading);
+    ImGui::Text("Airspeed: %lf", aircraft.airspeed);
+    ImGui::Text("Throttle: %lf", aircraft.throttle);
+    ImGui::Text("Rpm: %lf", aircraft.rpm);
+    ImGui::Text("Pitch: %lf", aircraft.pitch);
+    ImGui::Text("Roll: %lf", aircraft.roll);
+    ImGui::Text("Brake: %lf", aircraft.brake);
+
+    ImGui::End();
+    ImGui::Render();
 }

@@ -7,17 +7,19 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 
+#include "../model/Aircraft.h"
 
 class Window {
 public:
     Window();
     void cleanup();
-    void renderFrame(double time, double airspeed, double posN, double posE, double posU, double rpm, double heading, double brake, double
-                     roll, double throttle, double
-                     pitch);
+    void renderFrame(double time, Aircraft &aircraft);
     void loop();
 
 private:
+    void renderGUI(double time, Aircraft &aircraft);
+    void renderGraphics();
+
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;
     const SDL_Color BG_COLOR = { 0, 0, 255, 255 };

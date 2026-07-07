@@ -56,22 +56,14 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     while (true) {
         double time = fdm_.GetSimTime();
-        double airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
-        double posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
-        double posE = fdm_.GetPropertyValue("position/from-start-neu-e-ft");
-        double posU = fdm_.GetPropertyValue("position/from-start-neu-u-ft");
-        double rpm = fdm_.GetPropertyValue("propulsion/engine/engine-rpm");
-        double heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
-        double brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
-        double roll = fdm_.GetPropertyValue("attitude/roll-rad");
-        double throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
-        double pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
 
-        window_.renderFrame(time, airspeed, posN, posE, posU, rpm, heading, brake, roll, throttle, pitch);
+
+        window_.renderFrame(time, aircraft_);
         //window_.renderGraphics
 
         fdm_.Run();
 
+        aircraft_.updateValue();
         aircraft_.resetFCS();
 
         //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.

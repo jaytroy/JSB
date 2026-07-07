@@ -25,3 +25,16 @@ void Aircraft::resetFCS() {
         fdm_.SetPropertyValue("fcs/rudder-cmd-norm", 0.0);
         fdm_.SetPropertyValue("fcs/aileron-cmd-norm", 0.0);
 }
+
+void Aircraft::updateValue() {
+    airspeed = fdm_.GetPropertyValue("velocities/vc-kts");
+    posN = fdm_.GetPropertyValue("position/from-start-neu-n-ft");
+    posE = fdm_.GetPropertyValue("position/from-start-neu-e-ft");
+    posU = fdm_.GetPropertyValue("position/from-start-neu-u-ft");
+    rpm = fdm_.GetPropertyValue("propulsion/engine/engine-rpm");
+    heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
+    brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
+    roll = fdm_.GetPropertyValue("attitude/roll-rad");
+    throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
+    pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
+}
