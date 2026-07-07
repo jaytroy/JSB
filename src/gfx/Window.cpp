@@ -66,7 +66,7 @@ void Window::renderFrame(double time, double airspeed, double posN, double posE,
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(500, 5  00), ImGuiCond_FirstUseEver);
     ImGui::Begin("Flight controls");
     ImGui::Text("Sim time: %lf", time);
     ImGui::Text("North-South position: %lf", posN);
