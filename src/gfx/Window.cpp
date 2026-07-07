@@ -4,16 +4,12 @@
 
 #include "Window.h"
 
-#include <iostream>
-
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
 
 #include <SDL.h>
 #include <stdexcept>
-
-#include "../model/Aircraft.h"
 
 Window::Window() { //Give it an abstract implementation
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -73,7 +69,7 @@ void Window::renderFrame(std::vector<double>& payload) {
     SDL_RenderPresent(renderer_);
 }
 
-void Window::renderGUI(std::vector<double> payload) {
+void Window::renderGUI(std::vector<double> &payload) {
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();

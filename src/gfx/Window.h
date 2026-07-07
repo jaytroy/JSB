@@ -13,18 +13,15 @@ class Window {
 public:
     Window();
     void cleanup();
-    void renderFrame(std::vector<double> &payload);
-    void loop();
+    void renderFrame(std::vector<double>& payload);
 
 private:
-    void renderGUI(std::vector<double> payload);
+    void renderGUI(std::vector<double>& payload);
     void renderGraphics();
 
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;
     const SDL_Color BG_COLOR = { 0, 0, 255, 255 };
-
-    int bpp, flags;
 
     SDL_Window* window_ = nullptr;
     SDL_Renderer* renderer_ = nullptr;
