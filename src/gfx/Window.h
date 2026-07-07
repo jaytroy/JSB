@@ -6,14 +6,18 @@
 #define JSB_WINDOW_H
 #include <SDL_render.h>
 #include <SDL_video.h>
+#include <vector>
 
-#include "../model/Aircraft.h"
+#include "GfxEventSink.h"
+#include "../SDL/EventSink.h"
 
 class Window {
 public:
     Window();
     void cleanup();
     void renderFrame(std::vector<double>& payload);
+
+    EventSink* getGfxSink() { return &gfxSink_; }
 
 private:
     void renderGUI(std::vector<double>& payload);
@@ -25,6 +29,8 @@ private:
 
     SDL_Window* window_ = nullptr;
     SDL_Renderer* renderer_ = nullptr;
+
+    GfxEventSink gfxSink_;
 };
 
 #endif //JSB_WINDOW_H

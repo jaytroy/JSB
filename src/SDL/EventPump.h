@@ -4,8 +4,8 @@
 
 #ifndef JSB_EVENTPUMP_H
 #define JSB_EVENTPUMP_H
-#include <SDL_events.h>
 #include <vector>
+#include <SDL2/SDL_events.h>
 
 
 class EventSink;
@@ -15,7 +15,7 @@ class EventSink;
  */
 class EventPump {
 public:
-    void addSink(EventSink* sink) { sinks_.push_back(sink); }
+    void addSink(EventSink *sink) { sinks_.push_back(sink); }
 
     /**
      * Pumps events, return false if QUIT signal is sent.
@@ -26,15 +26,15 @@ public:
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT)
                 return false;
-            for (EventSink* sink : sinks_) {
+            for (EventSink *sink: sinks_) {
                 sink->onEvent(event); //Perform respective logic for each event
             }
-            return true;
         }
+        return true; 
     }
 
 private:
-    std::vector<EventSink*> sinks_;
+    std::vector<EventSink *> sinks_;
 };
 
 #endif //JSB_EVENTPUMP_H

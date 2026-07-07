@@ -14,7 +14,7 @@ class Joystick : public InputDevice, public EventSink {
 public:
     Joystick();
     void sampleState(ControlEvent& out) override;
-    void onEvent(ControlEvent& out) override;
+    void onEvent(const SDL_Event& out) override;
 
 private:
     SDL_Joystick *joystick_;

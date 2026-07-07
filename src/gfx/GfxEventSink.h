@@ -1,0 +1,17 @@
+//
+// Created by jay on 7/7/26.
+//
+
+#ifndef JSB_GFXEVENTSYNC_H
+#define JSB_GFXEVENTSYNC_H
+#include "imgui_impl_sdl2.h"
+
+#include "../SDL/EventSink.h"
+
+class GfxEventSink : public EventSink {
+    void onEvent(const SDL_Event& event) override {
+        ImGui_ImplSDL2_ProcessEvent(&event);
+    }
+};
+
+#endif //JSB_GFXEVENTSYNC_H

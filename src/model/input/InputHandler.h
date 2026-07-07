@@ -11,15 +11,21 @@
 #include <vector>
 
 #include "InputDevice.h"
+#include "../../input/KeyboardSink.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
+#include "../../SDL/EventPump.h"
+#include "../../input/KeyboardSink.h"
 
 
 class InputHandler {
 public:
     InputHandler();
     int handleInput(JSBSim::FGFDMExec &fdm); //I don't rly want the fdm instance here but I think it's necesary
+    void registerSinks(EventPump& pump);
+
 private:
+    KeyboardSink keyboardSink_;
 
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::vector<std::unique_ptr<InputDevice>> inputDevices_;

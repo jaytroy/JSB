@@ -4,6 +4,7 @@
 
 #ifndef JSB_EVENTSINK_H
 #define JSB_EVENTSINK_H
+#include "imgui_impl_sdl2.h"
 
 /**
  * Defines functionality for discrete events like mouse, keyboard.
@@ -12,7 +13,7 @@
 class EventSink {
 public:
     virtual ~EventSink() = default;
-    virtual void onEvent(ControlEvent& out) = 0; //This can't use ControlEvent
+    virtual void onEvent(const SDL_Event& out) = 0;
 };
 
 #endif //JSB_EVENTSINK_H

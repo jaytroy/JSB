@@ -22,26 +22,9 @@ InputHandler::InputHandler() {
 }
 
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
-    //Keyboard via ncurses. Should be changed.
-    /*int ch;
-    while ((ch = getch()) != ERR) {
-        if (ch == 27) {
-            return 0;
-        }
-
-        auto res = keyToCommand_.find(ch);
-        if (res != keyToCommand_.end()) {
-            auto command = commandHandler_.find(res->second);
-            if (command != commandHandler_.end()) {
-                FcsBinding &binding = command->second;
-                strategies_[binding.strategyKey]->adjustValue(fdm, binding.delta);
-            }
-        }
-    }*/
 
     for (std::unique_ptr<InputDevice> &device: inputDevices_) {
         //This only works with joystick atm
-        //Currently, solely SDL manages input
         ControlEvent event;
         device->sampleState(event);
 
@@ -51,15 +34,25 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
         strategies_["throttle"]->setValue(fdm, event.slider);
     }
 
+    std::vector<FcsCommand> cmds;
+    keyboardSink_.drain(cmds);
+    for (FcsCommand c : cmds) {
+        auto b = commandHandler_.find(c);
+        if (b != commandHandler_.end()) {
+            FcsBinding &binding = b->second;
+            strategies_[binding.strategyKey]->adjustValue(fdm, binding.delta);
+        }
+    }
+
     return 1;
 }
 
-/**
- * Handles joystick input.
- * Built to be input framework-agnostic.
- * These currently only handle FCS. Need to expand to work with other bindings.
- * @param fdm The FDM instance.
- */
-//void InputHandler::handleJoystick(JSBSim::FGFDMExec &fdm) {
+void InputHandler::registerSinks(EventPump &pump) {
+    pump.addSink(&keyboardSink_);
 
-//}
+    for (auto& device : inputDevices_) {
+        if (auto* sink = dynamic_cast<EventSink*>(device.get()))
+            pump.addSink(sink);
+    }
+}
+

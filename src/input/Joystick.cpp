@@ -45,7 +45,6 @@ void Joystick::sampleState(ControlEvent &outEvent) {
     outEvent.slider = slider;
 }
 
-void Joystick::onEvent(ControlEvent &out) {
-
+void Joystick::onEvent(const SDL_Event &out) {
+    //nada
 }
-

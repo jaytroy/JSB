@@ -4,10 +4,8 @@
 
 #include <fstream>
 #include <iostream>
-#include <unistd.h>
 #include <JSBSim/FGFDMExec.h>
 #include <JSBSim/initialization/FGInitialCondition.h>
-#include <ncurses.h> //Currently used to print but ideally shouldn't be here
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
@@ -39,6 +37,9 @@ Simulation::Simulation() : aircraft_(fdm_) {
 
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
+
+    pump_.addSink(window_.getGfxSink());
+    inputHandler_.registerSinks(pump_);
 }
 
 /**
@@ -49,21 +50,20 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     double dt = fdm_.GetDeltaT();
 
-    while (true) {
-
+    while (pump_.pump()) {
         if (!inputHandler_.handleInput(fdm_)) {
             break;
         }
-
-        fdm_.Run();
-
-        aircraft_.updateValues();
 
         std::vector<double> rendererPayload;
         double time = fdm_.GetSimTime();
         rendererPayload.push_back(time);
         aircraft_.appendData(rendererPayload);
         window_.renderFrame(rendererPayload);
+
+        aircraft_.updateValues();
+
+        fdm_.Run();
 
         //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
 
@@ -73,7 +73,6 @@ void Simulation::run() {
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 
-    endwin();
     window_.cleanup();
     std::cout << "Exited successfully" << std::endl;
 }

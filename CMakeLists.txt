@@ -15,8 +15,8 @@ add_executable(JSB
         src/Main.cpp
         src/model/Aircraft.cpp
         src/model/Aircraft.h
-        src/Simulation.cpp
-        src/Simulation.h
+        src/model/Simulation.cpp
+        src/model/Simulation.h
         src/model/fcs/FcsStrategy.h
         src/model/fcs/actions/Throttle.cpp
         src/model/fcs/actions/Throttle.h
@@ -33,8 +33,6 @@ add_executable(JSB
         src/model/fcs/FcsStrategyFactory.h
         src/model/fcs/actions/Engine.cpp
         src/model/fcs/actions/Engine.h
-        src/input/SdlManager.cpp
-        src/input/SdlManager.h
         src/gfx/GL.cpp
         src/gfx/Window.cpp
         src/gfx/Window.h
@@ -51,6 +49,8 @@ add_executable(JSB
         src/model/input/InputHandler.h
         src/SDL/EventSink.h
         src/SDL/EventPump.h
+        src/gfx/GfxEventSink.h
+        src/input/KeyboardSink.h
 )
 
 target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS} ${CURSES_INCLUDE_DIR})
