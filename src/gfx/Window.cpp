@@ -45,6 +45,8 @@ Window::Window() { //Give it an abstract implementation
     }
     SDL_GL_SetSwapInterval(1); //GL window swapping
 
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
     renderer_ = std::make_unique<GLRenderer>();
 
     //ImGui setup
@@ -75,7 +77,7 @@ void Window::renderFrame(std::vector<double>& payload) {
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    renderGraphics();
+    renderGraphics(payload);
     renderGUI(payload);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -106,6 +108,6 @@ void Window::renderGUI(std::vector<double> &payload) {
     ImGui::Render();
 }
 
-void Window::renderGraphics() {
-    renderer_->render();
+void Window::renderGraphics(std::vector<double>& payload) {
+    renderer_->render(payload);
 }

@@ -44,15 +44,18 @@ JSBSIMDIR="/your/jsb/dir"
 
 Then run it with:
 ```shell
-rm -rf build && cmake -B build && cmake --build build && ./build/JSB
+rm -rf build
+cmake -B build
+cmake --build build
+./build/JSB
 ```
-You can generally omit the first two commands.
+You can generally omit the first two commands after you've built your directories.
 
 ### Todo:
 | Feature                             | Status      | Notes                                                                       |
 |-------------------------------------|-------------|----------------------------------------------------------------------------------------------------|
 | Graphics (OpenGL)                   | In progress | Or UEngine/Unity instead? Ideally modular.                                  |
-| User interface                      | Done        | Graphics prerequisite. Display data better                                  |
+| User interface                      | Done   5    | Graphics prerequisite. Display data better                                  |
 | Environment Variables               | Done        | So that users don't have to modify code directly                            |
 | Better FCS strat creation           | Almost      | Implement factory pattern to declutter FCS strat creation                   |
 | Expand FCS functionality            | TBD         | Implement more than barebones flight controls                               |

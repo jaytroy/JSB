@@ -23,7 +23,7 @@ public:
 
 private:
     void renderGUI(std::vector<double>& payload);
-    void renderGraphics();
+    void renderGraphics(std::vector<double> &payload);
 
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;

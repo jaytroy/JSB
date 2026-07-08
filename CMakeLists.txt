@@ -53,18 +53,23 @@
             src/gfx/GLRenderer.cpp
             src/gfx/GLRenderer.h
             ${GLAD_DIR}/src/glad.c
+            src/gfx/Shader.h
+            src/gfx/Shader.cpp
+            src/gfx/Shader.h
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})
     target_include_directories(JSB PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends ${GLAD_DIR}/include)
 
     find_package(OpenGL REQUIRED)
+    find_package(glm CONFIG REQUIRED)
 
     target_link_directories(JSB PRIVATE ${JSBSIM_LIBRARY_DIRS})
     target_link_libraries(JSB PRIVATE
             /usr/lib/libJSBSim.a
             OpenGL::GL
             ${CMAKE_DL_LIBS}
+            glm::glm
             m
     )
     target_link_libraries(JSB PRIVATE SDL2::SDL2 SDL2::SDL2main)
