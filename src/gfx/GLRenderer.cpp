@@ -18,11 +18,11 @@ GLRenderer::GLRenderer() {
     //Below arrays define 2 triangles that make up the groundfloat vertices[] = {
     float grnd[] = {
         // positions               // colors           // texture coords
-        -10000.0f,  0.0f, -10000.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         10000.0f, 0.0f, -10000.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         10000.0f, 0.0f, 10000.0f,    0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -10000.0f,  0.0f, 10000.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
-   };
+        -10000.0f, 0.0f, -10000.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+        10000.0f, 0.0f, -10000.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        10000.0f, 0.0f, 10000.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -10000.0f, 0.0f, 10000.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // top left
+    };
 
     unsigned int indices[] = {
         0, 1, 3,
@@ -48,11 +48,11 @@ GLRenderer::GLRenderer() {
     glEnableVertexAttribArray(0);
 
     //Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     //Texture
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     //Can this be moved out into its own class?
@@ -63,7 +63,7 @@ GLRenderer::GLRenderer() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     int width, height, nrChannels;
-    unsigned char* data = stbi_load(SHADER_DIR "grid.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load(SHADER_DIR "grid.jpg", &width, &height, &nrChannels, 0);
     if (!data) {
         throw std::runtime_error(std::string("Failed to load ground texture from ") + SHADER_DIR "grid.jpg");
     }
@@ -74,46 +74,45 @@ GLRenderer::GLRenderer() {
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void GLRenderer::render(std::vector<double>& payload) {
+void GLRenderer::render(std::vector<double> &payload) {
     groundShader_->use();
 
     //Taken from directly from claude. Not gonna study these transformations (again!!!!)
 
     // payload: [0]=time [1]=north [2]=east [3]=down(or up?) [4]=heading [5]=airspeed
     //          [6]=throttle [7]=rpm [8]=pitch [9]=roll [10]=brake
-    double north   = payload[1];
-    double east    = payload[2];
-    double alt     = payload[3];
+    double north = payload[1];
+    double east = payload[2];
+    double alt = payload[3];
     double heading = payload[4];
-    double pitch   = payload[8];
-    double roll    = payload[9];
+    double pitch = payload[8];
+    double roll = payload[9];
 
     // NED-ish → GL (Y up): east→X, altitude→Y, north→-Z
     glm::vec3 eye(
-        (float)east,
-        (float)alt,
-        (float)-north
+        (float) east,
+        (float) alt,
+        (float) -north
     );
 
     // Aircraft attitude → camera orientation (yaw, then pitch, then roll)
-    glm::mat4 att = glm::rotate(glm::mat4(1.0f), (float)-heading, glm::vec3(0, 1, 0));
-    att = glm::rotate(att, (float)pitch, glm::vec3(1, 0, 0));
-    att = glm::rotate(att, (float)roll,  glm::vec3(0, 0, 1));
+    glm::mat4 att = glm::rotate(glm::mat4(1.0f), glm::radians((float) heading), glm::vec3(0, 1, 0));
+    att = glm::rotate(att, (float) pitch, glm::vec3(1, 0, 0));
+    att = glm::rotate(att, (float) roll, glm::vec3(0, 0, 1));
 
     glm::vec3 forward = glm::vec3(att * glm::vec4(0, 0, -1, 0));
-    glm::vec3 up      = glm::vec3(att * glm::vec4(0, 1, 0, 0));
+    glm::vec3 up = glm::vec3(att * glm::vec4(0, 1, 0, 0));
 
     glm::mat4 view = glm::lookAt(eye, eye + forward, up);
 
     groundShader_->setMat4("model", glm::mat4(1.0f));
     groundShader_->setMat4("view", view);
     groundShader_->setMat4("projection",
-        glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 1.0f, 20000.0f));
+                           glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 20000.0f));
     groundShader_->setInt("groundTex", 0);
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void *) 0);
     glBindVertexArray(0);
 }
-
