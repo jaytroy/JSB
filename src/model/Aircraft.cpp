@@ -34,9 +34,9 @@ void Aircraft::updateValues() {
     rpm = fdm_.GetPropertyValue("propulsion/engine/engine-rpm");
     heading = fdm_.GetPropertyValue("attitude/heading-true-rad") * (180.0 / 3.141592653589793238463);
     brake = fdm_.GetPropertyValue("fcs/center-brake-cmd-norm");
-    roll = fdm_.GetPropertyValue("attitude/roll-rad");
+    roll = fdm_.GetPropertyValue("attitude/roll-rad") * (180.0 / 3.141592653589793238463);
     throttle = fdm_.GetPropertyValue("fcs/throttle-cmd-norm");
-    pitch = fdm_.GetPropertyValue("fcs/pitch-cmd-norm");
+    pitch = fdm_.GetPropertyValue("attitude/pitch-rad") * (180.0 / 3.141592653589793238463);
 }
 
 

@@ -79,7 +79,7 @@ void GLRenderer::render(std::vector<double> &payload) {
 
     //Taken from directly from claude. Not gonna study these transformations (again!!!!)
 
-    // payload: [0]=time [1]=north [2]=east [3]=down(or up?) [4]=heading [5]=airspeed
+    // payload: [0]=time [1]=north [2]=east [3]=up [4]=heading [5]=airspeed
     //          [6]=throttle [7]=rpm [8]=pitch [9]=roll [10]=brake
     double north = payload[1];
     double east = payload[2];
@@ -96,9 +96,10 @@ void GLRenderer::render(std::vector<double> &payload) {
     );
 
     // Aircraft attitude → camera orientation (yaw, then pitch, then roll)
-    glm::mat4 att = glm::rotate(glm::mat4(1.0f), glm::radians((float) heading), glm::vec3(0, 1, 0));
-    att = glm::rotate(att, (float) pitch, glm::vec3(1, 0, 0));
-    att = glm::rotate(att, (float) roll, glm::vec3(0, 0, 1));
+    glm::mat4 att(1.0f);
+    att = glm::rotate(att, glm::radians((float)heading), glm::vec3(0, 1, 0));
+    att = glm::rotate(att, glm::radians((float)pitch),  glm::vec3(1, 0, 0));
+    att = glm::rotate(att, glm::radians((float)roll),   glm::vec3(0, 0, 1));
 
     glm::vec3 forward = glm::vec3(att * glm::vec4(0, 0, -1, 0));
     glm::vec3 up = glm::vec3(att * glm::vec4(0, 1, 0, 0));
