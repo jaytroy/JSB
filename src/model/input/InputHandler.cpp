@@ -24,7 +24,7 @@ InputHandler::InputHandler() {
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
 
     for (std::unique_ptr<InputDevice> &device: inputDevices_) {
-        //This only works with joystick atm
+        //This only works with joystick atm. Needs a refactor
         ControlEvent event;
         device->sampleState(event);
 

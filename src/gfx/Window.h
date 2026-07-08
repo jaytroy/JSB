@@ -4,11 +4,13 @@
 
 #ifndef JSB_WINDOW_H
 #define JSB_WINDOW_H
+#include <memory>
 #include <SDL_render.h>
 #include <SDL_video.h>
 #include <vector>
 
 #include "GfxEventSink.h"
+#include "GLRenderer.h"
 #include "../SDL/EventSink.h"
 
 class Window {
@@ -28,7 +30,8 @@ private:
     const SDL_Color BG_COLOR = { 0, 0, 255, 255 };
 
     SDL_Window* window_ = nullptr;
-    SDL_Renderer* renderer_ = nullptr;
+    std::unique_ptr<GLRenderer> renderer_;
+    SDL_GLContext gl_;
 
     GfxEventSink gfxSink_;
 };
