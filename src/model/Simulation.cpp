@@ -16,7 +16,7 @@
 Simulation::Simulation() : aircraft_(fdm_) {
     static const char* JSBGITDIR = std::getenv("JSBGITDIR");
 
-    fdm_.SetDebugLevel(0);
+    //fdm_.SetDebugLevel(0);
 
     //Set up JSB directories and load models
     const SGPath root(JSBGITDIR);
