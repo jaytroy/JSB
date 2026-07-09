@@ -25,8 +25,7 @@ public:
     }
 
     void setValue(JSBSim::FGFDMExec &fdm, double value) override {
-
-    fdm.SetPropertyValue(FCS::rudder.data(), value);
+        fdm.SetPropertyValue(FCS::rudder.data(), value);
     }
 };
 

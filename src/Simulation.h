@@ -6,10 +6,10 @@
 #define JSB_SIMULATION_H
 #include <JSBSim/FGFDMExec.h>
 
-#include "../gfx/Window.h"
-#include "Aircraft.h"
-#include "input/InputHandler.h"
-#include "../SDL/EventPump.h"
+#include "gfx/Window.h"
+#include "model/Aircraft.h"
+#include "model/input/InputHandler.h"
+#include "SDL/EventPump.h"
 
 /**
  * The simulation class is responsible for running all parts of the simulator and putting them together.

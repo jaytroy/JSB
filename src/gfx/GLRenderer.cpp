@@ -97,9 +97,9 @@ void GLRenderer::render(std::vector<double> &payload) {
 
     // Aircraft attitude → camera orientation (yaw, then pitch, then roll)
     glm::mat4 att(1.0f);
-    att = glm::rotate(att, glm::radians((float)heading), glm::vec3(0, 1, 0));
+    att = glm::rotate(att, glm::radians((float)-heading), glm::vec3(0, 1, 0));
     att = glm::rotate(att, glm::radians((float)pitch),  glm::vec3(1, 0, 0));
-    att = glm::rotate(att, glm::radians((float)roll),   glm::vec3(0, 0, 1));
+    att = glm::rotate(att, glm::radians((float)roll),   glm::vec3(0, 0, -1));
 
     glm::vec3 forward = glm::vec3(att * glm::vec4(0, 0, -1, 0));
     glm::vec3 up = glm::vec3(att * glm::vec4(0, 1, 0, 0));

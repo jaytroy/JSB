@@ -15,8 +15,8 @@
             src/Main.cpp
             src/model/Aircraft.cpp
             src/model/Aircraft.h
-            src/model/Simulation.cpp
-            src/model/Simulation.h
+            src/Simulation.cpp
+            src/Simulation.h
             src/model/fcs/FcsStrategy.h
             src/model/fcs/actions/Throttle.h
             src/model/fcs/actions/Pitch.h
