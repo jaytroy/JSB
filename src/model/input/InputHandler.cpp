@@ -5,6 +5,7 @@
 #include "InputHandler.h"
 
 #include <FGFDMExec.h>
+#include <iostream>
 
 #include "InputDevice.h"
 #include "../../input/Joystick.h"

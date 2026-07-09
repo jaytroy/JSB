@@ -12,8 +12,20 @@
 class Pitch : public FcsStrategy {
 public:
     ~Pitch() override = default;
-    void adjustValue(JSBSim::FGFDMExec &fdm, double delta) override;
-    void setValue(JSBSim::FGFDMExec &fdm, double value) override;
+    void adjustValue(JSBSim::FGFDMExec &fdm, double delta) override {
+        double current = fdm.GetPropertyValue(FCS::elevator.data());
+        double next = current + delta;
+        if (next > 1.0) {
+            next = 1.0;
+        } else if (next < 0.0) {
+            next = -1.0;
+        }
+        fdm.SetPropertyValue(FCS::elevator.data(), next);
+    }
+
+    void setValue(JSBSim::FGFDMExec &fdm, double value) override {
+        fdm.SetPropertyValue(FCS::elevator.data(), value);
+    }
 };
 
 

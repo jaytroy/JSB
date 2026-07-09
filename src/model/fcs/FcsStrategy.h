@@ -44,6 +44,9 @@ namespace FCS { //Should this be here?
     static constexpr std::string_view brake_right = "fcs/right-brake-cmd-norm";
     static constexpr std::string_view brake_center = "fcs/center-brake-cmd-norm";
     static constexpr std::string_view engine = "propulsion/engine/set-running";
+    static constexpr std::string_view pitch_trim = "fcs/pitch-trim-cmd-norm";
+    static constexpr std::string_view roll_trim = "fcs/roll-trim-cmd-norm";
+    static constexpr std::string_view yaw_trim = "fcs/yaw-trim-cmd-norm";
 }
 
 
