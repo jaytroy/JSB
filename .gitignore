@@ -1,6 +1,6 @@
 # Build files
-/build
-/cmake-build-debug
+build
+cmake-build-debug
 
 # Linter
 .clang-tidy
@@ -15,4 +15,4 @@
 *.env
 
 # Other files
-docker-compose.yml
+simulator/docker-compose.yml

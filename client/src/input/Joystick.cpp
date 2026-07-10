@@ -46,6 +46,6 @@ void Joystick::sampleState(ControlEvent &outEvent) {
     outEvent.slider = slider;
 }
 
-void Joystick::onEvent(const SDL_Event &out) {
-    //nada
+void Joystick::onEvent(const SDL_Event &event) {
+    if (event.type != SDL_JOYBUTTONDOWN || event.type != SDL_JOYHATMOTION) return;
 }

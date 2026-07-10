@@ -11,11 +11,8 @@
 #include <vector>
 
 #include "InputDevice.h"
-#include "../../input/KeyboardSink.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
-#include "../../SDL/EventPump.h"
-#include "../../input/KeyboardSink.h"
 
 
 class InputHandler {
@@ -30,6 +27,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::vector<std::unique_ptr<InputDevice>> inputDevices_;
 
+    //This translation should happen here
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
         {'w', FcsCommand::PitchDown},
        {'s', FcsCommand::PitchUp},

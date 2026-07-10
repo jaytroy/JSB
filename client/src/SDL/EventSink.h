@@ -4,7 +4,7 @@
 
 #ifndef JSB_EVENTSINK_H
 #define JSB_EVENTSINK_H
-#include "imgui_impl_sdl2.h"
+#include <SDL2/SDL_events.h>
 
 /**
  * Defines functionality for discrete events like mouse, keyboard.

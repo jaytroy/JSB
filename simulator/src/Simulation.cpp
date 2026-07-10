@@ -9,14 +9,15 @@
 #include <bits/this_thread_sleep.h>
 #include "Simulation.h"
 
-
 /**
  * Constructs the simulator.
  */
-Simulation::Simulation() : aircraft_(fdm_) {
+Simulation::Simulation(std::string model) : aircraft_(fdm_) {
+    //Considered making this a submodule, but given that a user might
+    //want to add custom aircraft, keeping it as an env var
     static const char* JSBGITDIR = std::getenv("JSBGITDIR");
 
-    //fdm_.SetDebugLevel(0);
+    fdm_.SetDebugLevel(0);
 
     //Set up JSB directories and load models
     const SGPath root(JSBGITDIR);
@@ -26,7 +27,7 @@ Simulation::Simulation() : aircraft_(fdm_) {
     fdm_.SetEnginePath(SGPath("engine"));
     fdm_.SetSystemsPath(SGPath("systems"));
 
-    if (!fdm_.LoadModel("c172p")) {
+    if (!fdm_.LoadModel(model)) {
         throw std::runtime_error("Failed to load aircraft model");
     }
 
@@ -38,7 +39,6 @@ Simulation::Simulation() : aircraft_(fdm_) {
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
-    pump_.addSink(window_.getGfxSink());
     inputHandler_.registerSinks(pump_);
 }
 
@@ -50,7 +50,7 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     double dt = fdm_.GetDeltaT();
 
-    while (pump_.pump()) {
+    while (inputHandler_.handleInput(fmd_)) {
         if (!inputHandler_.handleInput(fdm_)) {
             break;
         }

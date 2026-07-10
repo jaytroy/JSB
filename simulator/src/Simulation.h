@@ -6,10 +6,8 @@
 #define JSB_SIMULATION_H
 #include <JSBSim/FGFDMExec.h>
 
-#include "gfx/Window.h"
 #include "model/Aircraft.h"
 #include "model/input/InputHandler.h"
-#include "SDL/EventPump.h"
 
 /**
  * The simulation class is responsible for running all parts of the simulator and putting them together.
@@ -17,7 +15,8 @@
  */
 class Simulation {
 public:
-    Simulation();
+    Simulation(std::string model);
+
     void run();
 
 
@@ -25,9 +24,6 @@ private:
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
     InputHandler inputHandler_;
-    Window window_;
-    EventPump pump_;
-
 
     /**
      * Dumps the entirety property catalog of the current aircraft into a file.

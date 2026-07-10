@@ -7,9 +7,6 @@
 #include <vector>
 #include <SDL2/SDL_events.h>
 
-
-class EventSink;
-
 /**
  * Pumps SDL events from the event queue.
  */
@@ -34,7 +31,7 @@ public:
     }
 
 private:
-    std::vector<EventSink *> sinks_;
+    std::vector<EventSink*> sinks_;
 };
 
 #endif //JSB_EVENTPUMP_H
