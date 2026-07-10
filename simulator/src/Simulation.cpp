@@ -12,12 +12,12 @@
 /**
  * Constructs the simulator.
  */
-Simulation::Simulation(std::string model) : aircraft_(fdm_) {
+Simulation::Simulation(std::string model, std::string resetFile) : aircraft_(fdm_) {
     //Considered making this a submodule, but given that a user might
     //want to add custom aircraft, keeping it as an env var
     static const char* JSBGITDIR = std::getenv("JSBGITDIR");
 
-    fdm_.SetDebugLevel(0);
+    //fdm_.SetDebugLevel(0);
 
     //Set up JSB directories and load models
     const SGPath root(JSBGITDIR);
@@ -32,14 +32,16 @@ Simulation::Simulation(std::string model) : aircraft_(fdm_) {
     }
 
     auto IC = fdm_.GetIC();
-    if (!IC->Load(SGPath("reset00.xml"))) {
+    if (!IC->Load(SGPath(resetFile))) {
         throw std::runtime_error("Failed to load reset file");
     }
 
     //Dump catalog for selected plane
-    dumpPropertyCatalogToFile(fdm_, "catalog.txt");
-
-    inputHandler_.registerSinks(pump_);
+    try {
+        dumpPropertyCatalogToFile(fdm_, "catalog.txt");
+    } catch (std::runtime_error &e) {
+        std::cout << "Failed to create a JSB dump file";
+    }
 }
 
 /**
@@ -50,16 +52,12 @@ void Simulation::run() {
     fdm_.Setdt(0.01);
     double dt = fdm_.GetDeltaT();
 
-    while (inputHandler_.handleInput(fmd_)) {
-        if (!inputHandler_.handleInput(fdm_)) {
-            break;
-        }
+    while (inputHandler_.handleInput(fdm_)) { //handleInput will return true as long as ESC isn't pressed
 
         std::vector<double> rendererPayload;
         double time = fdm_.GetSimTime();
         rendererPayload.push_back(time);
         aircraft_.appendData(rendererPayload);
-        window_.renderFrame(rendererPayload);
 
         aircraft_.updateValues();
 
@@ -73,7 +71,6 @@ void Simulation::run() {
         std::this_thread::sleep_for(std::chrono::duration<double>(dt));
     }
 
-    window_.cleanup();
     std::cout << "Exited successfully" << std::endl;
 }
 

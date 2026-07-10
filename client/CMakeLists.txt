@@ -22,8 +22,6 @@ add_executable(CLIENT
         ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
         src/input/Joystick.cpp
         src/input/Joystick.h
-        src/model/input/InputHandler.cpp
-        src/model/input/InputHandler.h
         src/SDL/EventSink.h
         src/SDL/EventPump.h
         src/gfx/GfxEventSink.h

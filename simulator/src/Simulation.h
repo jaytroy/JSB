@@ -15,7 +15,7 @@
  */
 class Simulation {
 public:
-    Simulation(std::string model);
+    Simulation(std::string model, std::string resetFile);
 
     void run();
 

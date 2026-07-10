@@ -25,6 +25,8 @@ add_executable(Simulator
         src/model/fcs/FcsStrategyFactory.h
         src/model/fcs/actions/Engine.h
         src/model/fcs/actions/Trim.h
+        src/model/input/InputHandler.cpp
+        src/model/input/InputHandler.h
 )
 
 target_include_directories(Simulator PRIVATE ${JSBSIM_INCLUDE_DIRS})

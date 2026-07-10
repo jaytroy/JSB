@@ -8,7 +8,6 @@
 #include <iostream>
 
 #include "InputDevice.h"
-#include "../../input/Joystick.h"
 #include "../fcs/FcsStrategyFactory.h"
 
 InputHandler::InputHandler() {
@@ -16,7 +15,7 @@ InputHandler::InputHandler() {
 
     //Set up input
     try {
-        inputDevices_.push_back(std::make_unique<Joystick>());
+        //inputDevices_.push_back(std::make_unique<Joystick>());
     } catch (const std::runtime_error &e) {
         std::cout << "Did not find a joystick\n";
     }
@@ -36,7 +35,7 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
     }
 
     std::vector<FcsCommand> cmds;
-    keyboardSink_.drain(cmds);
+    //keyboardSink_.drain(cmds);
     for (FcsCommand c : cmds) {
         auto b = commandHandler_.find(c);
         if (b != commandHandler_.end()) {
@@ -48,6 +47,7 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm) {
     return 1;
 }
 
+/*
 void InputHandler::registerSinks(EventPump &pump) {
     pump.addSink(&keyboardSink_);
 
@@ -57,3 +57,4 @@ void InputHandler::registerSinks(EventPump &pump) {
     }
 }
 
+*/
