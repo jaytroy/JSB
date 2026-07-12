@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "InputDevice.h"
+#include "InputSocket.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
 
@@ -21,7 +22,7 @@ public:
     int handleInput(JSBSim::FGFDMExec &fdm); //I don't rly want the fdm instance here but I think it's necesary
 
 private:
-
+    InputSocket socket_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
     std::vector<std::unique_ptr<InputDevice>> inputDevices_;
 

@@ -27,6 +27,8 @@ add_executable(Simulator
         src/model/fcs/actions/Trim.h
         src/model/input/InputHandler.cpp
         src/model/input/InputHandler.h
+        src/model/input/InputSocket.cpp
+        src/model/input/InputSocket.h
 )
 
 target_include_directories(Simulator PRIVATE ${JSBSIM_INCLUDE_DIRS})
