@@ -7,29 +7,6 @@ The simulator is entirely self-contained, depending on only JSBSim itself. The d
 
 Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim.git) somewhere.
 
-### Run the container via Docker compose:
-Copy this file. Make sure to point it towards the repository you cloned above.
-```yaml
-name: jsb
-
-services:
-  simulation:
-    container_name: jsb-simulation
-    image: ghcr.io/jaytroy/jsb-simulation:latest
-    volumes:
-      - /your/jsb/dir:/app/jsbsim # Update this
-    environment:
-      - TERM=xterm
-    stdin_open: true
-    tty: true
-
-```
-
-Then run with:
-```shell
-docker compose run --build --rm -it simulation
-```
-
 ### Compile from source
 You're gonna need to install the required libraries:
 ```shell

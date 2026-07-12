@@ -16,7 +16,7 @@
 class Simulation {
 public:
     Simulation(const char* aircraftModel, const char* resetFile);
-    std::vector<double> run(std::vector<int> input);
+    std::vector<double> run(const std::vector<int> &input);
     double getDt() const { return fdm_.GetDeltaT(); }
 
 

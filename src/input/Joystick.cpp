@@ -6,7 +6,6 @@
 
 #include <format>
 #include <iostream>
-#include <ncurses.h>
 #include <SDL.h>
 #include <SDL_events.h>
 #include <string>

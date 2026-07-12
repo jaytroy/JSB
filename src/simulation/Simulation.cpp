@@ -44,7 +44,7 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
 /**
  * Runs a step the simulation.
  */
-std::vector<double> Simulation::run(std::vector<int> input) {
+std::vector<double> Simulation::run(const std::vector<int> &input) {
     inputHandler_.handleInput(fdm_, input);
 
     std::vector<double> rendererPayload;

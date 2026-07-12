@@ -40,7 +40,7 @@ private:
         {'b', FcsCommand::ToggleBrake},
         {'p', FcsCommand::ToggleEngine}
     };
-
+ 
     std::unordered_map<FcsCommand, FcsBinding> commandHandler_ = {
         {FcsCommand::PitchUp, {"pitch", -1}},
         {FcsCommand::PitchDown, {"pitch", 1}},
