@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y  \
     cmake \
     build-essential \
     pkg-config \
-    libncurses-dev
+    libsdl2-2.0-0 \
+    libsdl2-dev \
+    libglm-dev
 
 COPY /libraries/JSBSim_*.deb /libraries/JSBSim-devel_*.deb /tmp/
 RUN apt-get install -y /tmp/JSBSim_*.deb /tmp/JSBSim-devel_*.deb \
@@ -14,6 +16,7 @@ WORKDIR /app
 
 COPY CMakeLists.txt .
 COPY ./src ./src/
+COPY ./external ./external/
 
 ENV JSBGITDIR=/app/jsbsim/
 
