@@ -6,15 +6,13 @@
 #include <iostream>
 #include <JSBSim/FGFDMExec.h>
 #include <JSBSim/initialization/FGInitialCondition.h>
-#include <bits/this_thread_sleep.h>
 #include "Simulation.h"
-
 
 /**
  * Constructs the simulator.
  */
-Simulation::Simulation() : aircraft_(fdm_) {
-    static const char* JSBGITDIR = std::getenv("JSBGITDIR");
+Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_), inputHandler_(fdm_){
+    static const char *JSBGITDIR = std::getenv("JSBGITDIR");
 
     //fdm_.SetDebugLevel(0);
 
@@ -26,55 +24,42 @@ Simulation::Simulation() : aircraft_(fdm_) {
     fdm_.SetEnginePath(SGPath("engine"));
     fdm_.SetSystemsPath(SGPath("systems"));
 
-    if (!fdm_.LoadModel("c172p")) {
+    if (!fdm_.LoadModel(aircraftModel)) {
         throw std::runtime_error("Failed to load aircraft model");
     }
 
     auto IC = fdm_.GetIC();
-    if (!IC->Load(SGPath("reset00.xml"))) {
+    if (!IC->Load(SGPath(resetFile))) {
         throw std::runtime_error("Failed to load reset file");
     }
 
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
-    pump_.addSink(window_.getGfxSink());
-    inputHandler_.registerSinks(pump_);
+
+    fdm_.RunIC();
+    fdm_.Setdt(0.01);
+
 }
 
 /**
- * Runs the simulation.
+ * Runs a step the simulation.
  */
-void Simulation::run() {
-    fdm_.RunIC();
-    fdm_.Setdt(0.01);
-    double dt = fdm_.GetDeltaT();
+std::vector<double> Simulation::run(std::vector<int> input) {
+    inputHandler_.handleInput(fdm_, input);
 
-    while (pump_.pump()) {
-        if (!inputHandler_.handleInput(fdm_)) {
-            break;
-        }
+    std::vector<double> rendererPayload;
+    double time = fdm_.GetSimTime();
+    rendererPayload.push_back(time);
+    aircraft_.appendData(rendererPayload);
 
-        std::vector<double> rendererPayload;
-        double time = fdm_.GetSimTime();
-        rendererPayload.push_back(time);
-        aircraft_.appendData(rendererPayload);
-        window_.renderFrame(rendererPayload);
+    aircraft_.updateValues();
 
-        aircraft_.updateValues();
+    fdm_.Run();
 
-        fdm_.Run();
+    //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
 
-        //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
-
-        //Sleep for sim duration (~8.3ms) to (approximately) match real lifetime.
-        //This will inevitably lag the sim
-        //Needs to be replaced with some exterior time tracking given that real-time simulation is desired
-        std::this_thread::sleep_for(std::chrono::duration<double>(dt));
-    }
-
-    window_.cleanup();
-    std::cout << "Exited successfully" << std::endl;
+    return rendererPayload;
 }
 
 /**

@@ -7,9 +7,6 @@
 #include <vector>
 #include <SDL2/SDL_events.h>
 
-
-class EventSink;
-
 /**
  * Pumps SDL events from the event queue.
  */

@@ -15,15 +15,15 @@
             src/Main.cpp
             src/model/Aircraft.cpp
             src/model/Aircraft.h
-            src/Simulation.cpp
-            src/Simulation.h
+            src/model/Simulation.cpp
+            src/model/Simulation.h
             src/model/fcs/FcsStrategy.h
             src/model/fcs/actions/Throttle.h
             src/model/fcs/actions/Pitch.h
             src/model/fcs/actions/Roll.h
             src/model/fcs/actions/Yaw.h
             src/model/fcs/actions/Brake.h
-            src/model/input/InputDevice.h
+            src/model/input/AxisDevice.h
             src/model/fcs/FcsCommand.h
             src/model/fcs/FcsStrategyFactory.h
             src/model/fcs/actions/Engine.h
@@ -70,3 +70,4 @@
     target_link_libraries(JSB PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
     target_compile_definitions(JSB PRIVATE SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/shaders/")
+    target_compile_definitions(JSB PRIVATE TEXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/textures/")

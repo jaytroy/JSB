@@ -16,13 +16,13 @@
 class GLRenderer {
 public:
     GLRenderer();
-    void render(std::vector<double>& payload);
+    void render(const std::vector<double>& payload) const;
 
 private:
-    unsigned int VBO;
-    unsigned int VAO;
-    unsigned int EBO;
-    unsigned int texture;
+    unsigned int VBO{};
+    unsigned int VAO{};
+    unsigned int EBO{};
+    unsigned int texture{};
 
     std::unique_ptr<Shader> groundShader_;
     //std::unique_ptr<Shader> skyShader_;

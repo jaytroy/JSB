@@ -7,10 +7,10 @@
 #include <SDL_joystick.h>
 #include <string>
 
-#include "../model/input/InputDevice.h"
+#include "../model/input/AxisDevice.h"
 #include "../SDL/EventSink.h"
 
-class Joystick : public InputDevice, public EventSink {
+class Joystick : public AxisDevice, public EventSink {
 public:
     Joystick();
     void sampleState(ControlEvent& out) override;

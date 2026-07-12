@@ -5,7 +5,6 @@
 #ifndef JSB_WINDOW_H
 #define JSB_WINDOW_H
 #include <memory>
-#include <SDL_render.h>
 #include <SDL_video.h>
 #include <vector>
 
@@ -16,14 +15,14 @@
 class Window {
 public:
     Window();
-    void cleanup();
+    void cleanup() const;
     void renderFrame(std::vector<double>& payload);
 
     EventSink* getGfxSink() { return &gfxSink_; }
 
 private:
-    void renderGUI(std::vector<double>& payload);
-    void renderGraphics(std::vector<double> &payload);
+    void renderGUI(const std::vector<double>& payload);
+    void renderGraphics(std::vector<double> &payload) const;
 
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;

@@ -4,35 +4,32 @@
 
 #ifndef JSB_INPUTHANDLER_H
 #define JSB_INPUTHANDLER_H
+
 #include <FGFDMExec.h>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include "InputDevice.h"
-#include "../../input/KeyboardSink.h"
+#include "AxisDevice.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
-#include "../../SDL/EventPump.h"
-#include "../../input/KeyboardSink.h"
 
 
 class InputHandler {
 public:
-    InputHandler();
-    int handleInput(JSBSim::FGFDMExec &fdm); //I don't rly want the fdm instance here but I think it's necesary
-    void registerSinks(EventPump& pump);
+    explicit InputHandler(JSBSim::FGFDMExec &fdm);
+
+    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &input); //I don't rly want the fdm instance here but I think it's necesary
 
 private:
-    KeyboardSink keyboardSink_;
-
-    std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> strategies_;
-    std::vector<std::unique_ptr<InputDevice>> inputDevices_;
+    JSBSim::FGFDMExec& fdm_;
+    std::unordered_map<std::string, std::unique_ptr<FcsStrategy> > strategies_;
+    std::vector<std::unique_ptr<AxisDevice> > axisDevices_;
 
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
         {'w', FcsCommand::PitchDown},
-       {'s', FcsCommand::PitchUp},
+        {'s', FcsCommand::PitchUp},
         {'a', FcsCommand::RollLeft},
         {'d', FcsCommand::RollRight},
         {'q', FcsCommand::YawLeft},
@@ -58,6 +55,5 @@ private:
         {FcsCommand::ToggleEngine, {"engine", 0.0}}
     };
 };
-
 
 #endif //JSB_INPUTHANDLER_H

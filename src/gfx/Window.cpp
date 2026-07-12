@@ -18,7 +18,7 @@ Window::Window() { //Give it an abstract implementation
         throw std::runtime_error("SDL video init failed");
     }
 
-    //Set OpenGL atributes
+    //Set OpenGL attributes
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -63,7 +63,7 @@ Window::Window() { //Give it an abstract implementation
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void Window::cleanup() {
+void Window::cleanup() const {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
@@ -84,7 +84,7 @@ void Window::renderFrame(std::vector<double>& payload) {
     SDL_GL_SwapWindow(window_);
 }
 
-void Window::renderGUI(std::vector<double> &payload) {
+void Window::renderGUI(const std::vector<double> &payload) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -108,6 +108,6 @@ void Window::renderGUI(std::vector<double> &payload) {
     ImGui::Render();
 }
 
-void Window::renderGraphics(std::vector<double>& payload) {
+void Window::renderGraphics(std::vector<double>& payload) const {
     renderer_->render(payload);
 }

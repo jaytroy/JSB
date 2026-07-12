@@ -23,9 +23,9 @@ struct ControlEvent { //this currently holds logic for joystick (T16000). This n
  * This handles continuous events, like joystick.
  * Events here are taken directly from the device, bypassing an event pump.
  */
-class InputDevice {
+class AxisDevice {
 public:
-    virtual ~InputDevice() = default;
+    virtual ~AxisDevice() = default;
     virtual void sampleState(ControlEvent& out) = 0;
 };
 
