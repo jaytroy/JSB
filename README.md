@@ -1,7 +1,9 @@
 # JSBSim flight simulator
 This is a barebones implementation of a flight simulator using the JSBSim framework and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
 
-`model` is the simulator base. `input` and `gfx` act as standlone modules supplying information to `model`.
+The simulator is entirely self-contained, depending on only JSBSim itself. The diagram below shows the dependency flow of the program.
+
+![Diagram showing the dependency flow of the simulator](simulator.png "Dependency Diagram")
 
 Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim.git) somewhere.
 
@@ -31,7 +33,7 @@ docker compose run --build --rm -it simulation
 ### Compile from source
 You're gonna need to install the required libraries:
 ```shell
-sudo apt install cmake build-essential pkg-config libncurses-dev
+sudo apt install cmake build-essential pkg-config
 ```
 ```shell
 sudo apt-get install -y ./libraries/JSBSim_*.deb ./libraries/JSBSim-devel_*.deb
@@ -52,20 +54,15 @@ cmake --build build
 You can generally omit the first two commands after you've built your directories.
 
 ### Todo:
-| Feature                             | Status       | Notes                                                                                              |
-|-------------------------------------|--------------|----------------------------------------------------------------------------------------------------|
-| Graphics (OpenGL)                   | Almost       | Or UEngine/Unity instead? Ideally modular.                                                         |
-| User interface                      | Done         | Graphics prerequisite. Display data better                                                         |
-| Environment Variables               | Done         | So that users don't have to modify code directly                                                   |
-| Better FCS strat creation           | Almost       | Implement factory pattern to declutter FCS strat creation                                          |
-| Expand FCS functionality            | TBD          | Implement more than barebones flight controls                                                      |
-| Dockerize                           | Needs update | Make it run anywhere! (that runs Docker)                                                           |
-| Aircraft selection                  | TBD          | Fly something other than a measly 172P                                                             |
-| Multiple aircraft at once           | TBD          | Allow the user to perform mid-air collisions                                                       |
-| Custom environments                 | TBD          | Set up your own worlds and environments be creating bespoke XML Reset files                        |
-| Switch NCurses for something better | Done         | Curses only allows for onekeyboard input at a time. Replace with sdl2?                             |
-| Unit tests                          | TBD          | Oh no                                                                                              |
-| Implement better tick tracking      | In progress  | Ticks imitate realtime through timeout. This introduces a slight delay. Add an independent tracker |
+| Feature                        | Status       | Notes                                                                                                                             |
+|--------------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Enable own visualiers          | TBD          | Graphics are currently built in via OpenGL and will (likely) only run on Linux. Enable streaming to a separate graphics interface | 
+| Expand FCS functionality       | TBD          | Implement more than barebones flight controls                                                                                     |
+| Dockerize                      | Needs update | Make it run anywhere! (that runs Docker)                                                                                          |
+| Multiple aircraft at once      | TBD          | Allow the user to perform mid-air collisions                                                                                      |
+| Custom environments            | TBD          | Set up your own worlds and environments be creating bespoke XML Reset files                                                       |
+| Unit tests                     | TBD          | Oh no                                                                                                                             |
+| Implement better tick tracking | In progress  | Ticks imitate realtime through timeout. This introduces a slight delay. Add an independent tracker                                |
 
 #### Generative AI use declaration
 I try to stay away from generative AI as a means of generating code/debugging. However, it is sometimes indispensable 

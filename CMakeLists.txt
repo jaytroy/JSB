@@ -18,15 +18,15 @@
             src/simulation/Simulation.cpp
             src/simulation/Simulation.h
             src/simulation/fcs/FcsStrategy.h
-            src/simulation/fcs/actions/Throttle.h
-            src/simulation/fcs/actions/Pitch.h
-            src/simulation/fcs/actions/Roll.h
-            src/simulation/fcs/actions/Yaw.h
-            src/simulation/fcs/actions/Brake.h
+            src/simulation/fcs/actions/Throttle.hpp
+            src/simulation/fcs/actions/Pitch.hpp
+            src/simulation/fcs/actions/Roll.hpp
+            src/simulation/fcs/actions/Yaw.hpp
+            src/simulation/fcs/actions/Brake.hpp
             src/simulation/input/AxisDevice.h
             src/simulation/fcs/FcsCommand.h
             src/simulation/fcs/FcsStrategyFactory.h
-            src/simulation/fcs/actions/Engine.h
+            src/simulation/fcs/actions/Engine.hpp
             src/gfx/Window.cpp
             src/gfx/Window.h
             ${IMGUI_DIR}/imgui.cpp
@@ -50,7 +50,7 @@
             src/gfx/Shader.h
             src/gfx/Shader.cpp
             src/gfx/Shader.h
-            src/simulation/fcs/actions/Trim.h
+            src/simulation/fcs/actions/Trim.hpp
             src/SimRunner.hpp
     )
 

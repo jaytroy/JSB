@@ -8,12 +8,12 @@
 #include <memory>
 
 #include "FcsStrategy.h"
-#include "actions/Brake.h"
-#include "actions/Engine.h"
-#include "actions/Pitch.h"
-#include "actions/Roll.h"
-#include "actions/Throttle.h"
-#include "actions/Yaw.h"
+#include "actions/Brake.hpp"
+#include "actions/Engine.hpp"
+#include "actions/Pitch.hpp"
+#include "actions/Roll.hpp"
+#include "actions/Throttle.hpp"
+#include "actions/Yaw.hpp"
 
 /**
  * Enables easy and decoupled creation of FCS commands.

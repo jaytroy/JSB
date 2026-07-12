@@ -13,7 +13,7 @@
 #include "simulation/Simulation.h"
 
 /**
- * SimRunner aggregates all packages and runs the simulator;
+ * SimRunner is a proxy managing and running all parts of the simulator;
  */
 class SimRunner {
 public:
@@ -35,6 +35,10 @@ public:
 
         window_.cleanup();
         std::cout << "Exited successfully" << std::endl;
+    }
+
+    void updateSim() {
+        //TODO make simm updateable
     }
 
 private:

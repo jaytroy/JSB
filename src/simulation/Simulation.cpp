@@ -36,7 +36,6 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
     //Dump catalog for selected plane
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
-
     fdm_.RunIC();
     fdm_.Setdt(0.01);
 
