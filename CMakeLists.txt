@@ -13,20 +13,20 @@
 
     add_executable(JSB
             src/Main.cpp
-            src/model/Aircraft.cpp
-            src/model/Aircraft.h
-            src/model/Simulation.cpp
-            src/model/Simulation.h
-            src/model/fcs/FcsStrategy.h
-            src/model/fcs/actions/Throttle.h
-            src/model/fcs/actions/Pitch.h
-            src/model/fcs/actions/Roll.h
-            src/model/fcs/actions/Yaw.h
-            src/model/fcs/actions/Brake.h
-            src/model/input/AxisDevice.h
-            src/model/fcs/FcsCommand.h
-            src/model/fcs/FcsStrategyFactory.h
-            src/model/fcs/actions/Engine.h
+            src/simulation/Aircraft.cpp
+            src/simulation/Aircraft.h
+            src/simulation/Simulation.cpp
+            src/simulation/Simulation.h
+            src/simulation/fcs/FcsStrategy.h
+            src/simulation/fcs/actions/Throttle.h
+            src/simulation/fcs/actions/Pitch.h
+            src/simulation/fcs/actions/Roll.h
+            src/simulation/fcs/actions/Yaw.h
+            src/simulation/fcs/actions/Brake.h
+            src/simulation/input/AxisDevice.h
+            src/simulation/fcs/FcsCommand.h
+            src/simulation/fcs/FcsStrategyFactory.h
+            src/simulation/fcs/actions/Engine.h
             src/gfx/Window.cpp
             src/gfx/Window.h
             ${IMGUI_DIR}/imgui.cpp
@@ -38,8 +38,8 @@
             ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
             src/input/Joystick.cpp
             src/input/Joystick.h
-            src/model/input/InputHandler.cpp
-            src/model/input/InputHandler.h
+            src/simulation/input/InputHandler.cpp
+            src/simulation/input/InputHandler.h
             src/SDL/EventSink.h
             src/SDL/EventPump.h
             src/gfx/GfxEventSink.h
@@ -50,7 +50,8 @@
             src/gfx/Shader.h
             src/gfx/Shader.cpp
             src/gfx/Shader.h
-            src/model/fcs/actions/Trim.h
+            src/simulation/fcs/actions/Trim.h
+            src/SimRunner.hpp
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

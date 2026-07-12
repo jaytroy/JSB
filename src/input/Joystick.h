@@ -7,7 +7,7 @@
 #include <SDL_joystick.h>
 #include <string>
 
-#include "../model/input/AxisDevice.h"
+#include "../simulation/input/AxisDevice.h"
 #include "../SDL/EventSink.h"
 
 class Joystick : public AxisDevice, public EventSink {
