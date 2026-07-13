@@ -32,7 +32,7 @@ public:
      * @param fdm The fdm instance.
      * @param value The absolute change.
      */
-    virtual void setValue(JSBSim::FGFDMExec &fdm, double value) = 0; //make it an array?
+    virtual void setValue(JSBSim::FGFDMExec &fdm, double value) {}; //make it an array?
 };
 
 namespace FCS { //Should this be here?

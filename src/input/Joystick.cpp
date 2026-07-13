@@ -12,6 +12,7 @@
 #include <string>
 
 #include "json.hpp"
+#include "ControlBinding.h"
 
 Joystick::Joystick(const int deviceIndex) {
     SDL_Init(SDL_INIT_JOYSTICK);
@@ -20,13 +21,17 @@ Joystick::Joystick(const int deviceIndex) {
     if (!joystick_) {
         throw std::runtime_error(std::format("Joystick device {} not found", deviceIndex));
     }
-    name_ = SDL_JoystickName(joystick_);
+    const char* name = SDL_JoystickName(joystick_);
     SDL_JoystickEventState(SDL_ENABLE);
 
-    std::cout << "Registered joystick " << name_;
+    createControlBinding(name);
+
+    std::cout << "Registered joystick " << name << std::endl;
 }
 
 void Joystick::sampleState(ControlEvent &outEvent) {
+    //debugControls();
+
     double pitch, roll, yaw, slider;
     //Axes need to be inverted to transfer into what joystick controls should be
     roll = normalize(-SDL_JoystickGetAxis(joystick_, 0));
@@ -44,29 +49,20 @@ void Joystick::onEvent(const SDL_Event &out) {
     //nada
 }
 
-void Joystick::createControlBlock() {
-    nlohmann::json data;
-    std::ifstream file(std::format("{}.json", name_), std::ifstream::in);
-    file >> data;
-    //std::vector<object>
-    nlohmann::json jf = nlohmann::json::parse(file);
-
-    numAxes = 0;
-    numHats = 0;
-    numButtons = 0;
-    for (numAxes) {
-
+void Joystick::createControlBinding(const char* name) {
+    std::string configPath = std::format(SRC_DIR "input/configs/{}.json", name);
+    try {
+        std::ifstream file(configPath, std::ifstream::in);
+        c_ = nlohmann::json::parse(file).get<ControlBinding>();
+    } catch (nlohmann::detail::exception& e) {
+        std::cout << "Failed to parse json config " << configPath << "\nDetails: " << e.what() << std::endl;
     }
+}
 
-    for (numHats) {
+void Joystick::debugControls() const {
+    for (int i = 0; i < 16; i++) {
+        std::cout << "Axis " << i << ": " << SDL_JoystickGetAxis(joystick_, i) << std::endl;
+        //std::cout << "Hat " << i << SDL_JoystickGetHat(joystick_, i) << endl;
+        //<std::cout << "Button " << i << SDL_JoystickGetButton(joystick_, i) << endl;
     }
-
-    for (numButtons) {
-    }
-
-    //Read from json:
-    //read_file(name)
-    //Init axes
-    //Init hats
-    //Init buttons
 }

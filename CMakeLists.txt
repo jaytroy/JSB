@@ -23,7 +23,7 @@
             src/simulation/fcs/actions/Roll.hpp
             src/simulation/fcs/actions/Yaw.hpp
             src/simulation/fcs/actions/Brake.hpp
-            src/input/AxisDevice.h
+            src/data/AxisDevice.hpp
             src/simulation/fcs/FcsCommand.h
             src/simulation/fcs/FcsStrategyFactory.hpp
             src/simulation/fcs/actions/Engine.hpp
@@ -53,7 +53,7 @@
             src/simulation/fcs/actions/Trim.hpp
             src/SimRunner.hpp
             src/input/InputDeviceFactory.hpp
-            src/input/configs/ControlBinding.h
+            src/input/ControlBinding.h
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})
@@ -74,3 +74,4 @@
 
     target_compile_definitions(JSB PRIVATE SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/shaders/")
     target_compile_definitions(JSB PRIVATE TEXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/textures/")
+    target_compile_definitions(JSB PRIVATE SRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/")

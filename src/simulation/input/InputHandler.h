@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../input/AxisDevice.h"
+#include "../../data/AxisDevice.hpp"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
 
@@ -21,11 +21,12 @@ public:
     explicit InputHandler(JSBSim::FGFDMExec &fdm);
 
     int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &input); //I don't rly want the fdm instance here but I think it's necesary
+    void setInputDevices(const std::unordered_map<int, std::unique_ptr<AxisDevice>> &devices) { axisDevices_ = std::move(devices); }
 
 private:
     JSBSim::FGFDMExec& fdm_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy> > strategies_;
-    std::vector<std::unique_ptr<AxisDevice> > axisDevices_;
+    std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_{};
 
     //These should Ideally be read from config files.
     std::unordered_map<int, FcsCommand> keyToCommand_ = {
@@ -50,8 +51,8 @@ private:
         {FcsCommand::YawRight, {"yaw", -1}},
         {FcsCommand::ThrottleUp, {"throttle", 0.1}},
         {FcsCommand::ThrottleDown, {"throttle", -0.1}},
-        {FcsCommand::ToggleBrake, {"brake", NULL}},
-        {FcsCommand::ToggleEngine, {"engine", NULL}}
+        {FcsCommand::ToggleBrake, {"brake", 0.01}},
+        {FcsCommand::ToggleEngine, {"engine", 0.0}}
     };
 };
 

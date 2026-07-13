@@ -5,14 +5,12 @@
 #ifndef JSB_JOYSTICK_H
 #define JSB_JOYSTICK_H
 #include <SDL_joystick.h>
-#include <string>
-#include <unordered_map>
 
-#include "AxisDevice.h"
+#include "../data/AxisDevice.hpp"
 #include "../SDL/EventSink.h"
+#include "ControlBinding.h"
 
 //Make this a struct?
-typedef std::vector<std::tuple<std::unordered_map<int, char*>, double>> ControlBlock;
 
 
 class Joystick : public AxisDevice, public EventSink {
@@ -21,15 +19,14 @@ public:
     void sampleState(ControlEvent &outEvent) override;
     void onEvent(const SDL_Event& out) override;
 
-    void createControlBlock();
+    void createControlBinding(const char *name);
+
+    void debugControls() const;
 
 private:
     SDL_Joystick *joystick_;
-    std::string name_;
 
-    ControlBlock axes_;
-    ControlBlock hats_;
-    ControlBlock buttons_;
+    ControlBinding c_;
 };
 
 

@@ -1,5 +1,5 @@
 {
-  "Thrustmaster T16000M",
+  "name": "Thrustmaster T16000M",
   "numAxes": 4,
   "numButtons": 16,
   "numHats": 1,

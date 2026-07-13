@@ -6,6 +6,8 @@
 #define JSB_SIMULATION_H
 #include <JSBSim/FGFDMExec.h>
 
+#include <utility>
+
 #include "Aircraft.h"
 #include "input/InputHandler.h"
 
@@ -15,10 +17,12 @@
  */
 class Simulation {
 public:
-    Simulation(const char* aircraftModel, const char* resetFile);
+    Simulation(const char *aircraftModel, const char *resetFile);
+
     std::vector<double> run(const std::vector<int> &input);
     double getDt() const { return fdm_.GetDeltaT(); }
 
+    void addInputDevices(const std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { inputHandler_.setInputDevices(std::move(devices)); }
 
 private:
     JSBSim::FGFDMExec fdm_;

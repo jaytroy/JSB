@@ -11,7 +11,8 @@
 /**
  * Constructs the simulator.
  */
-Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_), inputHandler_(fdm_){
+Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_),
+                                                                           inputHandler_(fdm_) {
     static const char *JSBGITDIR = std::getenv("JSBGITDIR");
 
     fdm_.SetDebugLevel(0);
@@ -41,7 +42,9 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
 }
 
 /**
- * Runs a step the simulation.
+ * Runs a step in the simulation.
+ * @param input The data coming from input devices such as joystick, keyboard.
+ * @return Sim state to be rendered.
  */
 std::vector<double> Simulation::run(const std::vector<int> &input) {
     inputHandler_.handleInput(fdm_, input);

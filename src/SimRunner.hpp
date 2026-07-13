@@ -8,18 +8,25 @@
 #include <thread>
 
 #include "gfx/Window.h"
+#include "input/InputDeviceFactory.hpp"
 #include "input/KeyboardSink.h"
 #include "SDL/EventPump.h"
 #include "simulation/Simulation.h"
 
 /**
- * SimRunner is a proxy managing and running all parts of the simulator;
+ * SimRunner is a proxy managing and running all parts of the simulator.
+ * It orchestrates everything, ensuring packages stay separate from each other.
  */
 class SimRunner {
 public:
     SimRunner(const char* aircraftModel, const char* resetFile) : sim_(aircraftModel, resetFile) {
+
         pump_.addSink(&keyboardSink_);
         pump_.addSink(window_.getGfxSink());
+
+        //This is dirty, I don't like it
+        auto inputDevices = InputDeviceFactory::createAll();
+        sim_.addInputDevices(std::move(inputDevices));
 
         dt_ = sim_.getDt();
     }
@@ -38,7 +45,7 @@ public:
     }
 
     void updateSim() {
-        //TODO make simm updateable
+        //TODO: make simm updatable
     }
 
 private:
@@ -48,7 +55,5 @@ private:
     Window window_;
     double dt_;
 };
-
-
 
 #endif //JSB_SIMRUNNER_H

@@ -4,7 +4,6 @@
 
 #ifndef JSB_INPUTDEVICE_H
 #define JSB_INPUTDEVICE_H
-#include <vector>
 
 enum InputType { // Move this into the class?
     JOYAXIS,
@@ -12,6 +11,11 @@ enum InputType { // Move this into the class?
     CONTROLLER, //Future proofing
 };
 
+/**
+ * This is currently used by what will eventually become client and server.
+ * Currently, it's used to pass input data from the input package to simulation.
+ * This is likely to be serialized in the future.
+ */
 struct ControlEvent { //this currently holds logic for joystick (T16000). This needs to be able to handle other input devices as well
     InputType type;
     double roll;
@@ -21,7 +25,9 @@ struct ControlEvent { //this currently holds logic for joystick (T16000). This n
 };
 
 // 2^16 / 2 denotes max movement (32768) for T16000
-#define MAX 32767.0
+// SDL (allegedly) supports this for input devices from all vendors
+// TODO: verify that
+#define MAX 32768.0
 
 /**
  * This handles continuous events, like joystick.
@@ -30,8 +36,19 @@ struct ControlEvent { //this currently holds logic for joystick (T16000). This n
 class AxisDevice {
 public:
     virtual ~AxisDevice() = default;
+
+    /**
+     * SampleState takes a sample of the control device's axis position when called.
+     * This may include buttons and hats in the future.
+     * @param out The result of the sampling.
+     */
     virtual void sampleState(ControlEvent &out) = 0;
 
+    /**
+     * Normalizes raw joystick values into the format used by JSBSim: [-1,1].
+     * @param value The value to be normalized.
+     * @return The normalized value.
+     */
     static double normalize(double value) {  return value /= MAX; }
 };
 
