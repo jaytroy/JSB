@@ -7,13 +7,13 @@
 #include <SDL_joystick.h>
 #include <string>
 
-#include "../simulation/input/AxisDevice.h"
+#include "AxisDevice.h"
 #include "../SDL/EventSink.h"
 
 class Joystick : public AxisDevice, public EventSink {
 public:
-    Joystick();
-    void sampleState(ControlEvent& out) override;
+    explicit Joystick(int deviceIndex);
+    void sampleState(ControlEvent &outEvent) override;
     void onEvent(const SDL_Event& out) override;
 
 private:

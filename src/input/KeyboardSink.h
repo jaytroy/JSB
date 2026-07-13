@@ -9,7 +9,6 @@
 #include <SDL2/SDL_events.h>
 #include <vector>
 
-
 class KeyboardSink : public EventSink {
 public:
     void onEvent(const SDL_Event& event) override {
@@ -23,7 +22,6 @@ public:
         out.swap(pending_);
         pending_.clear();
         return out;
-
     }
 
 private:

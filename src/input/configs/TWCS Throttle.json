@@ -1,0 +1,46 @@
+{
+  "name": "TWCS Throttle",
+  "numAxes": 8,
+  "numButtons": 16,
+  "numHats": 8,
+  "axes": [
+    {
+      "axis": 0,
+      "name": "Selector Right"
+    },
+    {
+      "axis": 1,
+      "name": "Selector Up"
+    },
+    {
+      "axis": 2,
+      "name": "Throttle Slider"
+    },
+    {
+      "axis": 3,
+      "name": "Brake Right"
+    },
+    {
+      "axis": 4,
+      "name": "Brake Right"
+    },
+    {
+      "axis": 5,
+      "name": "Brake Left"
+    },
+    {
+      "axis": 6,
+      "name": "Rocker"
+    },
+    {
+      "axis": 7,
+      "name": "Pedals"
+    },
+    {
+      "axis": 8,
+      "name": "Side Wheel"
+    }
+  ],
+  "buttons": [],
+  "hats": []
+}

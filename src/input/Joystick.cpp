@@ -10,10 +10,10 @@
 #include <SDL_events.h>
 #include <string>
 
-Joystick::Joystick() {
+Joystick::Joystick(const int deviceIndex) {
     SDL_Init(SDL_INIT_JOYSTICK);
 
-    joystick_ = SDL_JoystickOpen(0);
+    joystick_ = SDL_JoystickOpen(deviceIndex);
     if (!joystick_) {
         throw std::runtime_error("No joystick found");
     }
@@ -27,17 +27,10 @@ void Joystick::sampleState(ControlEvent &outEvent) {
 
     double pitch, roll, yaw, slider;
     //Axes need to be inverted to transfer into what joystick controls should be
-    roll = -SDL_JoystickGetAxis(joystick_, 0);
-    pitch = -SDL_JoystickGetAxis(joystick_, 1);
-    yaw = -SDL_JoystickGetAxis(joystick_, 2);
-    slider = 32767.0f - SDL_JoystickGetAxis(joystick_, 3);
-
-    // 2^16 / 2 denotes max movement (32768)
-    //Clamp axes from -1.0 to 1.0
-    roll /= 32767.0f;
-    pitch /= 32767.0f;
-    yaw /= 32767.0f;
-    slider /= 32767.0f*2;
+    roll = normalize(-SDL_JoystickGetAxis(joystick_, 0));
+    pitch = normalize(-SDL_JoystickGetAxis(joystick_, 1));
+    yaw = normalize(-SDL_JoystickGetAxis(joystick_, 2));
+    slider = normalize(32767.0f - SDL_JoystickGetAxis(joystick_, 3)) * 2;
 
     outEvent.roll = roll;
     outEvent.pitch = pitch;

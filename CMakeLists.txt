@@ -23,9 +23,9 @@
             src/simulation/fcs/actions/Roll.hpp
             src/simulation/fcs/actions/Yaw.hpp
             src/simulation/fcs/actions/Brake.hpp
-            src/simulation/input/AxisDevice.h
+            src/input/AxisDevice.h
             src/simulation/fcs/FcsCommand.h
-            src/simulation/fcs/FcsStrategyFactory.h
+            src/simulation/fcs/FcsStrategyFactory.hpp
             src/simulation/fcs/actions/Engine.hpp
             src/gfx/Window.cpp
             src/gfx/Window.h
@@ -52,6 +52,7 @@
             src/gfx/Shader.h
             src/simulation/fcs/actions/Trim.hpp
             src/SimRunner.hpp
+            src/input/InputDeviceFactory.hpp
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

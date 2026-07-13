@@ -7,16 +7,16 @@
 #include <FGFDMExec.h>
 #include <iostream>
 
-#include "AxisDevice.h"
+#include "../../input/AxisDevice.h"
 #include "../../input/Joystick.h"
-#include "../fcs/FcsStrategyFactory.h"
+#include "../fcs/FcsStrategyFactory.hpp"
 
 InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {
     strategies_ = FcsStrategyFactory::createAll();
 
     //Set up input
     try {
-        axisDevices_.push_back(std::make_unique<Joystick>());
+        axisDevices_.push_back(std::make_unique<Joystick>(0));
     } catch ([[maybe_unused]] const std::runtime_error &e) {
         std::cout << "Did not find a joystick\n";
     }

@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "AxisDevice.h"
+#include "../../input/AxisDevice.h"
 #include "../fcs/FcsCommand.h"
 #include "../fcs/FcsStrategy.h"
 
