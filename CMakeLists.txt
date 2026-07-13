@@ -53,6 +53,7 @@
             src/simulation/fcs/actions/Trim.hpp
             src/SimRunner.hpp
             src/input/InputDeviceFactory.hpp
+            src/input/configs/ControlBinding.h
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

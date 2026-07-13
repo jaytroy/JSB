@@ -1,5 +1,5 @@
 {
-  "name": "TWCS Throttle",
+  "name": "Thrustmaster TWCS Throttle",
   "numAxes": 8,
   "numButtons": 16,
   "numHats": 8,
@@ -41,6 +41,24 @@
       "name": "Side Wheel"
     }
   ],
-  "buttons": [],
-  "hats": []
+  "buttons": [
+    {
+      "button": 0,
+      "name": "binding1"
+    },
+    {
+      "button": 1,
+      "name": "binding2"
+    }
+  ],
+  "hats": [
+    {
+      "hat": 0,
+      "name": "trim0"
+    },
+    {
+      "hat": 1,
+      "name": "trim1"
+    }
+  ]
 }

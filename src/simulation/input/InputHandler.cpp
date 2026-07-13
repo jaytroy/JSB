@@ -7,8 +7,8 @@
 #include <FGFDMExec.h>
 #include <iostream>
 
-#include "../../input/AxisDevice.h"
-#include "../../input/Joystick.h"
+#include "../../input/AxisDevice.h" //These should
+#include "../../input/Joystick.h"   //not be here
 #include "../fcs/FcsStrategyFactory.hpp"
 
 InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {

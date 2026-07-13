@@ -14,6 +14,7 @@ class InputDeviceFactory {
 public:
     using Creator = std::function<std::unique_ptr<AxisDevice>()>;
 
+
 };
 
 
