@@ -22,7 +22,7 @@ public:
     std::vector<double> run(const std::vector<int> &input);
     double getDt() const { return fdm_.GetDeltaT(); }
 
-    void addInputDevices(const std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { inputHandler_.setInputDevices(std::move(devices)); }
+    void addInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { inputHandler_.setInputDevices(std::move(devices)); }
 
 private:
     JSBSim::FGFDMExec fdm_;

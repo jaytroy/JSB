@@ -5,20 +5,19 @@
 #include "InputHandler.h"
 
 #include <FGFDMExec.h>
-#include <iostream>
 #include <utility>
 
 #include "../../data/AxisDevice.hpp"
 #include "../fcs/FcsStrategyFactory.hpp"
 
 
-InputHandler::InputHandler(JSBSim::FGFDMExec &fdm, std::vector<std::unique_ptr<AxisDevice>> devices) : fdm_(fdm), axisDevices_(std::move(devices)) {
+InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {
     strategies_ = FcsStrategyFactory::createAll();
 
 }
 
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &input) {
-    for (std::unique_ptr<AxisDevice> &device: axisDevices_) {
+    for (auto& [index, device]: axisDevices_) {
         //This only works with joystick atm. Needs a refactor
         ControlEvent event{};
         device->sampleState(event);

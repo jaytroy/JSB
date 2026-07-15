@@ -15,13 +15,14 @@ struct FcsBinding {
  * Will expand as sim expands.
  */
 enum class FcsCommand {
+    None,
     ThrottleUp, ThrottleDown,
     PitchUp, PitchDown,
     RollLeft, RollRight,
     YawLeft, YawRight,
     Start, Stop,
     ToggleBrake,
-    ToggleEngine
+    ToggleEngine,
 };
 
 

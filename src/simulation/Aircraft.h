@@ -17,6 +17,7 @@ public:
 
     void resetFCS();
     void updateValues();
+    void updateState();
     void appendData(std::vector<double>& rendererPayload);
 
 private:

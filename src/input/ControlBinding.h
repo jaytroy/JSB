@@ -9,9 +9,9 @@
 #include "json.hpp"
 
 struct Control {
-    int index{};
-    std::string name;
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, name);
+    int index;
+    std::string binding;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, binding);
 };
 
 /**
@@ -20,15 +20,19 @@ struct Control {
  */
 class ControlBinding {
 public:
-    std::string name{};
-    int numAxes{};
-    int numButtons{};
-    int numHats{};
+    std::string name;
+    int numAxes;
+    int numButtons;
+    int numHats;
     std::vector<Control> axes{};
     std::vector<Control> buttons{};
     std::vector<Control> hats{};
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, name, numAxes, numButtons, numHats, axes, buttons, hats);
 };
+
+namespace BINDING {
+
+}
 
 #endif //JSB_CONTROLBINDING_H

@@ -20,13 +20,16 @@ class InputHandler {
 public:
     explicit InputHandler(JSBSim::FGFDMExec &fdm);
 
+    InputHandler(JSBSim::FGFDMExec &fdm, std::unordered_map<int, std::unique_ptr<AxisDevice>> devices);
+
     int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &input); //I don't rly want the fdm instance here but I think it's necesary
-    void setInputDevices(const std::unordered_map<int, std::unique_ptr<AxisDevice>> &devices) { axisDevices_ = std::move(devices); }
+
+    void setInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { axisDevices_ = std::move(devices); }
 
 private:
     JSBSim::FGFDMExec& fdm_;
     std::unordered_map<std::string, std::unique_ptr<FcsStrategy> > strategies_;
-    std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_{};
+    std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
 
     //These should Ideally be read from config files.
     std::unordered_map<int, FcsCommand> keyToCommand_ = {

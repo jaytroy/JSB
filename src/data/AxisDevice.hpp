@@ -11,6 +11,12 @@ enum InputType { // Move this into the class?
     CONTROLLER, //Future proofing
 };
 
+enum AxisType {
+    JOY,
+    SLIDER,
+    ROCKER,
+};
+
 /**
  * This is currently used by what will eventually become client and server.
  * Currently, it's used to pass input data from the input package to simulation.
@@ -26,8 +32,8 @@ struct ControlEvent { //this currently holds logic for joystick (T16000). This n
 
 // 2^16 / 2 denotes max movement (32768) for T16000
 // SDL (allegedly) supports this for input devices from all vendors
-// TODO: verify that
-#define MAX 32768.0
+// TODO: verify this45834583
+#define MAX 32767.0
 
 /**
  * This handles continuous events, like joystick.

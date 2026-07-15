@@ -5,7 +5,9 @@
 #ifndef JSB_INPUTDEVICEFACTORY_H
 #define JSB_INPUTDEVICEFACTORY_H
 #include <functional>
+#include <iostream>
 #include <memory>
+#include <SDL.h>
 #include <SDL_joystick.h>
 
 #include "../data/AxisDevice.hpp"
@@ -19,7 +21,9 @@ public:
     using Creator = std::function<std::unique_ptr<AxisDevice>()>;
 
     static std::unordered_map<int, std::unique_ptr<AxisDevice>> createAll() {
+        SDL_Init(SDL_INIT_JOYSTICK);
         const int totalJoysticks = SDL_NumJoysticks();
+        std::cout << "Found " << totalJoysticks << " joysticks" << std::endl;
         static std::unordered_map<int, Creator> registry{};
 
         //This should be implementation agnostic
