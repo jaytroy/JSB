@@ -4,7 +4,7 @@
 
 #ifndef JSB_INPUTDEVICEMANAGER_H
 #define JSB_INPUTDEVICEMANAGER_H
-#include "KeyboardSink.h"
+#include "KeyboardSink.hpp"
 #include "../SDL/EventPump.h"
 
 
@@ -20,7 +20,7 @@ public:
     bool pump(std::vector<OutCommand>& outCommands) {
         outCommands.clear();
 
-        outData = keyboardSink_.drain(); //Needs an implementation of char to cmd
+        keyboardSink_.drain(outCommands);
 
         for (auto& [id, device] : axisDevices_) {
              device->sampleState(outCommands);

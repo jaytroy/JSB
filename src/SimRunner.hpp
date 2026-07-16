@@ -10,7 +10,7 @@
 #include "gfx/Window.h"
 #include "input/InputDeviceFactory.hpp"
 #include "input/InputDeviceManager.hpp"
-#include "input/KeyboardSink.h"
+#include "input/KeyboardSink.hpp"
 #include "SDL/EventPump.h"
 #include "simulation/Simulation.h"
 
@@ -27,7 +27,7 @@ public:
     void run() {
         while (inputManager_.pump(outCommands_)) {
             //This should have more logic than a vector of doubles
-            std::vector<double> rendererPayload = sim_.run(inputManager_.outData, outCommands_);
+            std::vector<double> rendererPayload = sim_.run(outCommands_);
 
             window_.renderFrame(rendererPayload);
 

@@ -40,18 +40,6 @@ void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
             outCommands.push_back(out);
         }
     }
-
-    //double pitch, roll, yaw, slider;
-    //Axes need to be inverted to transfer into what joystick controls should be
-    //roll = normalize(-SDL_JoystickGetAxis(joystick_, 0));
-    //pitch = normalize(-SDL_JoystickGetAxis(joystick_, 1));
-    //yaw = normalize(-SDL_JoystickGetAxis(joystick_, 2));
-    //slider = std::clamp(normalize(32767.0f - SDL_JoystickGetAxis(joystick_, 3))/2, 0.0, 1.0);
-
-    //outEvent.roll = roll;
-    //outEvent.pitch = pitch;
-    //outEvent.yaw = yaw;
-    //outEvent.slider = slider;
 }
 
 void Joystick::onEvent(const SDL_Event &out) {
@@ -60,7 +48,7 @@ void Joystick::onEvent(const SDL_Event &out) {
 }
 
 
- //These can likely be moved out into their own json class
+ //These can likely be moved out into its own json class.
 /**
  * This reads a control binding and creates a data struct that allows for data to be passed forward.
  * @param name The name of the file containing the bindings.
@@ -75,9 +63,8 @@ void Joystick::createControlBinding(const char* name) {
     }
 }
 
-void Joystick::updateBinding(const std::pair<int, std::string>, const std::string newBinding) {
+void Joystick::updateBinding(const std::pair<int, std::string>, const std::string &newBinding) {
     std::string configPath = std::format(SRC_DIR "input/configs/{}.json", c_.name);
-
 }
 
 void Joystick::debugControls() const {

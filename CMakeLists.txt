@@ -43,7 +43,7 @@
             src/SDL/EventSink.h
             src/SDL/EventPump.h
             src/gfx/GfxEventSink.h
-            src/input/KeyboardSink.h
+            src/input/KeyboardSink.hpp
             src/gfx/GLRenderer.cpp
             src/gfx/GLRenderer.h
             ${GLAD_DIR}/src/glad.c

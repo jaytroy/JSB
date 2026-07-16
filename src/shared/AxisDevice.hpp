@@ -9,34 +9,8 @@
 
 #include "FcsCommand.h"
 
-enum InputType { // Move this into the class?
-    JOYAXIS,
-    THROTTLE,
-    CONTROLLER, //Future proofing
-};
-
-enum AxisType {
-    JOY,
-    SLIDER,
-    ROCKER,
-};
-
-/**
- * This is currently used by what will eventually become client and server.
- * Currently, it's used to pass input data from the input package to simulation.
- * This is likely to be serialized in the future.
- */
-struct ControlEvent { //this currently holds logic for joystick (T16000). This needs to be able to handle other input devices as well
-    InputType type;
-    double roll;
-    double pitch;
-    double yaw;
-    double slider;
-};
-
-// 2^16 / 2 denotes max movement (32768) for T16000
-// SDL (allegedly) supports this for input devices from all vendors
-// TODO: verify this45834583
+// SDL automatically auto-normalizes axes to 2^16 / 2 -> (32768)
+// If SDL is dropped in the future, this will need to be updated
 #define MAX 32767.0
 
 /**

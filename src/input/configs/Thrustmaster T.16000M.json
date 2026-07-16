@@ -18,7 +18,7 @@
     },
     {
       "index": 3,
-      "action": "none":
+      "action": "throttle",
       "inverted": 1
     }
   ],

@@ -21,7 +21,7 @@ public:
     void onEvent(const SDL_Event& out) override;
 
     void createControlBinding(const char *name);
-    void updateBinding(std::pair<int, std::string>, std::string);
+    void updateBinding(std::pair<int, std::string>, const std::string &);
 
     void debugControls() const;
 

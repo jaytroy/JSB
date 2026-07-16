@@ -21,7 +21,7 @@ class InputHandler {
 public:
     explicit InputHandler(JSBSim::FGFDMExec &fdm);
 
-    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int>& inputD, const std::vector<OutCommand>& inputA);
+    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<OutCommand>& input);
 
     void setInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { axisDevices_ = std::move(devices); }
 
@@ -31,18 +31,7 @@ private:
     std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
 
     //These should Ideally be read from config files.
-    std::unordered_map<int, FcsCommand> keyToCommand_ = { //This should not be here but in keyboardSink or smt
-        {'w', FcsCommand::PitchDown},
-        {'s', FcsCommand::PitchUp},
-        {'a', FcsCommand::RollLeft},
-        {'d', FcsCommand::RollRight},
-        {'q', FcsCommand::YawLeft},
-        {'e', FcsCommand::YawRight},
-        {'u', FcsCommand::ThrottleUp},
-        {'n', FcsCommand::ThrottleDown},
-        {'b', FcsCommand::ToggleBrake},
-        {'p', FcsCommand::ToggleEngine}
-    };
+
 
     std::unordered_map<FcsCommand, double> commandHandler_ = {
         {FcsCommand::PitchUp, -1.0},

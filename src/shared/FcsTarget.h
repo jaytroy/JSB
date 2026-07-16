@@ -7,6 +7,10 @@
 #include "FcsCommand.h"
 
 
+/**
+ * Contains all possible FCS systems.
+ * FcsCommand is 1:N with FcsStrategy.
+ */
 enum class FcsTarget {
     None,
     Throttle, Pitch, Yaw, Roll, Brake, Engine,
@@ -18,7 +22,12 @@ struct FcsBinding { //This needs to be killed asap
     double delta;
 };
 
-//There needs to be some logic here deciding if this is an axis or a discrete even
+/**
+ * This casts an FCS Command down to an FCS Target system.
+ * TODO: There needs to be some logic here deciding if this is an axis or a discrete event
+ * @param cmd The FCS Command to be casted down.
+ * @return The targeted FCS system.
+ */
 constexpr FcsTarget targetOf(FcsCommand cmd) {
     switch (cmd) {
         case FcsCommand::ThrottleUp:

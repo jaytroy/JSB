@@ -15,12 +15,14 @@ InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {
 
 }
 
-int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &inputD, const std::vector<OutCommand>& inputA) {
+int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<OutCommand>& input) {
     //Need to merge these two loops
-    for (auto input: inputA) {
-        strategies_[targetOf(input.first)]->setValue(fdm, input.second);
+    for (auto out: input) {
+        //strategies_[targetOf(out.first)]->setValue(fdm, out.second);
+        strategies_[targetOf(out.first)]->adjustValue(fdm, commandHandler_.find(out.first)->second);
     }
 
+    /*
     std::vector<FcsCommand> cmds;
     for (int i: inputD) {
         auto cmd = keyToCommand_.find(i);
@@ -29,6 +31,6 @@ int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &in
             strategies_[targetOf(cmd->second)]->adjustValue(fdm, commandHandler_.find(cmd->second)->second);
         }
     }
-
+*/
     return 1;
 }

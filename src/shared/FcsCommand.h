@@ -13,8 +13,8 @@ enum class FcsCommand;
 
 
 /**
- * An enum class for all possible FCS commands.
- * Will expand as sim expands.
+ * Contains all possible FCS commands.
+ * This is not the same as \ref FcsTarget.
  */
 enum class FcsCommand {
     None,
@@ -43,7 +43,8 @@ inline FcsCommand fromString(std::string req) { //This is currently a free funct
         {"none", FcsCommand::None},
         {"pitch", FcsCommand::Pitch},
         {"yaw", FcsCommand::Yaw},
-        {"roll", FcsCommand::Roll}
+        {"roll", FcsCommand::Roll},
+        {"throttle", FcsCommand::Throttle}
     };
 
     auto out = registry.find(req);
