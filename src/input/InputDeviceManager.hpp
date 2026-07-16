@@ -4,6 +4,7 @@
 
 #ifndef JSB_INPUTDEVICEMANAGER_H
 #define JSB_INPUTDEVICEMANAGER_H
+#include "InputDeviceFactory.hpp"
 #include "KeyboardSink.hpp"
 #include "../SDL/EventPump.h"
 

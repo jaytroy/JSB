@@ -77,3 +77,5 @@
     target_compile_definitions(JSB PRIVATE SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/shaders/")
     target_compile_definitions(JSB PRIVATE TEXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/textures/")
     target_compile_definitions(JSB PRIVATE SRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/")
+
+    #target_compile_options(JSB PRIVATE -Wall -Wpedantic)

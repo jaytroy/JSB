@@ -16,7 +16,6 @@ InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {
 }
 
 int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<OutCommand>& input) {
-    //Need to merge these two loops
     for (auto out: input) {
         //strategies_[targetOf(out.first)]->setValue(fdm, out.second);
         strategies_[targetOf(out.first)]->adjustValue(fdm, commandHandler_.find(out.first)->second);

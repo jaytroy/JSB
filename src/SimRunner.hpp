@@ -8,10 +8,7 @@
 #include <thread>
 
 #include "gfx/Window.h"
-#include "input/InputDeviceFactory.hpp"
 #include "input/InputDeviceManager.hpp"
-#include "input/KeyboardSink.hpp"
-#include "SDL/EventPump.h"
 #include "simulation/Simulation.h"
 
 /**
@@ -20,18 +17,28 @@
  */
 class SimRunner {
 public:
-    SimRunner(const char* aircraftModel, const char* resetFile) : sim_(aircraftModel, resetFile), inputManager_(window_) {
+    SimRunner(const char *aircraftModel, const char *resetFile) : inputManager_(window_),
+                                                                  sim_(aircraftModel, resetFile) {
         dt_ = sim_.getDt();
     }
 
     void run() {
         while (inputManager_.pump(outCommands_)) {
+            auto start = std::chrono::steady_clock::now();
+
+
             //This should have more logic than a vector of doubles
             std::vector<double> rendererPayload = sim_.run(outCommands_);
 
             window_.renderFrame(rendererPayload);
 
-            std::this_thread::sleep_for(std::chrono::duration<double>(dt_));
+
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            auto sleep = std::chrono::duration<double>(dt_) - elapsed;
+            if (sleep > std::chrono::duration<double>::zero()) {
+                std::this_thread::sleep_for(sleep);
+            }
         }
 
         window_.cleanup();

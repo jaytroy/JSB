@@ -34,12 +34,10 @@ You can generally omit the first two commands after you've built your directorie
 | Feature                        | Status       | Notes                                                                                                                             |
 |--------------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------|
 | Enable own visualiers          | TBD          | Graphics are currently built in via OpenGL and will (likely) only run on Linux. Enable streaming to a separate graphics interface | 
-| Expand FCS functionality       | TBD          | Implement more than barebones flight controls                                                                                     |
 | Dockerize                      | Needs update | Make it run anywhere! (that runs Docker)                                                                                          |
 | Multiple aircraft at once      | TBD          | Allow the user to perform mid-air collisions                                                                                      |
 | Custom environments            | TBD          | Set up your own worlds and environments be creating bespoke XML Reset files                                                       |
 | Unit tests                     | TBD          | Oh no                                                                                                                             |
-| Implement better tick tracking | In progress  | Ticks imitate realtime through timeout. This introduces a slight delay. Add an independent tracker                                |
 
 #### Generative AI use declaration
 I try to stay away from generative AI as a means of generating code/debugging. However, it is sometimes indispensable 
