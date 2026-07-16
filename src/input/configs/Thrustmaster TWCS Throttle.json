@@ -3,59 +3,59 @@
   "axes": [
     {
       "index": 0,
-      "action": "Selector Right"
+      "action": "Selector Right",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 1,
-      "action": "Selector Up"
+      "action": "Selector Up",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 2,
-      "action": "Throttle Slider"
+      "action": "throttle",
+      "inverted": -1,
+      "type": 1
     },
     {
       "index": 3,
-      "action": "Brake Right"
+      "action": "Brake Right",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 4,
-      "action": "Brake Right"
+      "action": "Brake Right",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 5,
-      "action": "Brake Left"
+      "action": "Brake Left",
+      "inverted": -1,
+      "type": -1
     },
     {
       "index": 6,
-      "action": "Rocker"
+      "action": "Rocker",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 7,
-      "action": "Pedals"
+      "action": "Pedals",
+      "inverted": 1,
+      "type": -1
     },
     {
       "index": 8,
-      "action": "Side Wheel"
+      "action": "Side Wheel",
+      "inverted": 1,
+      "type": -1
     }
   ],
-  "buttons": [
-    {
-      "index": 0,
-      "action": "binding1"
-    },
-    {
-      "index": 1,
-      "action": "binding2"
-    }
-  ],
-  "hats": [
-    {
-      "index": 0,
-      "action": "trim0"
-    },
-    {
-      "index": 1,
-      "action": "trim1"
-    }
-  ]
+  "buttons": [],
+  "hats": []
 }

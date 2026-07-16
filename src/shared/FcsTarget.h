@@ -16,12 +16,6 @@ enum class FcsTarget {
     Throttle, Pitch, Yaw, Roll, Brake, Engine,
 };
 
-struct FcsBinding { //This needs to be killed asap
-    //Necessary?
-    FcsTarget command;
-    double delta;
-};
-
 /**
  * This casts an FCS Command down to an FCS Target system.
  * TODO: There needs to be some logic here deciding if this is an axis or a discrete event

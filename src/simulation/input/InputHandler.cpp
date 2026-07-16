@@ -9,27 +9,17 @@
 
 #include "../fcs/FcsStrategyFactory.hpp"
 
-
-InputHandler::InputHandler(JSBSim::FGFDMExec &fdm) : fdm_(fdm) {
+InputHandler::InputHandler(JSBSim::FGFDMExec& fdm) : fdm_(fdm) {
     strategies_ = FcsStrategyFactory::createAll();
-
 }
 
-int InputHandler::handleInput(JSBSim::FGFDMExec &fdm, const std::vector<OutCommand>& input) {
+int InputHandler::handleInput(JSBSim::FGFDMExec& fdm, std::vector<OutCommand>& input) {
     for (auto out: input) {
-        //strategies_[targetOf(out.first)]->setValue(fdm, out.second);
-        strategies_[targetOf(out.first)]->adjustValue(fdm, commandHandler_.find(out.first)->second);
-    }
-
-    /*
-    std::vector<FcsCommand> cmds;
-    for (int i: inputD) {
-        auto cmd = keyToCommand_.find(i);
-        if (cmd != keyToCommand_.end()) {
-
-            strategies_[targetOf(cmd->second)]->adjustValue(fdm, commandHandler_.find(cmd->second)->second);
+        switch (out.type) {
+            case Continuous: strategies_[targetOf(out.command)]->setValue(fdm, out.value); break;
+            case Discrete: strategies_[targetOf(out.command)]
+                ->adjustValue(fdm, commandHandler_.find(out.command)->second); break;
         }
     }
-*/
     return 1;
 }

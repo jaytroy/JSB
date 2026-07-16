@@ -46,7 +46,7 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
  * @param input The data coming from input devices such as joystick, keyboard.
  * @return Sim state to be rendered.
  */
-std::vector<double> Simulation::run(const std::vector<OutCommand>& input) {
+std::vector<double> Simulation::run(std::vector<OutCommand>& input) {
     inputHandler_.handleInput(fdm_, input);
 
     std::vector<double> rendererPayload;

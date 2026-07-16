@@ -4,22 +4,26 @@
     {
       "index": 0,
       "action": "roll",
-      "inverted": -1
+      "inverted": -1,
+      "type": 0
     },
     {
       "index": 1,
       "action": "pitch",
-      "inverted": -1
+      "inverted": -1,
+      "type": 0
     },
     {
       "index": 2,
       "action": "yaw",
-      "inverted": -1
+      "inverted": -1,
+      "type": 0
     },
     {
       "index": 3,
-      "action": "throttle",
-      "inverted": 1
+      "action": "none",
+      "inverted": 1,
+      "type": 0
     }
   ],
   "buttons": [],

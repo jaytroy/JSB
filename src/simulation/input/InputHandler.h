@@ -21,17 +21,17 @@ class InputHandler {
 public:
     explicit InputHandler(JSBSim::FGFDMExec &fdm);
 
-    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<OutCommand>& input);
-
-    void setInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { axisDevices_ = std::move(devices); }
+    /**
+     * Handles (applies) the input given to the simulation.
+     * @param fdm The sim instance.
+     * @param input A vector of commands to be processed this tick.
+     * @return The success of the handling.
+     */
+    int handleInput(JSBSim::FGFDMExec& fdm, std::vector<OutCommand>& input);
 
 private:
     JSBSim::FGFDMExec& fdm_;
     std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy> > strategies_;
-    std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
-
-    //These should Ideally be read from config files.
-
 
     std::unordered_map<FcsCommand, double> commandHandler_ = {
         {FcsCommand::PitchUp, -1.0},

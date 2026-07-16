@@ -22,8 +22,8 @@ public:
     void drain(std::vector<OutCommand> &outCommands) {
         for (int key: pending_) {
             OutCommand out;
-            out.first = fromKey(key);
-            out.second = -1;
+            out.command = fromKey(key);
+            out.type = Discrete;
             outCommands.push_back(out);
         }
 

@@ -31,11 +31,12 @@ Joystick::Joystick(const int deviceIndex) {
 void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
     //debugControls();
 
-    for (const auto& [index, action, inverted] : c_.axes) {
+    for (const auto& [index, action, inverted, type] : c_.axes) {
         OutCommand out;
-        out.first = fromString(action);
-        if (out.first != FcsCommand::None) { //Filter out dead binds
-            out.second = normalize(inverted * SDL_JoystickGetAxis(joystick_, index));
+        out.command = fromString(action);
+        if (out.command != FcsCommand::None) { //Filter out dead binds
+            out.type = Continuous;
+            out.value = normalize(inverted * SDL_JoystickGetAxis(joystick_, index), type);
 
             outCommands.push_back(out);
         }
@@ -43,6 +44,11 @@ void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
 }
 
 void Joystick::onEvent(const SDL_Event &out) {
+    OutCommand out1;
+    out1.command = FcsCommand::None;
+    out1.type = Discrete;
+    out1.value = -1;
+
     //nada
     //This will be similar to above.
 }
@@ -59,12 +65,16 @@ void Joystick::createControlBinding(const char* name) {
         std::ifstream file(configPath, std::ifstream::in);
         c_ = nlohmann::json::parse(file).get<ControlBinding>();
     } catch (nlohmann::detail::exception& e) {
-        std::cout << "Failed to parse json config " << configPath << "\nDetails: " << e.what() << std::endl;
+        throw std::runtime_error(
+            std::format("Failed to parse json config {}\n"
+                        "Details: {}\n"
+                        "\033[33mAre you sure the config {} is correct?\033[0m",
+            configPath, e.what(), name));
     }
 }
 
 void Joystick::updateBinding(const std::pair<int, std::string>, const std::string &newBinding) {
-    std::string configPath = std::format(SRC_DIR "input/configs/{}.json", c_.name);
+    std::string configPath = std::format(SRC_DIR "input/configs/{}.json", c_.device);
 }
 
 void Joystick::debugControls() const {

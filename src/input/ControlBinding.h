@@ -12,7 +12,15 @@ struct Control {
     int index;
     std::string action;
     int inverted;
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted);
+    /**
+     * Type denotes the type of the axis:
+     * 0: joy
+     * 1: slider
+     * 2: rocker
+     * This has an effect on how the axis values are read and handled.
+     */
+    int type;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted, type);
 };
 
 /**
@@ -21,12 +29,12 @@ struct Control {
  */
 class ControlBinding {
 public:
-    std::string name;
+    std::string device;
     std::vector<Control> axes{};
     std::vector<Control> buttons{};
     std::vector<Control> hats{};
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, name, axes, buttons, hats);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, device, axes, buttons, hats);
 };
 
 namespace BINDING {

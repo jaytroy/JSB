@@ -8,9 +8,9 @@
 #include <unordered_map>
 #include <utility>
 
-enum class FcsCommand;
-
-
+enum CommandType {
+    Discrete, Continuous,
+};
 
 /**
  * Contains all possible FCS commands.
@@ -29,7 +29,11 @@ enum class FcsCommand {
     ToggleEngine,
 };
 
-using OutCommand = std::pair<FcsCommand, double>;
+struct OutCommand {
+    FcsCommand command;
+    CommandType type;
+    double value; //Optional
+};
 
 /**
  * Maps strings to commands. Keybindings currently depend on this.
@@ -38,7 +42,7 @@ using OutCommand = std::pair<FcsCommand, double>;
  * @param req The string to be mapped into and FcsCommand;
  * @return The FcsCommand.
  */
-inline FcsCommand fromString(std::string req) { //This is currently a free function, it really shouldn't be
+inline FcsCommand fromString(const std::string &req) { //This is currently a free function, it really shouldn't be
     static std::unordered_map<std::string, FcsCommand> registry = {
         {"none", FcsCommand::None},
         {"pitch", FcsCommand::Pitch},

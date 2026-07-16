@@ -19,10 +19,8 @@ class Simulation {
 public:
     Simulation(const char *aircraftModel, const char *resetFile);
 
-    std::vector<double> run(const std::vector<OutCommand>& input);
+    std::vector<double> run(std::vector<OutCommand> &input);
     double getDt() const { return fdm_.GetDeltaT(); }
-
-    void addInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { inputHandler_.setInputDevices(std::move(devices)); }
 
 private:
     JSBSim::FGFDMExec fdm_;
