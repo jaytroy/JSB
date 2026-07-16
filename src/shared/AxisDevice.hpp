@@ -5,6 +5,10 @@
 #ifndef JSB_INPUTDEVICE_H
 #define JSB_INPUTDEVICE_H
 
+#include <vector>
+
+#include "FcsCommand.h"
+
 enum InputType { // Move this into the class?
     JOYAXIS,
     THROTTLE,
@@ -46,9 +50,8 @@ public:
     /**
      * SampleState takes a sample of the control device's axis position when called.
      * This may include buttons and hats in the future.
-     * @param out The result of the sampling.
      */
-    virtual void sampleState(ControlEvent &out) = 0;
+    virtual void sampleState(std::vector<OutCommand> &outCommands) = 0;
 
     /**
      * Normalizes raw joystick values into the format used by JSBSim: [-1,1].

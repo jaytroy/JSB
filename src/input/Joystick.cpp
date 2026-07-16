@@ -13,6 +13,7 @@
 
 #include "json.hpp"
 #include "ControlBinding.h"
+#include "../shared/FcsCommand.h"
 
 Joystick::Joystick(const int deviceIndex) {
     joystick_ = SDL_JoystickOpen(deviceIndex);
@@ -27,40 +28,45 @@ Joystick::Joystick(const int deviceIndex) {
     std::cout << "Registered joystick " << name << std::endl;
 }
 
-void Joystick::sampleState(ControlEvent &outEvent) {
+void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
     //debugControls();
 
-    for (int i = 0; i < c_.numAxes; i++) {
+    for (const auto& [index, action, inverted] : c_.axes) {
+        OutCommand out;
+        out.first = fromString(action);
+        if (out.first != FcsCommand::None) { //Filter out dead binds
+            out.second = normalize(inverted * SDL_JoystickGetAxis(joystick_, index));
 
+            outCommands.push_back(out);
+        }
     }
 
-
-    double pitch, roll, yaw, slider;
+    //double pitch, roll, yaw, slider;
     //Axes need to be inverted to transfer into what joystick controls should be
-    roll = normalize(-SDL_JoystickGetAxis(joystick_, 0));
-    pitch = normalize(-SDL_JoystickGetAxis(joystick_, 1));
-    yaw = normalize(-SDL_JoystickGetAxis(joystick_, 2));
-    slider = std::clamp(normalize(32767.0f - SDL_JoystickGetAxis(joystick_, 3))/2, 0.0, 1.0);
+    //roll = normalize(-SDL_JoystickGetAxis(joystick_, 0));
+    //pitch = normalize(-SDL_JoystickGetAxis(joystick_, 1));
+    //yaw = normalize(-SDL_JoystickGetAxis(joystick_, 2));
+    //slider = std::clamp(normalize(32767.0f - SDL_JoystickGetAxis(joystick_, 3))/2, 0.0, 1.0);
 
-    outEvent.roll = roll;
-    outEvent.pitch = pitch;
-    outEvent.yaw = yaw;
-    outEvent.slider = slider;
+    //outEvent.roll = roll;
+    //outEvent.pitch = pitch;
+    //outEvent.yaw = yaw;
+    //outEvent.slider = slider;
 }
 
 void Joystick::onEvent(const SDL_Event &out) {
     //nada
+    //This will be similar to above.
 }
 
 
  //These can likely be moved out into their own json class
-
 /**
  * This reads a control binding and creates a data struct that allows for data to be passed forward.
  * @param name The name of the file containing the bindings.
  */
 void Joystick::createControlBinding(const char* name) {
-    std::string configPath = std::format(SRC_DIR "input/configs/{}.json", name);
+    const std::string configPath = std::format(SRC_DIR "input/configs/{}.json", name);
     try {
         std::ifstream file(configPath, std::ifstream::in);
         c_ = nlohmann::json::parse(file).get<ControlBinding>();

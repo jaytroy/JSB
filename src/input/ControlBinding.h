@@ -10,8 +10,9 @@
 
 struct Control {
     int index;
-    std::string binding;
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, binding);
+    std::string action;
+    int inverted;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted);
 };
 
 /**
@@ -21,14 +22,11 @@ struct Control {
 class ControlBinding {
 public:
     std::string name;
-    int numAxes;
-    int numButtons;
-    int numHats;
     std::vector<Control> axes{};
     std::vector<Control> buttons{};
     std::vector<Control> hats{};
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, name, numAxes, numButtons, numHats, axes, buttons, hats);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, name, axes, buttons, hats);
 };
 
 namespace BINDING {

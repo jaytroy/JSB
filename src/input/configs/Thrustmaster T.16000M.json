@@ -1,24 +1,25 @@
 {
-  "binding": "Thrustmaster T16000M",
-  "numAxes": 4,
-  "numButtons": 16,
-  "numHats": 1,
+  "device": "Thrustmaster T16000M",
   "axes": [
     {
       "index": 0,
-      "binding": "roll"
+      "action": "roll",
+      "inverted": -1
     },
     {
       "index": 1,
-      "binding": "pitch"
+      "action": "pitch",
+      "inverted": -1
     },
     {
       "index": 2,
-      "binding": "yaw"
+      "action": "yaw",
+      "inverted": -1
     },
     {
       "index": 3,
-      "binding": "slider"
+      "action": "none":
+      "inverted": 1
     }
   ],
   "buttons": [],

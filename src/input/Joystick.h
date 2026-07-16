@@ -6,7 +6,7 @@
 #define JSB_JOYSTICK_H
 #include <SDL_joystick.h>
 
-#include "../data/AxisDevice.hpp"
+#include "../shared/AxisDevice.hpp"
 #include "../SDL/EventSink.h"
 #include "ControlBinding.h"
 
@@ -16,7 +16,8 @@
 class Joystick : public AxisDevice, public EventSink {
 public:
     explicit Joystick(int deviceIndex);
-    void sampleState(ControlEvent &outEvent) override;
+
+    void sampleState(std::vector<OutCommand> &outCommands) override;
     void onEvent(const SDL_Event& out) override;
 
     void createControlBinding(const char *name);

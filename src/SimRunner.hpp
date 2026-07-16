@@ -9,6 +9,7 @@
 
 #include "gfx/Window.h"
 #include "input/InputDeviceFactory.hpp"
+#include "input/InputDeviceManager.hpp"
 #include "input/KeyboardSink.h"
 #include "SDL/EventPump.h"
 #include "simulation/Simulation.h"
@@ -19,21 +20,14 @@
  */
 class SimRunner {
 public:
-    SimRunner(const char* aircraftModel, const char* resetFile) : sim_(aircraftModel, resetFile) {
-
-        pump_.addSink(&keyboardSink_);
-        pump_.addSink(window_.getGfxSink());
-
-        //This is dirty, I don't like it
-        auto inputDevices = InputDeviceFactory::createAll();
-        sim_.addInputDevices(std::move(inputDevices));
-
+    SimRunner(const char* aircraftModel, const char* resetFile) : sim_(aircraftModel, resetFile), inputManager_(window_) {
         dt_ = sim_.getDt();
     }
 
     void run() {
-        while (pump_.pump()) {
-            std::vector<double> rendererPayload = sim_.run(keyboardSink_.drain());
+        while (inputManager_.pump(outCommands_)) {
+            //This should have more logic than a vector of doubles
+            std::vector<double> rendererPayload = sim_.run(inputManager_.outData, outCommands_);
 
             window_.renderFrame(rendererPayload);
 
@@ -45,13 +39,13 @@ public:
     }
 
     void updateSim() {
-        //TODO: make simm updatable
+        //TODO: make sim hard data updatable
     }
 
 private:
+    std::vector<OutCommand> outCommands_;
+    InputDeviceManager inputManager_;
     Simulation sim_;
-    EventPump pump_;
-    KeyboardSink keyboardSink_;
     Window window_;
     double dt_;
 };

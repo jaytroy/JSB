@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "FcsStrategy.h"
+#include "../../shared/FcsTarget.h"
 #include "actions/Brake.hpp"
 #include "actions/Engine.hpp"
 #include "actions/Pitch.hpp"
@@ -22,17 +23,17 @@ class FcsStrategyFactory {
 public:
     using Creator = std::function<std::unique_ptr<FcsStrategy>()>;
 
-    static std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> createAll() {
-        static const std::unordered_map<std::string, Creator> registry = {
-            {"throttle", [] { return std::make_unique<Throttle>();}},
-            {"pitch", [] {return std::make_unique<Pitch>(); }},
-            {"roll", [] {return std::make_unique<Roll>(); }},
-            {"brake", [] {return std::make_unique<Brake>(); }},
-            {"yaw", [] {return std::make_unique<Yaw>();}},
-            {"engine", [] {return std::make_unique<Engine>();}}
+    static std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy>> createAll() {
+        static const std::unordered_map<FcsTarget, Creator> registry = {
+            {FcsTarget::Throttle , [] { return std::make_unique<Throttle>();}},
+            {FcsTarget::Pitch, [] {return std::make_unique<Pitch>(); }},
+            {FcsTarget::Roll, [] {return std::make_unique<Roll>(); }},
+            {FcsTarget::Brake, [] {return std::make_unique<Brake>(); }},
+            {FcsTarget::Yaw, [] {return std::make_unique<Yaw>();}},
+            {FcsTarget::Engine, [] {return std::make_unique<Engine>();}}
         };
 
-        std::unordered_map<std::string, std::unique_ptr<FcsStrategy>> result;
+        std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy>> result;
         for (auto& [name, creator] : registry) {
             result[name] = creator();
         }

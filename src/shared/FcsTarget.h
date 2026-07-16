@@ -1,0 +1,44 @@
+//
+// Created by jay on 7/16/26.
+//
+
+#ifndef JSB_FCSTARGET_H
+#define JSB_FCSTARGET_H
+#include "FcsCommand.h"
+
+
+enum class FcsTarget {
+    None,
+    Throttle, Pitch, Yaw, Roll, Brake, Engine,
+};
+
+struct FcsBinding { //This needs to be killed asap
+    //Necessary?
+    FcsTarget command;
+    double delta;
+};
+
+//There needs to be some logic here deciding if this is an axis or a discrete even
+constexpr FcsTarget targetOf(FcsCommand cmd) {
+    switch (cmd) {
+        case FcsCommand::ThrottleUp:
+        case FcsCommand::Throttle:
+        case FcsCommand::ThrottleDown: return FcsTarget::Throttle;
+        case FcsCommand::Pitch:
+        case FcsCommand::PitchUp:
+        case FcsCommand::PitchDown:    return FcsTarget::Pitch;
+        case FcsCommand::Roll:
+        case FcsCommand::RollLeft:
+        case FcsCommand::RollRight:    return FcsTarget::Roll;
+        case FcsCommand::YawLeft:
+        case FcsCommand::YawRight:
+        case FcsCommand::Yaw:          return FcsTarget::Yaw;
+        case FcsCommand::ToggleBrake:  return FcsTarget::Brake;
+        case FcsCommand::ToggleEngine: return FcsTarget::Engine;
+        case FcsCommand::None: return FcsTarget::None;
+        default: return FcsTarget::None;
+    }
+}
+
+
+#endif //JSB_FCSTARGET_H

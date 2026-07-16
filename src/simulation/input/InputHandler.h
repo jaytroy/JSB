@@ -11,8 +11,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../data/AxisDevice.hpp"
-#include "../fcs/FcsCommand.h"
+#include "../../shared/AxisDevice.hpp"
+#include "../../shared/FcsCommand.h"
+#include "../../shared/FcsTarget.h"
 #include "../fcs/FcsStrategy.h"
 
 
@@ -20,19 +21,17 @@ class InputHandler {
 public:
     explicit InputHandler(JSBSim::FGFDMExec &fdm);
 
-    InputHandler(JSBSim::FGFDMExec &fdm, std::unordered_map<int, std::unique_ptr<AxisDevice>> devices);
-
-    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int> &input); //I don't rly want the fdm instance here but I think it's necesary
+    int handleInput(JSBSim::FGFDMExec &fdm, const std::vector<int>& inputD, const std::vector<OutCommand>& inputA);
 
     void setInputDevices(std::unordered_map<int, std::unique_ptr<AxisDevice>> devices) { axisDevices_ = std::move(devices); }
 
 private:
     JSBSim::FGFDMExec& fdm_;
-    std::unordered_map<std::string, std::unique_ptr<FcsStrategy> > strategies_;
+    std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy> > strategies_;
     std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
 
     //These should Ideally be read from config files.
-    std::unordered_map<int, FcsCommand> keyToCommand_ = {
+    std::unordered_map<int, FcsCommand> keyToCommand_ = { //This should not be here but in keyboardSink or smt
         {'w', FcsCommand::PitchDown},
         {'s', FcsCommand::PitchUp},
         {'a', FcsCommand::RollLeft},
@@ -44,18 +43,18 @@ private:
         {'b', FcsCommand::ToggleBrake},
         {'p', FcsCommand::ToggleEngine}
     };
- 
-    std::unordered_map<FcsCommand, FcsBinding> commandHandler_ = {
-        {FcsCommand::PitchUp, {"pitch", -1}},
-        {FcsCommand::PitchDown, {"pitch", 1}},
-        {FcsCommand::RollLeft, {"roll", -1}},
-        {FcsCommand::RollRight, {"roll", 1}},
-        {FcsCommand::YawLeft, {"yaw", 1}},
-        {FcsCommand::YawRight, {"yaw", -1}},
-        {FcsCommand::ThrottleUp, {"throttle", 0.1}},
-        {FcsCommand::ThrottleDown, {"throttle", -0.1}},
-        {FcsCommand::ToggleBrake, {"brake", 0.01}},
-        {FcsCommand::ToggleEngine, {"engine", 0.0}}
+
+    std::unordered_map<FcsCommand, double> commandHandler_ = {
+        {FcsCommand::PitchUp, -1.0},
+        {FcsCommand::PitchDown, 1.0},
+        {FcsCommand::RollLeft, -1.0},
+        {FcsCommand::RollRight, 1.0},
+        {FcsCommand::YawLeft, 1.0},
+        {FcsCommand::YawRight, -1.0},
+        {FcsCommand::ThrottleUp, 0.1},
+        {FcsCommand::ThrottleDown, -0.1},
+        {FcsCommand::ToggleBrake, 0.01},
+        {FcsCommand::ToggleEngine, 0.0}
     };
 };
 

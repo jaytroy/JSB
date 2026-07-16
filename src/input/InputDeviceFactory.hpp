@@ -10,7 +10,7 @@
 #include <SDL.h>
 #include <SDL_joystick.h>
 
-#include "../data/AxisDevice.hpp"
+#include "../shared/AxisDevice.hpp"
 #include "Joystick.h"
 
 /**
@@ -20,7 +20,7 @@ class InputDeviceFactory {
 public:
     using Creator = std::function<std::unique_ptr<AxisDevice>()>;
 
-    static std::unordered_map<int, std::unique_ptr<AxisDevice>> createAll() {
+    static std::unordered_map<int, std::unique_ptr<AxisDevice>> createAxisDevices() {
         SDL_Init(SDL_INIT_JOYSTICK);
         const int totalJoysticks = SDL_NumJoysticks();
         std::cout << "Found " << totalJoysticks << " joysticks" << std::endl;
@@ -29,6 +29,7 @@ public:
         //This should be implementation agnostic
         //Abstract factory pattern?
         //TODO: Verify that AxisDevice will be implemented on more things
+        //Is ID even necesary?
         for (int i = 0; i < totalJoysticks; i++) {
             registry[i] = { [i] { return std::make_unique<Joystick>(i); }};
         }
@@ -40,7 +41,6 @@ public:
 
         return result;
     }
-
 
 private:
     std::vector<std::pair<int, std::unique_ptr<AxisDevice>>> devices_;

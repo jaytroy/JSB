@@ -23,8 +23,8 @@
             src/simulation/fcs/actions/Roll.hpp
             src/simulation/fcs/actions/Yaw.hpp
             src/simulation/fcs/actions/Brake.hpp
-            src/data/AxisDevice.hpp
-            src/simulation/fcs/FcsCommand.h
+            src/shared/AxisDevice.hpp
+            src/shared/FcsCommand.h
             src/simulation/fcs/FcsStrategyFactory.hpp
             src/simulation/fcs/actions/Engine.hpp
             src/gfx/Window.cpp
@@ -54,6 +54,8 @@
             src/SimRunner.hpp
             src/input/InputDeviceFactory.hpp
             src/input/ControlBinding.h
+            src/input/InputDeviceManager.hpp
+            src/shared/FcsTarget.h
     )
 
     target_include_directories(JSB PRIVATE ${JSBSIM_INCLUDE_DIRS})

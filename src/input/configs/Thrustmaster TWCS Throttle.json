@@ -1,64 +1,61 @@
 {
-  "binding": "Thrustmaster TWCS Throttle",
-  "numAxes": 8,
-  "numButtons": 16,
-  "numHats": 8,
+  "device": "Thrustmaster TWCS Throttle",
   "axes": [
     {
       "index": 0,
-      "binding": "Selector Right"
+      "action": "Selector Right"
     },
     {
       "index": 1,
-      "binding": "Selector Up"
+      "action": "Selector Up"
     },
     {
       "index": 2,
-      "binding": "Throttle Slider"
+      "action": "Throttle Slider"
     },
     {
       "index": 3,
-      "binding": "Brake Right"
+      "action": "Brake Right"
     },
     {
       "index": 4,
-      "binding": "Brake Right"
+      "action": "Brake Right"
     },
     {
       "index": 5,
-      "binding": "Brake Left"
+      "action": "Brake Left"
     },
     {
       "index": 6,
-      "binding": "Rocker"
+      "action": "Rocker"
     },
     {
       "index": 7,
-      "binding": "Pedals"
+      "action": "Pedals"
     },
     {
       "index": 8,
-      "binding": "Side Wheel"
+      "action": "Side Wheel"
     }
   ],
   "buttons": [
     {
       "index": 0,
-      "binding": "binding1"
+      "action": "binding1"
     },
     {
       "index": 1,
-      "binding": "binding2"
+      "action": "binding2"
     }
   ],
   "hats": [
     {
       "index": 0,
-      "binding": "trim0"
+      "action": "trim0"
     },
     {
       "index": 1,
-      "binding": "trim1"
+      "action": "trim1"
     }
   ]
 }
