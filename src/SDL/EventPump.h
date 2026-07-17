@@ -6,6 +6,7 @@
 #define JSB_EVENTPUMP_H
 #include <vector>
 #include <SDL2/SDL_events.h>
+#include "EventSink.h"
 
 /**
  * Pumps SDL events from the event queue.

@@ -17,8 +17,7 @@ public:
 
     void resetFCS();
     void updateValues();
-    void updateState();
-    void appendData(std::vector<double>& rendererPayload);
+    void appendDataTo(std::vector<double>& rendererPayload);
 
 private:
     JSBSim::FGFDMExec &fdm_;

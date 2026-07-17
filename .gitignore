@@ -19,3 +19,4 @@
 # Other files
 docker-compose.yml
 *.ini
+catalog.txt

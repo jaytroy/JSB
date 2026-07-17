@@ -20,7 +20,7 @@ struct Control {
      * This has an effect on how the axis values are read and handled.
      */
     int type;
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted, type);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted, type)
 };
 
 /**
@@ -34,7 +34,7 @@ public:
     std::vector<Control> buttons{};
     std::vector<Control> hats{};
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, device, axes, buttons, hats);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlBinding, device, axes, buttons, hats)
 };
 
 namespace BINDING {

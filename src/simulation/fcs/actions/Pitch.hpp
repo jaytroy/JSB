@@ -17,7 +17,7 @@ public:
         double next = current + delta;
         if (next > 1.0) {
             next = 1.0;
-        } else if (next < 0.0) {
+        } else if (next < -1.0) {
             next = -1.0;
         }
         fdm.SetPropertyValue(FCS::elevator.data(), next);

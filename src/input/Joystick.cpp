@@ -28,6 +28,11 @@ Joystick::Joystick(const int deviceIndex) {
     std::cout << "Registered joystick " << name << std::endl;
 }
 
+Joystick::~Joystick() {
+    SDL_JoystickClose(joystick_);
+
+}
+
 void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
     //debugControls();
 

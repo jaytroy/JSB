@@ -13,12 +13,12 @@ InputHandler::InputHandler(JSBSim::FGFDMExec& fdm) : fdm_(fdm) {
     strategies_ = FcsStrategyFactory::createAll();
 }
 
-int InputHandler::handleInput(JSBSim::FGFDMExec& fdm, std::vector<OutCommand>& input) {
+int InputHandler::handleInput(std::vector<OutCommand>& input) {
     for (auto out: input) {
         switch (out.type) {
-            case Continuous: strategies_[targetOf(out.command)]->setValue(fdm, out.value); break;
+            case Continuous: strategies_[targetOf(out.command)]->setValue(fdm_, out.value); break;
             case Discrete: strategies_[targetOf(out.command)]
-                ->adjustValue(fdm, commandHandler_.find(out.command)->second); break;
+                ->adjustValue(fdm_, commandHandler_.find(out.command)->second); break;
         }
     }
     return 1;

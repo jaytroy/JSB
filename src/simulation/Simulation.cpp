@@ -13,7 +13,10 @@
  */
 Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_),
                                                                            inputHandler_(fdm_) {
-    static const char *JSBGITDIR = std::getenv("JSBGITDIR");
+    if (!std::getenv("JSBGITDIR")) {
+        throw std::runtime_error("JSBGITDIR environment variable is not set");
+    }
+    const char *JSBGITDIR = std::getenv("JSBGITDIR");
 
     fdm_.SetDebugLevel(0);
 
@@ -47,14 +50,13 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
  * @return Sim state to be rendered.
  */
 std::vector<double> Simulation::run(std::vector<OutCommand>& input) {
-    inputHandler_.handleInput(fdm_, input);
+    inputHandler_.handleInput(input);
+    aircraft_.updateValues();
 
     std::vector<double> rendererPayload;
     double time = fdm_.GetSimTime();
     rendererPayload.push_back(time);
-    aircraft_.appendData(rendererPayload);
-
-    aircraft_.updateValues();
+    aircraft_.appendDataTo(rendererPayload);
 
     fdm_.Run();
 

@@ -36,7 +36,6 @@ private:
     EventPump pump_;
     KeyboardSink keyboardSink_; //This needs to be polymorphized
     std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
-    std::vector<OutCommand> outCommands;
 };
 
 

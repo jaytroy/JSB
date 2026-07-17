@@ -23,11 +23,10 @@ public:
 
     /**
      * Handles (applies) the input given to the simulation.
-     * @param fdm The sim instance.
      * @param input A vector of commands to be processed this tick.
      * @return The success of the handling.
      */
-    int handleInput(JSBSim::FGFDMExec& fdm, std::vector<OutCommand>& input);
+    int handleInput(std::vector<OutCommand>& input);
 
 private:
     JSBSim::FGFDMExec& fdm_;

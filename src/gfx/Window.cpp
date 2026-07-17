@@ -63,7 +63,7 @@ Window::Window() { //Give it an abstract implementation
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void Window::cleanup() const {
+Window::~Window() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();

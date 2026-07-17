@@ -8,7 +8,12 @@
 
 #include "../SDL/EventSink.h"
 
+/**
+ * Processes input events on the window.
+ * Right now, specifically, the GUI.
+ */
 class GfxEventSink : public EventSink {
+public:
     void onEvent(const SDL_Event& event) override {
         ImGui_ImplSDL2_ProcessEvent(&event);
     }

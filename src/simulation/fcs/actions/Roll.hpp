@@ -24,7 +24,7 @@ public:
     }
 
     void setValue(JSBSim::FGFDMExec &fdm, double value) override {
-        fdm.SetPropertyValue(FCS::aileron.data(), -value);
+        fdm.SetPropertyValue(FCS::aileron.data(), value);
     };
 };
 

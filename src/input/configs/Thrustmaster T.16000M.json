@@ -1,5 +1,5 @@
 {
-  "device": "Thrustmaster T16000M",
+  "device": "Thrustmaster T.16000M",
   "axes": [
     {
       "index": 0,
@@ -10,7 +10,7 @@
     {
       "index": 1,
       "action": "pitch",
-      "inverted": -1,
+      "inverted": 1,
       "type": 0
     },
     {

@@ -16,6 +16,7 @@
 class Joystick : public AxisDevice, public EventSink {
 public:
     explicit Joystick(int deviceIndex);
+    ~Joystick() override;
 
     void sampleState(std::vector<OutCommand> &outCommands) override;
     void onEvent(const SDL_Event& out) override;

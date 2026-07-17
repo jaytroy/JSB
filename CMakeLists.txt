@@ -13,7 +13,7 @@ find_package(OpenGL REQUIRED)
 find_package(glm CONFIG REQUIRED)
 pkg_check_modules(JSBSIM REQUIRED JSBSim)
 
-add_library(JSB_core STATIC
+add_library(JSB_CORE STATIC
         src/simulation/Aircraft.cpp
         src/simulation/Aircraft.h
         src/simulation/Simulation.cpp
@@ -58,7 +58,22 @@ add_library(JSB_core STATIC
         src/shared/FcsTarget.h
 )
 
-target_include_directories(JSB_core PUBLIC
+set(JSB_THIRD_PARTY
+        ${IMGUI_DIR}/imgui.cpp
+        ${IMGUI_DIR}/imgui_draw.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        ${IMGUI_DIR}/imgui_demo.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_sdl2.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+        ${GLAD_DIR}/src/glad.c
+)
+set_source_files_properties(
+        ${JSB_THIRD_PARTY}
+        PROPERTIES COMPILE_OPTIONS "-w"
+)
+
+target_include_directories(JSB_CORE PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${JSBSIM_INCLUDE_DIRS}
         ${IMGUI_DIR}
@@ -66,9 +81,9 @@ target_include_directories(JSB_core PUBLIC
         ${GLAD_DIR}/include
 )
 
-target_link_directories(JSB_core PUBLIC ${JSBSIM_LIBRARY_DIRS})
-target_link_libraries(JSB_core PUBLIC
-        /usr/lib/libJSBSim.a
+target_link_directories(JSB_CORE PUBLIC ${JSBSIM_LIBRARY_DIRS})
+target_link_libraries(JSB_CORE PUBLIC
+        /usr/lib/libJSBSim.a # fix this
         OpenGL::GL
         ${CMAKE_DL_LIBS}
         glm::glm
@@ -76,12 +91,12 @@ target_link_libraries(JSB_core PUBLIC
         SDL2::SDL2
 )
 
-target_compile_definitions(JSB_core PUBLIC SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/shaders/")
-target_compile_definitions(JSB_core PUBLIC TEXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/textures/")
-target_compile_definitions(JSB_core PUBLIC SRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/")
+target_compile_definitions(JSB_CORE PUBLIC SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/shaders/")
+target_compile_definitions(JSB_CORE PUBLIC TEXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/gfx/textures/")
+target_compile_definitions(JSB_CORE PUBLIC SRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
 add_executable(JSB src/Main.cpp)
-target_link_libraries(JSB PRIVATE JSB_core SDL2::SDL2main)
+target_link_libraries(JSB PRIVATE JSB_CORE SDL2::SDL2main)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -95,4 +110,4 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 add_subdirectory(test)
 
-#target_compile_options(JSB PRIVATE -Wall -Wpedantic)
+target_compile_options(JSB PRIVATE -Wall -Wpedantic)

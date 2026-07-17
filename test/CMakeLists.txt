@@ -6,7 +6,7 @@ add_executable(JSB_TEST
 
 target_link_libraries(JSB_TEST PRIVATE
         Catch2::Catch2WithMain
-        JSB_core
+        JSB_CORE
 )
 
 include(Catch)

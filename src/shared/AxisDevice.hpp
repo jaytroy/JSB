@@ -13,7 +13,7 @@
 
 // SDL automatically auto-normalizes axes to 2^16 / 2 -> (32768)
 // If SDL is dropped in the future, this will need to be updated
-#define MAX 32767.0
+constexpr double MAX = 32767.0;
 
 /**
  * This handles continuous events, like joystick.

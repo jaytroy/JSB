@@ -12,6 +12,6 @@ TEST_CASE("Aircraft appends its state to the renderer payload", "[.integration][
     Aircraft aircraft(fdm);
 
     std::vector<double> payload;
-    aircraft.appendData(payload);
+    aircraft.appendDataTo(payload);
     REQUIRE_FALSE(payload.empty());
 }

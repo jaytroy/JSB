@@ -24,7 +24,7 @@ public:
         SDL_Init(SDL_INIT_JOYSTICK);
         const int totalJoysticks = SDL_NumJoysticks();
         std::cout << "Found " << totalJoysticks << " joysticks" << std::endl;
-        static std::unordered_map<int, Creator> registry{};
+        std::unordered_map<int, Creator> registry{};
 
         //This should be implementation agnostic
         //Abstract factory pattern?
@@ -41,9 +41,6 @@ public:
 
         return result;
     }
-
-private:
-    std::vector<std::pair<int, std::unique_ptr<AxisDevice>>> devices_;
 };
 
 

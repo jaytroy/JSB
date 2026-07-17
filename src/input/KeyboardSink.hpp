@@ -10,7 +10,6 @@
 #include <vector>
 
 
-
 class KeyboardSink : public EventSink {
 public:
     void onEvent(const SDL_Event &event) override {
@@ -23,8 +22,10 @@ public:
         for (int key: pending_) {
             OutCommand out;
             out.command = fromKey(key);
-            out.type = Discrete;
-            outCommands.push_back(out);
+            if (out.command != FcsCommand::None) {
+                out.type = Discrete;
+                outCommands.push_back(out);
+            }
         }
 
         pending_.clear();
@@ -52,8 +53,6 @@ private:
         return out != registry.end() ? out->second : FcsCommand::None;
     }
 };
-
-
 
 
 #endif //JSB_KEYBOARDSINK_H

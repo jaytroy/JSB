@@ -17,8 +17,7 @@
  */
 class SimRunner {
 public:
-    SimRunner(const char *aircraftModel, const char *resetFile) : inputManager_(window_),
-                                                                  sim_(aircraftModel, resetFile) {
+    SimRunner(const char *aircraftModel, const char *resetFile) : inputManager_(window_), sim_(aircraftModel, resetFile) {
         dt_ = sim_.getDt();
     }
 
@@ -41,7 +40,6 @@ public:
             }
         }
 
-        window_.cleanup();
         std::cout << "Exited successfully" << std::endl;
     }
 
@@ -50,10 +48,10 @@ public:
     }
 
 private:
-    std::vector<OutCommand> outCommands_;
+    Window window_;
     InputDeviceManager inputManager_;
     Simulation sim_;
-    Window window_;
+    std::vector<OutCommand> outCommands_;
     double dt_;
 };
 
