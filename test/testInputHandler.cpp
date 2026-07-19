@@ -23,6 +23,7 @@ TEST_CASE("fromString resolves known bindings and defaults to None", "[fcs]") {
     REQUIRE(fromString("pitch") == FcsCommand::Pitch);
     REQUIRE(fromString("throttle") == FcsCommand::Throttle);
     REQUIRE(fromString("not-a-command") == FcsCommand::None);
+    REQUIRE(fromString("jhaskdjhakjshdka") == FcsCommand::None);
 }
 
 TEST_CASE("AxisDevice::normalize maps SDL axis range onto [-1, 1]", "[input]") {
@@ -33,5 +34,5 @@ TEST_CASE("AxisDevice::normalize maps SDL axis range onto [-1, 1]", "[input]") {
 
 TEST_CASE("AxisDevice::normalize maps SDL axis range onto [0, 1]", "[input]") {
     REQUIRE(AxisDevice::normalize(32767.0, 1) == 1.0);
-    REQUIRE(AxisDevice::normalize(-32676.0, 1) < 0.01);
+    REQUIRE(AxisDevice::normalize(-32767.0, 1) == 0.0);
 }

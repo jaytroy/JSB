@@ -4,6 +4,7 @@
 
 #ifndef JSB_GFXEVENTSYNC_H
 #define JSB_GFXEVENTSYNC_H
+
 #include "imgui_impl_sdl2.h"
 
 #include "../SDL/EventSink.h"
@@ -14,7 +15,7 @@
  */
 class GfxEventSink : public EventSink {
 public:
-    void onEvent(const SDL_Event& event) override {
+    void onEvent(SDL_Event& event) override {
         ImGui_ImplSDL2_ProcessEvent(&event);
     }
 };

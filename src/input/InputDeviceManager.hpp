@@ -12,18 +12,30 @@
 class InputDeviceManager {
 public:
     InputDeviceManager(Window& window) { //Passing window in is not my favorite thing. Is there a better way?
+        //Create axis devices
+        axisDevices_ = InputDeviceFactory::createAxisDevices();
+        for (auto& device : axisDevices_) {
+            if (auto* sink = dynamic_cast<EventSink*>(device.get())) {
+                pump_.addSink(sink);
+                //std::cout << "Added sink" << std::endl;
+            }
+        }
+
+        //Then assign base sinks
+        //These need to be polymorphized
         pump_.addSink(&keyboardSink_);
         pump_.addSink(window.getGfxSink());
-
-        axisDevices_ = InputDeviceFactory::createAxisDevices();
     }
 
     bool pump(std::vector<OutCommand>& outCommands) {
         outCommands.clear();
 
         keyboardSink_.drain(outCommands);
+        for (auto& sink : sinks_) {
+            sink->drain(outCommands);
+        }
 
-        for (auto& [id, device] : axisDevices_) {
+        for (auto& device : axisDevices_) {
              device->sampleState(outCommands);
         }
 
@@ -34,8 +46,9 @@ public:
 
 private:
     EventPump pump_;
-    KeyboardSink keyboardSink_; //This needs to be polymorphized
-    std::unordered_map<int, std::unique_ptr<AxisDevice>> axisDevices_;
+    std::vector<std::unique_ptr<EventSink>> sinks_;
+    KeyboardSink keyboardSink_;
+    std::vector<std::unique_ptr<AxisDevice>> axisDevices_;
 };
 
 

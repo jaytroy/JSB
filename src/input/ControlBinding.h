@@ -11,7 +11,7 @@
 struct Control {
     int index;
     std::string action;
-    int inverted;
+    int inverted = 0;
     /**
      * Type denotes the type of the axis:
      * 0: joy
@@ -19,7 +19,10 @@ struct Control {
      * 2: rocker
      * This has an effect on how the axis values are read and handled.
      */
-    int type;
+    int type = 0;
+
+    Control() = default;
+
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Control, index, action, inverted, type)
 };
 

@@ -32,7 +32,7 @@ enum class FcsCommand {
 struct OutCommand {
     FcsCommand command;
     CommandType type;
-    double value = -1.0; //Optional
+    double value = 0; //Value is optional
 };
 
 /**

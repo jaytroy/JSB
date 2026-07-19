@@ -12,7 +12,7 @@
 
 class KeyboardSink : public EventSink {
 public:
-    void onEvent(const SDL_Event &event) override {
+    void onEvent(SDL_Event& event) override {
         if (event.type != SDL_KEYDOWN) return;
 
         pending_.push_back(event.key.keysym.sym);

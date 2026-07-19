@@ -19,17 +19,19 @@ public:
     ~Joystick() override;
 
     void sampleState(std::vector<OutCommand> &outCommands) override;
-    void onEvent(const SDL_Event& out) override;
+    void onEvent(SDL_Event &event) override;
+    void drain(std::vector<OutCommand> &outCommands);
 
     void createControlBinding(const char *name);
     void updateBinding(std::pair<int, std::string>, const std::string &);
 
-    void debugControls() const;
+    void debugAxes() const;
 
 private:
     SDL_Joystick *joystick_;
-
     ControlBinding c_;
+
+    std::vector<SDL_Event> pending_;
 };
 
 

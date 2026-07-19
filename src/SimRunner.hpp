@@ -31,7 +31,6 @@ public:
 
             window_.renderFrame(rendererPayload);
 
-
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> elapsed = end - start;
             auto sleep = std::chrono::duration<double>(dt_) - elapsed;
@@ -41,10 +40,6 @@ public:
         }
 
         std::cout << "Exited successfully" << std::endl;
-    }
-
-    void updateSim() {
-        //TODO: make sim hard data updatable
     }
 
 private:

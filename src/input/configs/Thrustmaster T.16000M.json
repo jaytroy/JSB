@@ -21,11 +21,18 @@
     },
     {
       "index": 3,
-      "action": "none",
+      "action": "throttle",
       "inverted": 1,
       "type": 0
     }
   ],
   "buttons": [],
-  "hats": []
+  "hats": [
+    {
+      "index": 0,
+      "action": "trim",
+      "inverted": 0,
+      "type": 0
+    }
+  ]
 }
