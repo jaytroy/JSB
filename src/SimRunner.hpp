@@ -25,7 +25,6 @@ public:
         while (inputManager_.pump(outCommands_)) {
             auto start = std::chrono::steady_clock::now();
 
-
             //This should have more logic than a vector of doubles
             std::vector<double> rendererPayload = sim_.run(outCommands_);
 

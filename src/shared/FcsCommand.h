@@ -20,6 +20,8 @@ enum class FcsCommand {
     None,
     Pitch, Yaw, Roll, Throttle,
 
+    Trim, TrimUp, TrimRight,
+
     //Single-trigger commands
     ThrottleUp, ThrottleDown,
     PitchUp, PitchDown,
@@ -48,7 +50,9 @@ inline FcsCommand fromString(const std::string &req) { //This is currently a fre
         {"pitch", FcsCommand::Pitch},
         {"yaw", FcsCommand::Yaw},
         {"roll", FcsCommand::Roll},
-        {"throttle", FcsCommand::Throttle}
+        {"throttle", FcsCommand::Throttle},
+        {"trim", FcsCommand::Trim},
+        {"toggleEngine", FcsCommand::ToggleEngine}
     };
 
     auto out = registry.find(req);

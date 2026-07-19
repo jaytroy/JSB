@@ -4,6 +4,7 @@
 
 #include "Joystick.h"
 
+#include <algorithm>
 #include <format>
 #include <fstream>
 #include <iostream>
@@ -32,6 +33,20 @@ Joystick::~Joystick() {
     SDL_JoystickClose(joystick_);
 }
 
+static double hatAngle(const Uint8 value) {
+    switch (value) {
+        case SDL_HAT_UP:        return 0.0;
+        case SDL_HAT_RIGHTUP:   return 45.0;
+        case SDL_HAT_RIGHT:     return 90.0;
+        case SDL_HAT_RIGHTDOWN: return 135.0;
+        case SDL_HAT_DOWN:      return 180.0;
+        case SDL_HAT_LEFTDOWN:  return 225.0;
+        case SDL_HAT_LEFT:      return 270.0;
+        case SDL_HAT_LEFTUP:    return 315.0;
+        default: throw std::runtime_error("Unknown hat value");
+    }
+}
+
 void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
     //debugControls();
 
@@ -45,56 +60,43 @@ void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
             outCommands.push_back(out);
         }
     }
+
+    for (const auto& [index, action, inverted, type] : c_.hats) {
+        const Uint8 value = SDL_JoystickGetHat(joystick_, index);
+        if (value == SDL_HAT_CENTERED) continue;
+
+        OutCommand out;
+        out.command = fromString(action);
+        if (out.command != FcsCommand::None) {
+            out.type = Discrete;
+            out.value = hatAngle(value);
+
+            outCommands.push_back(out);
+        }
+    }
 }
 
 void Joystick::onEvent(SDL_Event& event) {
-    if (event.type != SDL_JOYHATMOTION && event.type != SDL_JOYBUTTONDOWN) return;
+    if (event.type != SDL_JOYBUTTONDOWN) return;
 
     pending_.push_back(event);
 }
 
 void Joystick::drain(std::vector<OutCommand> &outCommands) {
-    //Don't like SDL_Event here directly
-    for (SDL_Event event : pending_) {
-        if (event.type == SDL_JOYHATMOTION) {
-            Uint8 index = event.jhat.hat;
+    for (const SDL_Event& event : pending_) {
+        const auto it = std::find_if(c_.buttons.begin(), c_.buttons.end(),
+            [&](const Control& b) { return b.index == event.jbutton.button; });
+        if (it == c_.buttons.end()) continue;
 
-            OutCommand out;
-            //Should this be here?
-            Control control = c_.hats.at(index);
-            out.command = fromString(control.action);
-            if (out.command != FcsCommand::None) {
-                out.value = event.jhat.value;
-                out.type = Discrete;
-                outCommands.push_back(out);
-            }
-        } else if (event.type == SDL_JOYBUTTONDOWN) {
-            Uint8 index = event.jbutton.button;
-
-            OutCommand out;
-            Control control = c_.buttons.at(index);
-            out.command = fromString(control.action);
-            if (out.command != FcsCommand::None) {
-                out.type = Discrete;
-                outCommands.push_back(out);
-            }
-        } else {
-            //I don't know how this could even be reached, but it's here for safety
-            //Maybe if a random photon hits the gpu fan
-            throw std::runtime_error("Unknown joystick onEvent trigger");
-        }
-
-        for (const auto& [index, action, inverted, type] : c_.buttons) {
-            OutCommand out;
-            out.command = fromString(action);
-            if (out.command != FcsCommand::None) {
-                out.type = Discrete;
-                out.value = SDL_JoystickGetHat(joystick_, index);
-
-                outCommands.push_back(out);
-            }
+        OutCommand out;
+        out.command = fromString(it->action);
+        if (out.command != FcsCommand::None) {
+            out.type = Discrete;
+            outCommands.push_back(out);
         }
     }
+
+    pending_.clear();
 }
 
 

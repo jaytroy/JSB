@@ -13,7 +13,7 @@
  */
 enum class FcsTarget {
     None,
-    Throttle, Pitch, Yaw, Roll, Brake, Engine,
+    Throttle, Pitch, Yaw, Roll, Brake, Engine, Trim,
 };
 
 /**
@@ -22,7 +22,7 @@ enum class FcsTarget {
  * @param cmd The FCS Command to be casted down.
  * @return The targeted FCS system.
  */
-constexpr FcsTarget targetOf(FcsCommand cmd) {
+constexpr FcsTarget targetOf(const FcsCommand cmd) {
     switch (cmd) {
         case FcsCommand::ThrottleUp:
         case FcsCommand::Throttle:
@@ -38,6 +38,9 @@ constexpr FcsTarget targetOf(FcsCommand cmd) {
         case FcsCommand::Yaw:          return FcsTarget::Yaw;
         case FcsCommand::ToggleBrake:  return FcsTarget::Brake;
         case FcsCommand::ToggleEngine: return FcsTarget::Engine;
+        case FcsCommand::TrimUp:
+        case FcsCommand::TrimRight:
+        case FcsCommand::Trim:        return FcsTarget::Trim;
         case FcsCommand::None: return FcsTarget::None;
         default: return FcsTarget::None;
     }

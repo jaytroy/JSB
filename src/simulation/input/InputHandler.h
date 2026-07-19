@@ -26,7 +26,7 @@ public:
      * @param input A vector of commands to be processed this tick.
      * @return The success of the handling.
      */
-    int handleInput(std::vector<OutCommand>& input);
+    int handleInput(const std::vector<OutCommand>& input);
 
 private:
     JSBSim::FGFDMExec& fdm_;

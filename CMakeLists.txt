@@ -56,6 +56,7 @@ add_library(JSB_CORE STATIC
         src/input/ControlBinding.h
         src/input/InputDeviceManager.hpp
         src/shared/FcsTarget.h
+        src/simulation/fcs/actions/Trim.hpp
 )
 
 set(JSB_THIRD_PARTY

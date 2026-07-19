@@ -14,6 +14,7 @@
 #include "actions/Pitch.hpp"
 #include "actions/Roll.hpp"
 #include "actions/Throttle.hpp"
+#include "actions/Trim.hpp"
 #include "actions/Yaw.hpp"
 
 /**
@@ -30,7 +31,8 @@ public:
             {FcsTarget::Roll, [] {return std::make_unique<Roll>(); }},
             {FcsTarget::Brake, [] {return std::make_unique<Brake>(); }},
             {FcsTarget::Yaw, [] {return std::make_unique<Yaw>();}},
-            {FcsTarget::Engine, [] {return std::make_unique<Engine>();}}
+            {FcsTarget::Engine, [] {return std::make_unique<Engine>();}},
+            { FcsTarget::Trim, [] {return std::make_unique<Trim>();}}
         };
 
         std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy>> result;

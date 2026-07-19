@@ -11,13 +11,14 @@
 
 class InputDeviceManager {
 public:
-    InputDeviceManager(Window& window) { //Passing window in is not my favorite thing. Is there a better way?
+    explicit InputDeviceManager(Window& window) { //Passing window in is not my favorite thing. Is there a better way?
         //Create axis devices
         axisDevices_ = InputDeviceFactory::createAxisDevices();
         for (auto& device : axisDevices_) {
             if (auto* sink = dynamic_cast<EventSink*>(device.get())) {
                 pump_.addSink(sink);
-                //std::cout << "Added sink" << std::endl;
+                sinks_.push_back(sink);
+                std::cout << "Added sink" << std::endl;
             }
         }
 
@@ -46,7 +47,7 @@ public:
 
 private:
     EventPump pump_;
-    std::vector<std::unique_ptr<EventSink>> sinks_;
+    std::vector<EventSink*> sinks_;
     KeyboardSink keyboardSink_;
     std::vector<std::unique_ptr<AxisDevice>> axisDevices_;
 };

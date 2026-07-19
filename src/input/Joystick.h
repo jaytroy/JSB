@@ -20,7 +20,7 @@ public:
 
     void sampleState(std::vector<OutCommand> &outCommands) override;
     void onEvent(SDL_Event &event) override;
-    void drain(std::vector<OutCommand> &outCommands);
+    void drain(std::vector<OutCommand> &outCommands) override;
 
     void createControlBinding(const char *name);
     void updateBinding(std::pair<int, std::string>, const std::string &);

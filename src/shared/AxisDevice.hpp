@@ -32,15 +32,16 @@ public:
     /**
      * Normalizes raw joystick values into the format used by JSBSim: [-1,1].
      * @param value The value to be normalized.
+     * @param type The type of the axis. See beginning of file.
      * @return The normalized value.
      */
-    static double normalize(double value, int type) {
+    static double normalize(double value, const int type) {
         //considering this is a shared package,
         //type should maybe not be here as it loosely couples this to input
         //consider moving it into Joystick directly
         switch (type) {
             case 0: return std::clamp(value /= MAX, -1.0, 1.0);
-            case 1: return std::clamp((value + MAX) / (2*MAX), -1.0, 1.0);
+            case 1: return std::clamp((value + MAX) / (2*MAX), 0.0, 1.0);
         default: throw std::runtime_error("Something failed in normalization");
 
         }
