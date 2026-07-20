@@ -18,7 +18,7 @@ sudo apt-get install -y ./libraries/JSBSim_*.deb ./libraries/JSBSim-devel_*.deb
 
 Make sure you have your environment variables set
 ```dotenv
-JSBSIMDIR="/your/jsb/dir"
+JSBGITDIR="/your/jsb/dir"
 ```
 
 Then run it with:
