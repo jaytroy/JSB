@@ -32,7 +32,11 @@ public:
         //TODO: Verify that AxisDevice will be implemented on more things
         //Is ID even necesary? I don't think so. Moving away from it
         for (int i = 0; i < totalJoysticks; i++) {
-            registry[i] = { [i] { return std::make_unique<Joystick>(i); }};
+            try {
+                registry[i] = { [i] { return std::make_unique<Joystick>(i); }};
+            } catch (std::exception &e) {
+                std::cout << "Failed to initialize joystick: " << i << std::endl;
+            }
         }
 
         std::vector<std::unique_ptr<AxisDevice>> result;

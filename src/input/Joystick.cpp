@@ -12,7 +12,7 @@
 #include <SDL_events.h>
 #include <string>
 
-#include "json.hpp"
+#include "../../external/json.hpp"
 #include "ControlBinding.h"
 #include "../shared/FcsCommand.h"
 

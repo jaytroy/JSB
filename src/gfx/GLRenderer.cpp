@@ -4,7 +4,7 @@
 #include "GLRenderer.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "../../external/stb_image.h"
 
 #include <memory>
 #include <glad/glad.h>

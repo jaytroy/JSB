@@ -6,12 +6,12 @@
 #define JSB_CONTROLBINDING_H
 #include <vector>
 
-#include "json.hpp"
+#include "../../external/json.hpp"
 
 struct Control {
     int index;
     std::string action;
-    int inverted = 0;
+    int inverted = 1;
     /**
      * Type denotes the type of the axis:
      * 0: joy

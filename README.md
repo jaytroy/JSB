@@ -1,5 +1,5 @@
 # JSBSim flight simulator
-This is a barebones implementation of a flight simulator using the JSBSim framework and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
+This is an implementation of a flight simulator using the JSBSim framework and C++. At the moment, it's tested on Ubuntu 24.04 and is unlikely to compile on dissimilar OS's.
 
 The simulator is entirely self-contained, depending on only JSBSim itself. The diagram below shows the dependency flow of the program.
 
@@ -10,8 +10,7 @@ Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim
 ### Compile from source
 You're gonna need to install the required libraries:
 ```shell
-sudo apt install cmake build-essential pkg-config
-```
+sudo apt install cmake build-essential pkg-config libsdl2-2.0-0 libsdl2-dev libglm-dev```
 ```shell
 sudo apt-get install -y ./libraries/JSBSim_*.deb ./libraries/JSBSim-devel_*.deb
 ````
@@ -37,7 +36,7 @@ You can generally omit the first two commands after you've built your directorie
 | Dockerize                      | Needs update | Make it run anywhere! (that runs Docker)                                                                                          |
 | Multiple aircraft at once      | TBD          | Allow the user to perform mid-air collisions                                                                                      |
 | Custom environments            | TBD          | Set up your own worlds and environments be creating bespoke XML Reset files                                                       |
-| Unit tests                     | TBD          | Oh no                                                                                                                             |
+| Unit tests                     | Need more    | Oh no                                                                                                                             |
 
 #### Generative AI use declaration
 I try to stay away from generative AI as a means of generating code/debugging. However, it is sometimes indispensable 
