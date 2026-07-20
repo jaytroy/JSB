@@ -4,9 +4,7 @@
 
 #ifndef JSB_AIRCRAFT_H
 #define JSB_AIRCRAFT_H
-#include <FGFDMExec.h>
-
-#include "fcs/FcsStrategy.h"
+#include <JSBSim/FGFDMExec.h>
 
 /**
  * @brief The aircraft class. Holds all info about the specific aircraft.

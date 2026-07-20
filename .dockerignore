@@ -1,0 +1,9 @@
+# Ignore the gfx directory and related content
+# Dockerized instances of the app require external renderer impl
+src/gfx
+external/glad
+external/imgui
+external/stb_image.h
+
+# Test
+test

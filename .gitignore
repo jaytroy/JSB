@@ -12,12 +12,17 @@
 
 # Log files
 *.log
+catalog.txt
 
 # Env files
 *.env
 
-# Other files
-docker-compose.yml
+# App state files
 *.ini
-catalog.txt
+
+# AI files
 .claude
+
+# Other
+# docker-compose.yml is user-specific. it's available in the README
+docker-compose.yml

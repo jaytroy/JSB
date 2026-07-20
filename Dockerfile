@@ -8,13 +8,14 @@ RUN apt-get update && apt-get install -y  \
     libsdl2-dev \
     libglm-dev
 
-COPY /libraries/JSBSim_*.deb /libraries/JSBSim-devel_*.deb /tmp/
+COPY /external/debs/JSBSim_*.deb /external/debs/JSBSim-devel_*.deb /tmp/
 RUN apt-get install -y /tmp/JSBSim_*.deb /tmp/JSBSim-devel_*.deb \
     && rm /tmp/*.deb
 
 WORKDIR /app
 
 COPY CMakeLists.txt .
+
 COPY ./src ./src/
 COPY ./external ./external/
 
