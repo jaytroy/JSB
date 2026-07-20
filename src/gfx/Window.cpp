@@ -72,7 +72,7 @@ Window::~Window() {
     SDL_Quit();
 }
 
-void Window::renderFrame(std::vector<double>& payload) {
+void Window::renderFrame(RendererPayload& payload) {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -84,7 +84,7 @@ void Window::renderFrame(std::vector<double>& payload) {
     SDL_GL_SwapWindow(window_);
 }
 
-void Window::renderGUI(const std::vector<double> &payload) {
+void Window::renderGUI(const RendererPayload &payload) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -92,22 +92,22 @@ void Window::renderGUI(const std::vector<double> &payload) {
     //All relevant info
     ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
     ImGui::Begin("Flight controls");
-    ImGui::Text("Sim time: %lf", payload[0]);
-    ImGui::Text("North-South position: %lf", payload[1]);
-    ImGui::Text("East-West position: %lf", payload[2]);
-    ImGui::Text("Up-Down position: %lf", payload[3]);
-    ImGui::Text("Heading: %lf", payload[4]);
-    ImGui::Text("Airspeed: %lf", payload[5]);
-    ImGui::Text("Throttle: %lf", payload[6]);
-    ImGui::Text("Rpm: %lf", payload[7]);
-    ImGui::Text("Pitch: %lf", payload[8]);
-    ImGui::Text("Roll: %lf", payload[9]);
-    ImGui::Text("Brake: %lf", payload[10]);
+    ImGui::Text("Sim time: %lf", payload.time);
+    //ImGui::Text("North-South position: %lf", payload.north);
+    //ImGui::Text("East-West position: %lf", payload.east);
+    ImGui::Text("Altitude (ft): %lf", payload.up);
+    ImGui::Text("Heading (deg): %lf", payload.heading);
+    ImGui::Text("Airspeed (kts): %lf", payload.airspeed);
+    ImGui::Text("Throttle (%): %lf", payload.throttle);
+    ImGui::Text("Rpm: %lf", payload.rpm);
+    ImGui::Text("Pitch (deg): %lf", payload.pitch);
+    ImGui::Text("Roll (deg): %lf", payload.roll);
+    ImGui::Text("Brake: %s", payload.brake ? "on" : "off");
 
     ImGui::End();
     ImGui::Render();
 }
 
-void Window::renderGraphics(std::vector<double>& payload) const {
+void Window::renderGraphics(RendererPayload& payload) const {
     renderer_->render(payload);
 }

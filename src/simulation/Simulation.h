@@ -19,7 +19,7 @@ class Simulation {
 public:
     Simulation(const char *aircraftModel, const char *resetFile);
 
-    std::vector<double> run(std::vector<OutCommand> &input);
+    RendererPayload run(const std::vector<OutCommand> &input);
     double getDt() const { return fdm_.GetDeltaT(); }
 
 private:

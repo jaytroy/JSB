@@ -26,9 +26,12 @@ public:
             auto start = std::chrono::steady_clock::now();
 
             //This should have more logic than a vector of doubles
-            std::vector<double> rendererPayload = sim_.run(outCommands_);
+            RendererPayload p = sim_.run(outCommands_);
 
-            window_.renderFrame(rendererPayload);
+            //Add networking here
+            //This should be sending to socket via json
+            //socket_.send(p.toJson);
+            window_.renderFrame(p);
 
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> elapsed = end - start;

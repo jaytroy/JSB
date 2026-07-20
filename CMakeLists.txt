@@ -57,6 +57,9 @@ add_library(JSB_CORE STATIC
         src/input/InputDeviceManager.hpp
         src/shared/FcsTarget.h
         src/simulation/fcs/actions/Trim.hpp
+        src/shared/RendererPayload.hpp
+        src/gfx/Texture.cpp
+        src/gfx/Texture.h
 )
 
 set(JSB_THIRD_PARTY

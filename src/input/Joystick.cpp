@@ -119,10 +119,14 @@ void Joystick::createControlBinding(const char* name) {
     }
 }
 
+//TODO: Dynamic bindings
 void Joystick::updateBinding(const std::pair<int, std::string>, const std::string &newBinding) {
     std::string configPath = std::format(SRC_DIR "input/configs/{}.json", c_.device);
 }
 
+/**
+ * Prints all the axes and their current values into stdout.
+ */
 void Joystick::debugAxes() const {
     for (int i = 0; i < 16; i++) {
         std::cout << "Axis " << i << ": " << SDL_JoystickGetAxis(joystick_, i) << std::endl;

@@ -49,25 +49,26 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
  * @param input The data coming from input devices such as joystick, keyboard.
  * @return Sim state to be rendered.
  */
-std::vector<double> Simulation::run(std::vector<OutCommand>& input) {
+RendererPayload Simulation::run(const std::vector<OutCommand> &input) {
     inputHandler_.handleInput(input);
     aircraft_.updateValues();
 
-    std::vector<double> rendererPayload;
+    //Update this to contain a proper payload
+    RendererPayload p;
     double time = fdm_.GetSimTime();
-    rendererPayload.push_back(time);
-    aircraft_.appendDataTo(rendererPayload);
+    p.time = time;
+    aircraft_.appendDataTo(p);
 
     fdm_.Run();
 
     //aircraft_.resetFCS(); //gamified controls reset each tick. This is useful for arcade keyboard input
 
-    return rendererPayload;
+    return p;
 }
 
 /**
  * @brief Dumps all the adjustable and telemetry properties of the currently used aircraft into a file.
- * @param fdm The FGFDMExec instance
+ * @param fdm The simulator instance
  * @param filename The output file name.
  */
 void Simulation::dumpPropertyCatalogToFile(JSBSim::FGFDMExec &fdm, const std::string &filename) {

@@ -12,6 +12,11 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+/**
+ *
+ * @param vertPath Path to the vertex shader.
+ * @param fragPath Path to the fragment shader.
+ */
 Shader::Shader(const char* vertPath, const char* fragPath) {
     //Compile vertex shader
     unsigned int vertexShader;

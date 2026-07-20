@@ -35,7 +35,7 @@ public:
             try {
                 registry[i] = { [i] { return std::make_unique<Joystick>(i); }};
             } catch (std::exception &e) {
-                std::cout << "Failed to initialize joystick: " << i << std::endl;
+                std::cout << "Failed to initialize joystick: " << i << "\n" << e.what() << std::endl;
             }
         }
 

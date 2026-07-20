@@ -6,7 +6,7 @@
 #define JSB_AIRCRAFT_H
 #include <FGFDMExec.h>
 
-#include "fcs/FcsStrategy.h"
+#include "shared/RendererPayload.hpp"
 
 /**
  * @brief The aircraft class. Holds all info about the specific aircraft.
@@ -15,27 +15,27 @@ class Aircraft {
 public:
     explicit Aircraft(JSBSim::FGFDMExec &fdm);
 
-    void resetFCS();
+    void resetFCS() const;
     void updateValues();
-    void appendDataTo(std::vector<double>& rendererPayload);
+    void appendDataTo(RendererPayload &rendererPayload) const;
 
 private:
     JSBSim::FGFDMExec &fdm_;
 
-    int engineOn = 0;
-    double throttle = 0.0;
-    double rudder = 0.0;
-    double elevator = 0.0;
-    double aileron = 0.0;
-    double airspeed = 0.0;
-    double posN = 0.0;
-    double posE = 0.0;
-    double posU = 0.0;
-    double rpm = 0.0;
-    double heading = 0.0;
-    double brake = 0.0;
-    double roll = 0.0;
-    double pitch = 0.0;
+    int engineOn_ = 0;
+    double throttle_ = 0.0;
+    double rudder_ = 0.0;
+    double elevator_ = 0.0;
+    double aileron_ = 0.0;
+    double airspeed_ = 0.0;
+    double posN_ = 0.0;
+    double posE_ = 0.0;
+    double posU_ = 0.0;
+    double rpm_ = 0.0;
+    double heading_ = 0.0;
+    double brake_ = 0.0;
+    double roll_ = 0.0;
+    double pitch_ = 0.0;
 };
 
 

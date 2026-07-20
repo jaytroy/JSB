@@ -31,7 +31,7 @@ public:
     bool pump(std::vector<OutCommand>& outCommands) {
         outCommands.clear();
 
-        keyboardSink_.drain(outCommands);
+        keyboardSink_.drain(outCommands); //Again, should be part of sinks
         for (auto& sink : sinks_) {
             sink->drain(outCommands);
         }
@@ -42,8 +42,6 @@ public:
 
         return pump_.pump();
     }
-
-    std::vector<int> outData;
 
 private:
     EventPump pump_;

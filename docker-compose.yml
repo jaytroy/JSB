@@ -9,7 +9,4 @@ services:
       dockerfile: Dockerfile
     volumes:
       - /home/jay/Proj/jsbsim:/app/jsbsim
-    environment:
-      - TERM=xterm
-    stdin_open: true
     tty: true

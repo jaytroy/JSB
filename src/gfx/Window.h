@@ -10,7 +10,8 @@
 
 #include "GfxEventSink.h"
 #include "GLRenderer.h"
-#include "../SDL/EventSink.h"
+#include "SDL/EventSink.h"
+#include "shared/RendererPayload.hpp"
 
 class Window {
 public:
@@ -18,13 +19,13 @@ public:
 
     ~Window();
 
-    void renderFrame(std::vector<double>& payload);
+    void renderFrame(RendererPayload& payload);
 
     EventSink* getGfxSink() { return &gfxSink_; }
 
 private:
-    void renderGUI(const std::vector<double>& payload);
-    void renderGraphics(std::vector<double> &payload) const;
+    void renderGUI(const RendererPayload &payload);
+    void renderGraphics(RendererPayload &payload) const;
 
     const int WINDOW_WIDTH = 800;
     const int WINDOW_HEIGHT = 600;
