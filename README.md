@@ -3,6 +3,8 @@ This is an implementation of a flight simulator using the JSBSim framework and C
 
 **Roadmap text, this is what the branch is working towards:**
 
+This is the server for this simulator. It runs headless, you'll need to provide your own graphics visualizer.
+
 Without graphics, the sim works anywhere that supports SDL2. The current visualizer is only supported on Ubuntu 24.04. If you're on a different OS/Distro, you'll need to supply your own. dataspec.json shows the structure that the visualizer received (outputs).
 
 The diagram below shows the dependency flow of the program. The simulation is designed to run on its own, depending on modules for added functionality.
