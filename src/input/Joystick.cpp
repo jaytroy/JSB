@@ -4,47 +4,129 @@
 
 #include "Joystick.h"
 
+#include <algorithm>
 #include <format>
+#include <fstream>
 #include <iostream>
 #include <SDL.h>
 #include <SDL_events.h>
 #include <string>
 
-Joystick::Joystick() {
-    SDL_Init(SDL_INIT_JOYSTICK);
+#include "../../external/json.hpp"
+#include "ControlBinding.h"
+#include "../shared/FcsCommand.h"
 
-    joystick_ = SDL_JoystickOpen(0);
+Joystick::Joystick(const int deviceIndex) {
+    joystick_ = SDL_JoystickOpen(deviceIndex);
     if (!joystick_) {
-        throw std::runtime_error("No joystick found");
+        throw std::runtime_error(std::format("Joystick device {} not found", deviceIndex));
     }
-    name = SDL_JoystickName(joystick_);
+    const char* name = SDL_JoystickName(joystick_);
     SDL_JoystickEventState(SDL_ENABLE);
 
-    std::cout << "Registered joystick " << name;
+    createControlBinding(name);
+
+    std::cout << "Registered joystick " << name << std::endl;
 }
 
-void Joystick::sampleState(ControlEvent &outEvent) {
-
-    double pitch, roll, yaw, slider;
-    //Axes need to be inverted to transfer into what joystick controls should be
-    roll = -SDL_JoystickGetAxis(joystick_, 0);
-    pitch = -SDL_JoystickGetAxis(joystick_, 1);
-    yaw = -SDL_JoystickGetAxis(joystick_, 2);
-    slider = 32767.0f - SDL_JoystickGetAxis(joystick_, 3);
-
-    // 2^16 / 2 denotes max movement (32768)
-    //Clamp axes from -1.0 to 1.0
-    roll /= 32767.0f;
-    pitch /= 32767.0f;
-    yaw /= 32767.0f;
-    slider /= 32767.0f*2;
-
-    outEvent.roll = roll;
-    outEvent.pitch = pitch;
-    outEvent.yaw = yaw;
-    outEvent.slider = slider;
+Joystick::~Joystick() {
+    SDL_JoystickClose(joystick_);
 }
 
-void Joystick::onEvent(const SDL_Event &out) {
-    //nada
+static double hatAngle(const Uint8 value) {
+    switch (value) {
+        case SDL_HAT_UP:        return 0.0;
+        case SDL_HAT_RIGHTUP:   return 45.0;
+        case SDL_HAT_RIGHT:     return 90.0;
+        case SDL_HAT_RIGHTDOWN: return 135.0;
+        case SDL_HAT_DOWN:      return 180.0;
+        case SDL_HAT_LEFTDOWN:  return 225.0;
+        case SDL_HAT_LEFT:      return 270.0;
+        case SDL_HAT_LEFTUP:    return 315.0;
+        default: throw std::runtime_error("Unknown hat value");
+    }
+}
+
+void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
+    //debugControls();
+
+    for (const auto& [index, action, inverted, type] : c_.axes) {
+        OutCommand out;
+        out.command = fromString(action);
+        if (out.command != FcsCommand::None) { //Filter out dead binds
+            out.type = Continuous;
+            out.value = normalize(inverted * SDL_JoystickGetAxis(joystick_, index), type);
+
+            outCommands.push_back(out);
+        }
+    }
+
+    for (const auto& [index, action, inverted, type] : c_.hats) {
+        const Uint8 value = SDL_JoystickGetHat(joystick_, index);
+        if (value == SDL_HAT_CENTERED) continue;
+
+        OutCommand out;
+        out.command = fromString(action);
+        if (out.command != FcsCommand::None) {
+            out.type = Discrete;
+            out.value = hatAngle(value);
+
+            outCommands.push_back(out);
+        }
+    }
+}
+
+void Joystick::onEvent(SDL_Event& event) {
+    if (event.type != SDL_JOYBUTTONDOWN) return;
+
+    pending_.push_back(event);
+}
+
+void Joystick::drain(std::vector<OutCommand> &outCommands) {
+    for (const SDL_Event& event : pending_) {
+        const auto it = std::find_if(c_.buttons.begin(), c_.buttons.end(),
+            [&](const Control& b) { return b.index == event.jbutton.button; });
+        if (it == c_.buttons.end()) continue;
+
+        OutCommand out;
+        out.command = fromString(it->action);
+        if (out.command != FcsCommand::None) {
+            out.type = Discrete;
+            outCommands.push_back(out);
+        }
+    }
+
+    pending_.clear();
+}
+
+
+//These can likely be moved out into its own json class.
+/**
+ * This reads a control binding and creates a data struct that allows for data to be passed forward.
+ * @param name The name of the file containing the bindings.
+ */
+void Joystick::createControlBinding(const char* name) {
+    const std::string configPath = std::format(SRC_DIR "input/configs/{}.json", name);
+    try {
+        std::ifstream file(configPath, std::ifstream::in);
+        c_ = nlohmann::json::parse(file).get<ControlBinding>();
+    } catch (nlohmann::detail::exception& e) {
+        throw std::runtime_error(
+            std::format("Failed to parse json config {}\n"
+                        "Details: {}\n"
+                        "\033[33mAre you sure the config {} is correct?\033[0m",
+            configPath, e.what(), name));
+    }
+}
+
+void Joystick::updateBinding(const std::pair<int, std::string>, const std::string &newBinding) {
+    std::string configPath = std::format(SRC_DIR "input/configs/{}.json", c_.device);
+}
+
+void Joystick::debugAxes() const {
+    for (int i = 0; i < 16; i++) {
+        std::cout << "Axis " << i << ": " << SDL_JoystickGetAxis(joystick_, i) << std::endl;
+        //std::cout << "Hat " << i << SDL_JoystickGetHat(joystick_, i) << endl;
+        //<std::cout << "Button " << i << SDL_JoystickGetButton(joystick_, i) << endl;
+    }
 }

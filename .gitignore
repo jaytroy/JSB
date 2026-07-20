@@ -8,6 +8,7 @@
 # IDE files
 .idea
 .vscode
+.cache
 
 # Log files
 *.log
@@ -18,3 +19,5 @@
 # Other files
 docker-compose.yml
 *.ini
+catalog.txt
+.claude

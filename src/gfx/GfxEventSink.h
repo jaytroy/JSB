@@ -4,12 +4,18 @@
 
 #ifndef JSB_GFXEVENTSYNC_H
 #define JSB_GFXEVENTSYNC_H
+
 #include "imgui_impl_sdl2.h"
 
 #include "../SDL/EventSink.h"
 
+/**
+ * Processes input events on the window.
+ * Right now, specifically, the GUI.
+ */
 class GfxEventSink : public EventSink {
-    void onEvent(const SDL_Event& event) override {
+public:
+    void onEvent(SDL_Event& event) override {
         ImGui_ImplSDL2_ProcessEvent(&event);
     }
 };

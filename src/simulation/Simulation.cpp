@@ -11,10 +11,14 @@
 /**
  * Constructs the simulator.
  */
-Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_), inputHandler_(fdm_){
-    static const char *JSBGITDIR = std::getenv("JSBGITDIR");
+Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircraft_(fdm_),
+                                                                           inputHandler_(fdm_) {
+    if (!std::getenv("JSBGITDIR")) {
+        throw std::runtime_error("JSBGITDIR environment variable is not set");
+    }
+    const char *JSBGITDIR = std::getenv("JSBGITDIR");
 
-    //fdm_.SetDebugLevel(0);
+    fdm_.SetDebugLevel(0);
 
     //Set up JSB directories and load models
     const SGPath root(JSBGITDIR);
@@ -37,22 +41,22 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
     dumpPropertyCatalogToFile(fdm_, "catalog.txt");
 
     fdm_.RunIC();
-    fdm_.Setdt(0.01);
-
+    fdm_.Setdt(0.02);
 }
 
 /**
- * Runs a step the simulation.
+ * Runs a step in the simulation.
+ * @param input The data coming from input devices such as joystick, keyboard.
+ * @return Sim state to be rendered.
  */
-std::vector<double> Simulation::run(const std::vector<int> &input) {
-    inputHandler_.handleInput(fdm_, input);
+std::vector<double> Simulation::run(std::vector<OutCommand>& input) {
+    inputHandler_.handleInput(input);
+    aircraft_.updateValues();
 
     std::vector<double> rendererPayload;
     double time = fdm_.GetSimTime();
     rendererPayload.push_back(time);
-    aircraft_.appendData(rendererPayload);
-
-    aircraft_.updateValues();
+    aircraft_.appendDataTo(rendererPayload);
 
     fdm_.Run();
 

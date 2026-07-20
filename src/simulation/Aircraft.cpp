@@ -40,7 +40,7 @@ void Aircraft::updateValues() {
 }
 
 
-void Aircraft::appendData(std::vector<double>& rendererPayload) {
+void Aircraft::appendDataTo(std::vector<double>& rendererPayload) {
     rendererPayload.push_back(posN);
     rendererPayload.push_back(posE);
     rendererPayload.push_back(posU);

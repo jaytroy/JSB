@@ -5,20 +5,33 @@
 #ifndef JSB_JOYSTICK_H
 #define JSB_JOYSTICK_H
 #include <SDL_joystick.h>
-#include <string>
 
-#include "../simulation/input/AxisDevice.h"
+#include "../shared/AxisDevice.hpp"
 #include "../SDL/EventSink.h"
+#include "ControlBinding.h"
+
+//Make this a struct?
+
 
 class Joystick : public AxisDevice, public EventSink {
 public:
-    Joystick();
-    void sampleState(ControlEvent& out) override;
-    void onEvent(const SDL_Event& out) override;
+    explicit Joystick(int deviceIndex);
+    ~Joystick() override;
+
+    void sampleState(std::vector<OutCommand> &outCommands) override;
+    void onEvent(SDL_Event &event) override;
+    void drain(std::vector<OutCommand> &outCommands) override;
+
+    void createControlBinding(const char *name);
+    void updateBinding(std::pair<int, std::string>, const std::string &);
+
+    void debugAxes() const;
 
 private:
     SDL_Joystick *joystick_;
-    std::string name;
+    ControlBinding c_;
+
+    std::vector<SDL_Event> pending_;
 };
 
 

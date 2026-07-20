@@ -15,7 +15,9 @@
 class Window {
 public:
     Window();
-    void cleanup() const;
+
+    ~Window();
+
     void renderFrame(std::vector<double>& payload);
 
     EventSink* getGfxSink() { return &gfxSink_; }

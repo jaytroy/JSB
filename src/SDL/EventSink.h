@@ -4,7 +4,8 @@
 
 #ifndef JSB_EVENTSINK_H
 #define JSB_EVENTSINK_H
-#include "imgui_impl_sdl2.h"
+#include <SDL2/SDL_events.h>
+#include <shared/FcsCommand.h> //I'm not a big fan of this here. Refactor?
 
 /**
  * Defines functionality for discrete events like mouse, keyboard.
@@ -13,7 +14,8 @@
 class EventSink {
 public:
     virtual ~EventSink() = default;
-    virtual void onEvent(const SDL_Event& out) = 0;
+    virtual void onEvent(SDL_Event& event) = 0;
+    virtual void drain(std::vector<OutCommand> &outCommands) {}
 };
 
 #endif //JSB_EVENTSINK_H

@@ -27,7 +27,7 @@ public:
             fdm.SetPropertyValue("fcs/mixture-cmd-norm", 0.0);
             fdm.SetPropertyValue("propulsion/magneto_cmd", 0);
         }
-    };
+    }
 };
 
 

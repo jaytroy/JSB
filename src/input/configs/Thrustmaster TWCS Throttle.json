@@ -1,0 +1,61 @@
+{
+  "device": "Thrustmaster TWCS Throttle",
+  "axes": [
+    {
+      "index": 0,
+      "action": "Selector Right",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 1,
+      "action": "Selector Up",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 2,
+      "action": "throttle",
+      "inverted": -1,
+      "type": 1
+    },
+    {
+      "index": 3,
+      "action": "Brake Right",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 4,
+      "action": "Brake Right",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 5,
+      "action": "Brake Left",
+      "inverted": -1,
+      "type": -1
+    },
+    {
+      "index": 6,
+      "action": "Rocker",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 7,
+      "action": "Pedals",
+      "inverted": 1,
+      "type": -1
+    },
+    {
+      "index": 8,
+      "action": "Side Wheel",
+      "inverted": 1,
+      "type": -1
+    }
+  ],
+  "buttons": [],
+  "hats": []
+}

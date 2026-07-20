@@ -12,7 +12,7 @@
 class Brake : public FcsStrategy {
 public:
     ~Brake() override = default;
-    void adjustValue(JSBSim::FGFDMExec &fdm, double value) {
+    void adjustValue(JSBSim::FGFDMExec &fdm, double delta) override {
         double isOn = fdm.GetPropertyValue(FCS::brake_center.data());
 
         if (!isOn) {
@@ -25,6 +25,12 @@ public:
             fdm.SetPropertyValue(FCS::brake_center.data(), 0.0);
         }
     };
+
+    void setValue(JSBSim::FGFDMExec &fdm, double value) override {
+        fdm.SetPropertyValue(FCS::brake_left.data(), value);
+        fdm.SetPropertyValue(FCS::brake_right.data(), value);
+        fdm.SetPropertyValue(FCS::brake_center.data(), value);
+    }
 };
 
 
