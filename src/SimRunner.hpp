@@ -7,7 +7,6 @@
 
 #include <thread>
 
-#include "gfx/Window.h"
 #include "input/InputDeviceManager.hpp"
 #include "simulation/Simulation.h"
 
@@ -17,7 +16,7 @@
  */
 class SimRunner {
 public:
-    SimRunner(const char *aircraftModel, const char *resetFile) : inputManager_(window_), sim_(aircraftModel, resetFile) {
+    SimRunner(const char *aircraftModel, const char *resetFile) :  sim_(aircraftModel, resetFile) {
         dt_ = sim_.getDt();
     }
 
@@ -28,7 +27,8 @@ public:
             //This should have more logic than a vector of doubles
             std::vector<double> rendererPayload = sim_.run(outCommands_);
 
-            window_.renderFrame(rendererPayload);
+            //Pass data to renderer
+            //window_.renderFrame(rendererPayload);
 
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> elapsed = end - start;
@@ -42,7 +42,6 @@ public:
     }
 
 private:
-    Window window_;
     InputDeviceManager inputManager_;
     Simulation sim_;
     std::vector<OutCommand> outCommands_;

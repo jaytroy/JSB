@@ -11,7 +11,7 @@
 
 class InputDeviceManager {
 public:
-    explicit InputDeviceManager(Window& window) { //Passing window in is not my favorite thing. Is there a better way?
+    explicit InputDeviceManager() { //Passing window in is not my favorite thing. Is there a better way?
         //Create axis devices
         axisDevices_ = InputDeviceFactory::createAxisDevices();
         for (auto& device : axisDevices_) {
@@ -25,7 +25,7 @@ public:
         //Then assign base sinks
         //These need to be polymorphized
         pump_.addSink(&keyboardSink_);
-        pump_.addSink(window.getGfxSink());
+        //pump_.addSink(window.getGfxSink());
     }
 
     bool pump(std::vector<OutCommand>& outCommands) {
