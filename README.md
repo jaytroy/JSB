@@ -8,10 +8,14 @@ The diagram below shows the dependency flow of the program. The simulation runs 
 Start off by cloning the [JSBSim git repo](https://github.com/JSBSim-Team/jsbsim.git) somewhere.
 
 ### Compile from source
+Clone this repo. Make sure add the `--recurse-submodules` tag.
+
 You're gonna need to install the required libraries:
 ```shell
 sudo apt install cmake build-essential pkg-config libsdl2-2.0-0 libsdl2-dev libglm-dev
 ```
+then `cd` into the cloned directory and run:
+
 ```shell
 sudo apt-get install -y ./libraries/JSBSim_*.deb ./libraries/JSBSim-devel_*.deb
 ````
@@ -21,14 +25,12 @@ Make sure you have your environment variables set
 JSBGITDIR="/your/jsb/dir"
 ```
 
-Then run it with:
+Build and run the program with:
 ```shell
-rm -rf build
 cmake -B build
 cmake --build build
 ./build/JSB
 ```
-You can generally omit the first two commands after you've built your directories.
 
 ### Todo:
 | Feature                        | Status       | Notes                                                                                                                             |
