@@ -13,7 +13,11 @@
 class Shader {
 public:
     Shader(const char* vertPath, const char* fragPath);
+    ~Shader();
     void use();
+
+    void drawFullscreenTriangle();
+
     void setMat4(const char* name, const glm::mat4& m);
     void setVec3(const char* name, const glm::vec3& v);
     void setFloat(const char* name, float f);
@@ -21,12 +25,11 @@ public:
     void setInt(const char *name, int i);
 
 private:
-    unsigned int program_;
     std::string loadShader(const char* path);
-    int success;
-    char infoLog[512];
-    unsigned int shaderProgram;
-    GLint modelLoc, viewLoc, projLoc;
+    int success{};
+    char infoLog[512]{};
+    unsigned int shaderProgram{};
+    unsigned int quadVAO{};
 };
 
 

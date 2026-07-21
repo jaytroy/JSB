@@ -28,7 +28,8 @@ GLRenderer::GLRenderer() {
         1, 2, 3,
     };
 
-    groundShader_ = std::make_unique<Shader>(SHADER_DIR "vertex.glsl", SHADER_DIR "fragment.glsl");
+    groundShader_ = std::make_unique<Shader>(SHADER_DIR "v_ground.glsl", SHADER_DIR "f_ground.glsl");
+    skyShader_ = std::make_unique<Shader>(SHADER_DIR "v_sky.glsl", SHADER_DIR "f_sky.glsl");
     groundTexture_ = std::make_unique<Texture>(TEXTURE_DIR "grid.jpg");
 
     //Set up OpenGL objects
@@ -59,7 +60,7 @@ GLRenderer::GLRenderer() {
 }
 
 void GLRenderer::render(const RendererPayload &payload) const {
-    groundShader_->use();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Taken from directly from claude. Not gonna study these transformations (again!!!!)
 
@@ -72,18 +73,29 @@ void GLRenderer::render(const RendererPayload &payload) const {
     glm::mat4 att(1.0f);
     att = glm::rotate(att, glm::radians(static_cast<float>(-payload.heading)), glm::vec3(0, 1, 0));
     att = glm::rotate(att, glm::radians(static_cast<float>(payload.pitch)),  glm::vec3(1, 0, 0));
-    att = glm::rotate(att, glm::radians(static_cast<float>(payload.roll)),   glm::vec3(0, 0, -1));
+    att = glm::rotate(att, glm::radians(static_cast<float>(payload.roll)
+        ),   glm::vec3(0, 0, -1));
 
     glm::vec3 forward = glm::vec3(att * glm::vec4(0, 0, -1, 0));
     glm::vec3 up = glm::vec3(att * glm::vec4(0, 1, 0, 0));
 
     glm::mat4 view = glm::lookAt(eye, eye + forward, up);
 
+    glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
+    skyShader_->use();
+    skyShader_->setVec3("topColor", glm::vec3(0.05f, 0.15f, 0.45f));
+    skyShader_->setVec3("bottomColor", glm::vec3(0.55f, 0.75f, 0.95f));
+    skyShader_->drawFullscreenTriangle();
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+
+    groundShader_->use();
     groundShader_->setMat4("model", glm::mat4(1.0f));
     groundShader_->setMat4("view", view);
     groundShader_->setMat4("projection",
                            glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 20000.0f));
-    groundShader_->setInt("groundTex", 0);
+    groundShader_->setInt("ourTexture", 0);
 
     groundTexture_->use();
     glBindVertexArray(VAO);

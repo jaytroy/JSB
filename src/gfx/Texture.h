@@ -8,7 +8,7 @@
 class Texture {
 public:
     Texture(const char* texturePath);
-    void use();
+    void use(unsigned int unit = 0) const;
 
 private:
     unsigned int texture{};

@@ -23,7 +23,7 @@ private:
     unsigned int EBO{};
 
     std::unique_ptr<Shader> groundShader_;
-    //std::unique_ptr<Shader> skyShader_;
+    std::unique_ptr<Shader> skyShader_;
     std::unique_ptr<Texture> groundTexture_;
 
     std::string loadShader(const char *path);

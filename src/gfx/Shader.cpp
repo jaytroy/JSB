@@ -8,8 +8,6 @@
 #include <sstream>
 #include <string>
 #include <glad/glad.h>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 /**
@@ -55,34 +53,50 @@ Shader::Shader(const char* vertPath, const char* fragPath) {
         throw std::runtime_error(std::string("Failed to create shader program") + infoLog);
     }
 
-    modelLoc = glGetUniformLocation(shaderProgram, "model");
-    viewLoc = glGetUniformLocation(shaderProgram, "view");
-    projLoc = glGetUniformLocation(shaderProgram, "projection");
-
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+}
+
+Shader::~Shader() {
+    if (quadVAO != 0) {
+        glDeleteVertexArrays(1, &quadVAO);
+    }
+    glDeleteProgram(shaderProgram);
 }
 
 void Shader::use() {
     glUseProgram(shaderProgram);
 }
 
-void Shader::setMat4(const char *name, const glm::mat4 &m) {
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, glm::value_ptr(m));
+void Shader::drawFullscreenTriangle() {
+    use();
+    if (quadVAO == 0) {
+        glGenVertexArrays(1, &quadVAO);
+    }
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+}
 
+//glUniform* writes to the program that is currently bound, not the one the
+//location was queried from, so every setter binds this program first.
+void Shader::setMat4(const char *name, const glm::mat4 &m) {
+    use();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, glm::value_ptr(m));
 }
 
 void Shader::setVec3(const char *name, const glm::vec3 &v) {
+    use();
     glUniform3fv(glGetUniformLocation(shaderProgram, name), 1, glm::value_ptr(v));
-
 }
 
 void Shader::setFloat(const char *name, float f) {
-    //Frustrum
+    use();
     glUniform1f(glGetUniformLocation(shaderProgram, name), f);
 }
 
 void Shader::setInt(const char* name, int i) {
+    use();
     glUniform1i(glGetUniformLocation(shaderProgram, name), i);
 }
 
