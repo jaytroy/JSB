@@ -10,6 +10,7 @@
 
 #include "Aircraft.h"
 #include "input/InputHandler.h"
+#include "networking/UdpClient.hpp"
 
 /**
  * The simulation class is responsible for running all parts of the simulator and putting them together.
@@ -26,6 +27,7 @@ private:
     JSBSim::FGFDMExec fdm_;
     Aircraft aircraft_;
     InputHandler inputHandler_;
+    UdpClient client_;
 
     /**
      * Dumps the entirety property catalog of the current aircraft into a file.

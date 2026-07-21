@@ -38,6 +38,8 @@ add_library(JSB_CORE STATIC
         src/input/InputDeviceManager.hpp
         src/shared/FcsTarget.h
         src/simulation/fcs/actions/Trim.hpp
+        src/simulation/networking/UdpClient.cpp
+        src/simulation/networking/UdpClient.hpp
 )
 
 target_link_directories(JSB_CORE PUBLIC ${JSBSIM_LIBRARY_DIRS})
@@ -117,7 +119,9 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/gfx")
 endif ()
 
 
-add_executable(JSB src/Main.cpp)
+add_executable(JSB src/Main.cpp
+        src/gfx/networking/UdpServer.cpp
+        src/gfx/networking/UdpServer.hpp)
 target_link_libraries(JSB PRIVATE JSB_CORE SDL2::SDL2main)
 
 

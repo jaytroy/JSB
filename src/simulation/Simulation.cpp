@@ -8,6 +8,8 @@
 #include <JSBSim/initialization/FGInitialCondition.h>
 #include "Simulation.h"
 
+#include "networking/UdpClient.hpp"
+
 /**
  * Constructs the simulator.
  */
@@ -42,6 +44,7 @@ Simulation::Simulation(const char *aircraftModel, const char *resetFile) : aircr
 
     fdm_.RunIC();
     fdm_.Setdt(0.02);
+
 }
 
 /**
@@ -53,6 +56,7 @@ RendererPayload Simulation::run(const std::vector<OutCommand> &input) {
     inputHandler_.handleInput(input);
     aircraft_.updateValues();
 
+    client_.send();
     //Update this to contain a proper payload
     RendererPayload p;
     double time = fdm_.GetSimTime();

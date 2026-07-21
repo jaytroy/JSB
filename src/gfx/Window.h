@@ -11,6 +11,7 @@
 #include "GfxEventSink.h"
 #include "GLRenderer.h"
 #include "SDL/EventSink.h"
+#include "networking/UdpServer.hpp"
 #include "shared/RendererPayload.hpp"
 
 class Window {
@@ -36,6 +37,7 @@ private:
     SDL_GLContext gl_;
 
     GfxEventSink gfxSink_;
+    UdpServer server_;
 };
 
 #endif //JSB_WINDOW_H

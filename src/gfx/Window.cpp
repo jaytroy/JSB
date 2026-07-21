@@ -12,6 +12,7 @@
 #include <stdexcept>
 
 #include "glad/glad.h"
+#include "networking/UdpServer.hpp"
 
 Window::Window() { //Give it an abstract implementation
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -76,6 +77,8 @@ void Window::renderFrame(RendererPayload& payload) {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    server_.receive();
 
     renderGraphics(payload);
     renderGUI(payload);
