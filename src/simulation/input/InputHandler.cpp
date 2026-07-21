@@ -16,7 +16,7 @@ InputHandler::InputHandler(JSBSim::FGFDMExec& fdm) : fdm_(fdm) {
 int InputHandler::handleInput(const std::vector<OutCommand>& input) {
     for (auto out: input) {
         switch (out.type) {
-            case Continuous: strategies_[targetOf(out.command)]->setValue(fdm_, out.value); break;
+            case Continuous: strategies_[FcsTarget::targetOf(out.command)]->setValue(fdm_, out.value); break;
             case Discrete: {
                 const auto it = commandHandler_.find(out.command);
                 const double delta = it != commandHandler_.end() ? it->second : out.value;
