@@ -73,6 +73,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/gfx")
             src/gfx/Shader.cpp
             src/gfx/Shader.h
             src/gfx/GfxEventSink.h
+            src/gfx/Texture.h
+            src/gfx/Texture.cpp
             ${IMGUI_DIR}/imgui.cpp
             ${IMGUI_DIR}/imgui_draw.cpp
             ${IMGUI_DIR}/imgui_tables.cpp

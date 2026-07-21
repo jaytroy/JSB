@@ -5,7 +5,6 @@
 #ifndef JSB_TEXTURE_H
 #define JSB_TEXTURE_H
 
-
 class Texture {
 public:
     Texture(const char* texturePath);

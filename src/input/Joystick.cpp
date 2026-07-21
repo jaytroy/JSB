@@ -52,7 +52,7 @@ void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
 
     for (const auto& [index, action, inverted, type] : c_.axes) {
         OutCommand out;
-        out.command = fromString(action);
+        out.command = Command::fromString(action);
         if (out.command != FcsCommand::None) { //Filter out dead binds
             out.type = Continuous;
             out.value = normalize(inverted * SDL_JoystickGetAxis(joystick_, index), type);
@@ -66,7 +66,7 @@ void Joystick::sampleState(std::vector<OutCommand>& outCommands) {
         if (value == SDL_HAT_CENTERED) continue;
 
         OutCommand out;
-        out.command = fromString(action);
+        out.command = Command::fromString(action);
         if (out.command != FcsCommand::None) {
             out.type = Discrete;
             out.value = hatAngle(value);
@@ -89,7 +89,7 @@ void Joystick::drain(std::vector<OutCommand> &outCommands) {
         if (it == c_.buttons.end()) continue;
 
         OutCommand out;
-        out.command = fromString(it->action);
+        out.command = Command::fromString(it->action);
         if (out.command != FcsCommand::None) {
             out.type = Discrete;
             outCommands.push_back(out);

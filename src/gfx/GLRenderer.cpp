@@ -3,9 +3,6 @@
 //
 #include "GLRenderer.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "../../external/stb_image.h"
-
 #include <memory>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>

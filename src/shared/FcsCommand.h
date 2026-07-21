@@ -12,57 +12,53 @@ enum CommandType {
     Discrete, Continuous,
 };
 
+/**
+ * Contains all possible FCS commands.
+ * This is not the same as \ref FcsTarget.
+ */
+enum class FcsCommand {
+    None,
+    Pitch, Yaw, Roll, Throttle,
 
-class FcsCommand {
-public:
+    Trim, TrimUp, TrimRight,
+
+    //Single-trigger commands
+    ThrottleUp, ThrottleDown,
+    PitchUp, PitchDown,
+    RollLeft, RollRight,
+    YawLeft, YawRight,
+    ToggleBrake,
+    ToggleEngine,
+};
+
+namespace Command {
     /**
-    * Contains all possible FCS commands.
-    * This is not the same as \ref FcsTarget.
-    */
-    enum Value {
-        None,
-        Pitch, Yaw, Roll, Throttle,
-
-        Trim, TrimUp, TrimRight,
-
-        //Single-trigger commands
-        ThrottleUp, ThrottleDown,
-        PitchUp, PitchDown,
-        RollLeft, RollRight,
-        YawLeft, YawRight,
-        ToggleBrake,
-        ToggleEngine,
-    };
-
-    /**
-    * Maps strings to commands. Keybindings currently depend on this.
-    * TODO: Make this dynamically rebindable.
-    * This could also be in server, but I currently think it's better here.
-    * @param req The string to be mapped into and FcsCommand;
-    * @return The FcsCommand.
-    */
-    static Value fromString(const std::string &req) {
+     * Maps strings to commands. Keybindings currently depend on this.
+     * TODO: Make this dynamically rebindable.
+     * This could also be in server, but I currently think it's better here.
+     * @param req The string to be mapped into and FcsCommand;
+     * @return The FcsCommand.
+     */
+    inline FcsCommand fromString(const std::string &req) {
         //This is currently a free function, it really shouldn't be
-        static std::unordered_map<std::string, Value> registry = {
-            {"none", None},
-            {"pitch", Pitch},
-            {"yaw", Yaw},
-            {"roll", Roll},
-            {"throttle", Throttle},
-            {"trim", Trim},
-            {"toggleEngine", ToggleEngine}
+        static std::unordered_map<std::string, FcsCommand> registry = {
+            {"none", FcsCommand::None},
+            {"pitch", FcsCommand::Pitch},
+            {"yaw", FcsCommand::Yaw},
+            {"roll", FcsCommand::Roll},
+            {"throttle", FcsCommand::Throttle},
+            {"trim", FcsCommand::Trim},
+            {"toggleEngine", FcsCommand::ToggleEngine}
         };
 
         auto out = registry.find(req);
-        return out != registry.end() ? out->second : None;
+        return out != registry.end() ? out->second : FcsCommand::None;
     }
-};
+}
 
 struct OutCommand {
     FcsCommand command;
     CommandType type;
     double value = 0; //Value is optional
 };
-
-
 #endif //JSB_FCSCOMMAND_H

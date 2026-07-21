@@ -30,7 +30,7 @@ public:
 
 private:
     JSBSim::FGFDMExec& fdm_;
-    std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy> > strategies_;
+    std::unordered_map<FcsTarget, std::unique_ptr<FcsStrategy>> strategies_;
 
     std::unordered_map<FcsCommand, double> commandHandler_ = {
         {FcsCommand::PitchUp, -1.0},

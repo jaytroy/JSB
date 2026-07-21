@@ -4,10 +4,10 @@
 
 #include "Texture.h"
 
-#include <iostream>
 #include <stdexcept>
+#include <glad/glad.h>
 
-#include "glad/glad.h"
+#define STB_IMAGE_IMPLEMENTATION
 #include "../external/stb_image.h"
 
 Texture::Texture(const char *texturePath) {
